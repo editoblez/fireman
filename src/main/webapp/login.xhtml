@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>login</title>
+    </h:head>
+    <h:body>
+        <p:panel id="panel" header="Autenticación Sistgema de Bomberos" style="margin-bottom:10px;">
+            <h:form>
+                <p:messages id="messages"/>
+                <h:panelGrid columns="2" cellpadding="5">
+                    <h:outputLabel for="username" value="Username"/>
+                    <p:inputText id="username" required="true" value="#{loginBean.ci}"/>
+
+                    <h:outputLabel for="password" value="Clave"/>
+                    <p:password id="password" required="true" value="#{loginBean.password}"/>
+                </h:panelGrid>
+                <p:commandButton value="Submit" action="#{loginBean.validateUserAndPassword}"/>
+            </h:form>
+        </p:panel>
+    </h:body>
+</html>

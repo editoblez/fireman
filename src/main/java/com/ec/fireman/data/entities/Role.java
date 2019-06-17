@@ -6,7 +6,7 @@ import java.util.List;
 import static com.ec.fireman.data.entities.EntityConstants.GENERIC_COLUMN_SIZE;
 
 @Entity
-public class Role {
+public class Role implements BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
@@ -17,6 +17,10 @@ public class Role {
   private List<UserAccount> userAccounts;
 
   public Role() {
+  }
+
+  public Role(String roleName) {
+    this.roleName = roleName;
   }
 
   public long getId() {

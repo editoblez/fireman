@@ -30,19 +30,20 @@ public class LoginBean implements Serializable {
   private String password;
 
   public String validateUserAndPassword() {
-    log.debug("submit pressed");
+    log.debug("attempt to login the user: " + ci);
     UserAccount account = userAccountDao.findUserByCi(ci);
 
     if (account == null) {
+      log.debug("The user do not exists");
       FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login Error", LOGIN_ERROR_MESSAGES));
       return LOGIN_PAGE;
     }
 
     if (PasswordUtil.encrypt(password).equals(account.getPassword())) {
-      FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login Error", LOGIN_ERROR_MESSAGES));
+      log.debug("Authentication successful for user: " + ci);
       return ADMIN_LOGIN_PAGE;
     }
-
+    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login Error", LOGIN_ERROR_MESSAGES));
     return LOGIN_PAGE;
   }
 

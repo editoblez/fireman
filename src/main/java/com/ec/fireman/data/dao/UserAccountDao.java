@@ -3,6 +3,8 @@ package com.ec.fireman.data.dao;
 import com.ec.fireman.data.entities.UserAccount;
 import com.ec.fireman.util.UserUtil;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
@@ -10,9 +12,11 @@ import javax.ejb.Stateless;
 @Stateless
 public class UserAccountDao extends GenericDaoImpl<UserAccount> {
 
+  private static final Logger log = LogManager.getLogger(UserAccountDao.class);
+
   @PostConstruct
   public void init() {
-    System.out.println("Setup fireman app");
+    log.info("Setup fireman app");
     setClazz(UserAccount.class);
     if (CollectionUtils.isEmpty(findAll())) {
       createAdminUser();

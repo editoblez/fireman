@@ -3,6 +3,8 @@ package com.ec.fireman.beans;
 import com.ec.fireman.data.dao.UserAccountDao;
 import com.ec.fireman.data.entities.UserAccount;
 import com.ec.fireman.util.PasswordUtil;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
@@ -18,6 +20,8 @@ import static com.ec.fireman.beans.PageNameConstants.LOGIN_PAGE;
 @SessionScoped
 public class LoginBean implements Serializable {
 
+  private static final Logger log = LogManager.getLogger(LoginBean.class);
+
   public static final String LOGIN_ERROR_MESSAGES = "Usuario o clave inválida ";
   @Inject
   private UserAccountDao userAccountDao;
@@ -26,6 +30,7 @@ public class LoginBean implements Serializable {
   private String password;
 
   public String validateUserAndPassword() {
+    log.debug("submit pressed");
     UserAccount account = userAccountDao.findUserByCi(ci);
 
     if (account == null) {

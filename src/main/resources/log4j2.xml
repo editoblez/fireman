@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://logging.apache.org/log4j/2.0/config"
+               xsi:schemaLocation="http://logging.apache.org/log4j/2.0/config ">
+  <Properties>
+    <Property name="basePath">fireman</Property>
+  </Properties>
+
+  <Appenders>
+    <!-- File Appender -->
+    <File name="FILE" fileName="${basePath}/fireman.log" append="true">
+      <PatternLayout pattern="%-5p | %d{yyyy-MM-dd HH:mm:ss} | [%t] %C{2} (%F:%L) - %m%n"/>
+    </File>
+
+    <!-- Console Appender -->
+    <Console name="console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%-5p | %d{yyyy-MM-dd HH:mm:ss} | [%t] %C{2} (%F:%L) - %m%n"/>
+    </Console>
+  </Appenders>
+
+  <Loggers>
+    <Logger name="com.ec.fireman" level="debug"/>
+
+    <Root level="info">
+      <AppenderRef ref="console"/>
+      <AppenderRef ref="FILE"/>
+    </Root>
+  </Loggers>
+
+</Configuration>

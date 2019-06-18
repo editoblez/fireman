@@ -9,15 +9,17 @@
     <h:body>
         <p:panel id="panel" header="Autenticación Sistgema de Bomberos" style="margin-bottom:10px;">
             <h:form>
-                <p:messages id="messages"/>
-                <h:panelGrid columns="2" cellpadding="5">
+                <p:messages id="messages" showDetail="true" closable="true"/>
+                <h:panelGrid columns="3" cellpadding="5">
                     <h:outputLabel for="username" value="Username"/>
                     <p:inputText id="username" required="true" value="#{loginBean.ci}"/>
+                    <p:message for="username"/>
 
                     <h:outputLabel for="password" value="Clave"/>
                     <p:password id="password" required="true" value="#{loginBean.password}"/>
+                    <p:message for="password"/>
                 </h:panelGrid>
-                <p:commandButton value="Submit" action="#{loginBean.validateUserAndPassword}"/>
+                <p:commandButton value="Submit" action="#{loginBean.validateUserAndPassword}" update="panel"/>
             </h:form>
         </p:panel>
     </h:body>

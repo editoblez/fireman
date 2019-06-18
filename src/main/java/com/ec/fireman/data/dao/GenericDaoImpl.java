@@ -1,12 +1,16 @@
 package com.ec.fireman.data.dao;
 
 import com.ec.fireman.data.entities.BaseEntity;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
 public abstract class GenericDaoImpl<T extends BaseEntity> implements DaoFacade<T> {
+
+  private static final Logger log = LogManager.getLogger();
   @PersistenceContext(unitName = "FiremanPersistenceUnit")
   EntityManager entityManager;
   private Class<T> clazz;

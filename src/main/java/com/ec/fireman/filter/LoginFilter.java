@@ -14,11 +14,11 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
-@WebFilter
+@WebFilter("/app/*")
 public class LoginFilter extends HttpFilter {
 
-  public static final String INDEX_PAGE = "index.xhtml";
-  public static final String LOGIN_PAGE = "login.xhtml";
+  public static final String INDEX_PAGE = "app/index.xhtml";
+  public static final String LOGIN_PAGE = "app/login.xhtml";
   private static final Locale DEFAULT_LOCALE = new Locale("es");
 
   @Override

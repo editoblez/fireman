@@ -1,11 +1,13 @@
 package com.ec.fireman.util;
 
 import com.ec.fireman.data.representation.User;
+import lombok.extern.log4j.Log4j2;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+@Log4j2
 public class SessionUtils {
 
   public static final String USER_ID = "userid";
@@ -32,7 +34,9 @@ public class SessionUtils {
     if (session != null) {
       session.setAttribute(USER_ID, userId);
       session.setAttribute(ROL, rol);
+      return;
     }
+    log.error("There are no session");
   }
 
   public static void closeSession() {
@@ -41,6 +45,8 @@ public class SessionUtils {
       session.removeAttribute(USER_ID);
       session.removeAttribute(ROL);
       session.invalidate();
+      return;
     }
+    log.error("There are no session");
   }
 }

@@ -3,8 +3,9 @@ package com.ec.fireman.beans;
 import com.ec.fireman.data.dao.UserAccountDao;
 import com.ec.fireman.data.entities.UserAccount;
 import com.ec.fireman.util.PasswordUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.ec.fireman.util.SessionUtils;
+import lombok.Data;
+import lombok.extern.log4j.Log4j2;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
@@ -16,11 +17,11 @@ import java.io.Serializable;
 import static com.ec.fireman.beans.PageNameConstants.ADMIN_LOGIN_PAGE;
 import static com.ec.fireman.beans.PageNameConstants.LOGIN_PAGE;
 
+@Data
+@Log4j2
 @Named
 @SessionScoped
 public class LoginBean implements Serializable {
-
-  private static final Logger log = LogManager.getLogger(LoginBean.class);
 
   public static final String LOGIN_ERROR_MESSAGES = "Usuario o clave inválida ";
   @Inject
@@ -41,25 +42,11 @@ public class LoginBean implements Serializable {
 
     if (PasswordUtil.encrypt(password).equals(account.getPassword())) {
       log.debug("Authentication successful for user: " + ci);
+      SessionUtils.saveLoggingInfo(account.getCi(), account.getRole().getRoleName());
       return ADMIN_LOGIN_PAGE;
     }
     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login Error", LOGIN_ERROR_MESSAGES));
     return LOGIN_PAGE;
   }
 
-  public String getCi() {
-    return ci;
-  }
-
-  public void setCi(String ci) {
-    this.ci = ci;
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
-  }
 }

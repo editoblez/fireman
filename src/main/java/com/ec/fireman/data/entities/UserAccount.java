@@ -1,5 +1,7 @@
 package com.ec.fireman.data.entities;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
 import static com.ec.fireman.data.entities.EntityConstants.GENERIC_COLUMN_SIZE;
@@ -11,6 +13,7 @@ import static com.ec.fireman.data.entities.EntityConstants.GENERIC_COLUMN_SIZE;
     )
 })
 
+@Data
 @Entity
 public class UserAccount implements BaseEntity {
   @Id

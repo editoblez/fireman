@@ -3,6 +3,7 @@ package com.ec.fireman.beans;
 import com.ec.fireman.data.dao.UserAccountDao;
 import com.ec.fireman.data.entities.UserAccount;
 import com.ec.fireman.util.PasswordUtil;
+import com.ec.fireman.util.SessionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -41,6 +42,7 @@ public class LoginBean implements Serializable {
 
     if (PasswordUtil.encrypt(password).equals(account.getPassword())) {
       log.debug("Authentication successful for user: " + ci);
+      SessionUtils.saveLoggingInfo(account.getCi(), account.getRole().getRoleName());
       return ADMIN_LOGIN_PAGE;
     }
     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login Error", LOGIN_ERROR_MESSAGES));

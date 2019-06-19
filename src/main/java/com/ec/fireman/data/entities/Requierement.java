@@ -12,7 +12,13 @@ public class Requierement implements BaseEntity {
   @Column
   private String name;
 
+  @Column
+  private String description;
+
   @ManyToOne
   private Role role;
+
+  @Enumerated(EnumType.STRING)
+  private State state;
 
 }

@@ -26,4 +26,7 @@ public class Local implements BaseEntity {
   @JoinColumn
   private Client client;
 
+  @Enumerated(EnumType.STRING)
+  private State state;
+
 }

@@ -14,4 +14,7 @@ public class PermissionRequest implements BaseEntity {
   @ManyToOne
   private Local local;
 
+  @Enumerated(EnumType.STRING)
+  private State state;
+
 }

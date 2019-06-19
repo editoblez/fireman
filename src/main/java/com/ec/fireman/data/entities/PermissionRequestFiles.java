@@ -18,4 +18,7 @@ public class PermissionRequestFiles implements BaseEntity {
   @ManyToOne
   private PermissionRequest permissionRequest;
 
+  @Enumerated(EnumType.STRING)
+  private State state;
+
 }

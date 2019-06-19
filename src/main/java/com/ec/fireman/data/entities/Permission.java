@@ -24,4 +24,7 @@ public class Permission implements BaseEntity {
   @Column(length = 100000)
   private byte[] data;
 
+  @Enumerated(EnumType.STRING)
+  private State state;
+
 }

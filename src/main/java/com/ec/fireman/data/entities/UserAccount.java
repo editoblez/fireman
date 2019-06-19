@@ -41,6 +41,9 @@ public class UserAccount implements BaseEntity {
   @ManyToOne(cascade = CascadeType.ALL)
   private Role role;
 
+  @Enumerated(EnumType.STRING)
+  private State state;
+
   public UserAccount() {
   }
 
@@ -53,6 +56,7 @@ public class UserAccount implements BaseEntity {
     this.password = password;
     this.email = email;
     this.role = role;
+    state = State.ACTIVE;
   }
 
   public long getId() {

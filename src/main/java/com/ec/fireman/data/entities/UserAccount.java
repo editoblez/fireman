@@ -52,7 +52,7 @@ public class UserAccount implements BaseEntity {
     this.secondName = secondName;
     this.firstLastName = firstLastName;
     this.secondLastName = secondLastName;
-    this.ci = ci;
+    this.setCi(ci);
     this.password = password;
     this.email = email;
     this.role = role;
@@ -118,5 +118,13 @@ public class UserAccount implements BaseEntity {
   public String getPassword() {
     return password;
   }
+
+public String getCi() {
+	return ci;
+}
+
+public void setCi(String ci) {
+	this.ci = ci;
+}
 }
 

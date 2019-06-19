@@ -20,7 +20,7 @@
 	<h:form id="navBar">
 		<p:menubar>
 			<p:menuitem value="Inicio"
-				outcome="../../pages/home?faces-redirect=true" />
+				url="../../pages/home.xhtml" />
 
 			<p:menuitem value="Personal" url="#" />
 
@@ -31,11 +31,7 @@
 			<p:menuitem value="Cuentas" url="#" />
 
 			<p:menuitem value="Usuarios"
-				outcome="../../pages/admin/userList?faces-redirect=true" />
-
-			<f:facet name="options">
-				<p:commandButton type="button" value="Logout" />
-			</f:facet>
+				url="../../pages/admin/userList.xhtml" />
 		</p:menubar>
 	</h:form>
 	<b:container fluid="true">

@@ -5,7 +5,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:f="http://java.sun.com/jsf/core">
-<ui:composition template="../WEB-INF/template/template.xhtml">
+<ui:composition template="../../WEB-INF/template/template.xhtml">
 	<ui:define name="pageTitle">
 		Listar usuario
 	</ui:define>
@@ -32,18 +32,18 @@
 				<p:column headerText="Rol">
 					<h:outputText value="#{user.role.roleName}" />
 				</p:column>
-				<p:column style="width:32px;text-align: center">
-					<p:commandButton update=":formUserEdit:opEdit"
+				<p:column style="text-align: center">
+					<p:commandButton update=":formUserEdit:opEdit" value="Editar"
 						oncomplete="PF('dlgUserEdit').show()" icon="fa fa-fw fa-edit"
 						title="Editar">
 						<f:setPropertyActionListener value="#{user}"
 							target="#{userListBean.selectedUser}" />
 					</p:commandButton>
 				</p:column>
-				<p:column style="width:32px;text-align: center">
-					<p:commandButton update=":formPassReset:opPassReset"
+				<p:column style="text-align: center">
+					<p:commandButton update=":formPassReset:opPassReset" value="Contraseña"
 						oncomplete="PF('dlgPassReset').show()" icon="fa fa-refresh"
-						title="Editar">
+						title="Resetear Contraseña">
 						<f:setPropertyActionListener value="#{user}"
 							target="#{userListBean.selectedUser}" />
 					</p:commandButton>
@@ -303,7 +303,7 @@
 							</h:panelGroup>
 
 							<h:panelGroup layout="block" class="form-group">
-								<p:outputLabel for="txtPassR1" value="Correo"
+								<p:outputLabel for="txtPassR1" value="Nueva Contraseña"
 									styleClass="col-sm-2 control-label" />
 								<div class="col-sm-4">
 									<p:inputText id="txtPassR1" value="#{userListBean.passReset1}"
@@ -314,7 +314,7 @@
 							</h:panelGroup>
 
 							<h:panelGroup layout="block" class="form-group">
-								<p:outputLabel for="txtPassR2" value="Correo"
+								<p:outputLabel for="txtPassR2" value="Confirmar Contraseña"
 									styleClass="col-sm-2 control-label" />
 								<div class="col-sm-4">
 									<p:inputText id="txtPassR2" value="#{userListBean.passReset2}"

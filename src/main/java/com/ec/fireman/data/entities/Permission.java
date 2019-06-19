@@ -1,8 +1,11 @@
 package com.ec.fireman.data.entities;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.Date;
 
+@Data
 @Entity
 public class Permission implements BaseEntity {
   @Id

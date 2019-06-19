@@ -1,7 +1,6 @@
 package com.ec.fireman.data.entities;
 
 import javax.persistence.*;
-import java.util.List;
 
 import static com.ec.fireman.data.entities.EntityConstants.GENERIC_COLUMN_SIZE;
 
@@ -13,8 +12,9 @@ public class Role implements BaseEntity {
 
   @Column(unique = true, length = GENERIC_COLUMN_SIZE, nullable = false)
   private String roleName;
-  @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
-  private List<UserAccount> userAccounts;
+
+  @Enumerated(EnumType.STRING)
+  private State state;
 
   public Role() {
   }
@@ -39,12 +39,5 @@ public class Role implements BaseEntity {
     this.roleName = roleName;
   }
 
-  public List<UserAccount> getUserAccounts() {
-    return userAccounts;
-  }
-
-  public void setUserAccounts(List<UserAccount> userAccounts) {
-    this.userAccounts = userAccounts;
-  }
 }
 

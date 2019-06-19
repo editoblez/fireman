@@ -19,4 +19,12 @@ public class Role implements BaseEntity {
   @Enumerated(EnumType.STRING)
   private State state;
 
+  public Role() {
+    this.state = State.ACTIVE;
+  }
+
+  public Role(String roleName) {
+    this();
+    this.roleName = roleName;
+  }
 }

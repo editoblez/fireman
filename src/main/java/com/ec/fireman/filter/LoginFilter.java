@@ -14,8 +14,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
-
-@WebFilter("/app/*")
+@WebFilter("/app/**/*")
 public class LoginFilter extends HttpFilter {
 
   public static final String INDEX_PAGE = "app/index.xhtml";

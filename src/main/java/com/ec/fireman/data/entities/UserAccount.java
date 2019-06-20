@@ -41,7 +41,7 @@ public class UserAccount implements BaseEntity {
   @Column(unique = true, length = GENERIC_COLUMN_SIZE, nullable = false)
   private String email;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private Role role;
 
   @Enumerated(EnumType.STRING)

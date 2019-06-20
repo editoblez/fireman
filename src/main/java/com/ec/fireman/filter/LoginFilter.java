@@ -49,7 +49,7 @@ public class LoginFilter extends HttpFilter {
 
   private boolean urlIsAllowed(HttpServletRequest request) {
     String url = request.getRequestURL().toString();
-    return url.contains("login");
+    return url.contains("login") || url.contains("register-client");
   }
 
 }

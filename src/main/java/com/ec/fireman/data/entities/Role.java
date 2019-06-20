@@ -6,6 +6,13 @@ import javax.persistence.*;
 
 import static com.ec.fireman.data.entities.EntityConstants.GENERIC_COLUMN_SIZE;
 
+@NamedQueries({
+    @NamedQuery(
+        name = "findRoleByName",
+        query = "from Role e where e.roleName = :roleName"
+    )
+})
+
 @Data
 @Entity
 public class Role implements BaseEntity {

@@ -154,7 +154,7 @@
 				</p:outputPanel>
 
 				<div align="right">
-					<p:commandButton ajax="true" action="faces-redirect=false"
+					<p:commandButton ajax="true" action="faces-redirect=false" oncomplete="PF('dlgUserCreate').hide();"
 						actionListener="#{userListBean.createUser()}" icon="ui-icon-disk"
 						value="Guardar" styleClass="btn btn-default" />
 				</div>

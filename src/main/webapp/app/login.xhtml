@@ -4,7 +4,7 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <title>login</title>
+        <title>Login</title>
     </h:head>
     <h:body>
         <p:panel id="panel" header="Autenticación Sistgema de Bomberos" style="margin-bottom:10px;">
@@ -19,7 +19,9 @@
                     <p:password id="password" required="true" value="#{loginBean.password}"/>
                     <p:message for="password"/>
                 </h:panelGrid>
-                <p:commandButton value="Submit" action="#{loginBean.validateUserAndPassword}" update="panel"/>
+                <p:commandButton value="Login" action="#{loginBean.validateUserAndPassword}" update="panel"/>
+                <p:separator/>
+                <p:link outcome="register-client" value="Registrar"/>
             </h:form>
         </p:panel>
     </h:body>

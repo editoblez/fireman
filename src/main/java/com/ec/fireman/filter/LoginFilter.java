@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
+
 @WebFilter("/app/*")
 public class LoginFilter extends HttpFilter {
 
@@ -53,3 +54,4 @@ public class LoginFilter extends HttpFilter {
   }
 
 }
+

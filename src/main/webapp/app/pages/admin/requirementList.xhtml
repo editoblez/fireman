@@ -1,0 +1,132 @@
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core">
+<ui:composition template="../../../WEB-INF/template/template.xhtml">
+	<ui:define name="pageTitle">
+		Listar requerimientos
+	</ui:define>
+	<ui:define name="contenido">
+
+		<h:form id="formServiceList">
+
+			<p:commandButton ajax="true" update=":formServiceList:dtService"
+				oncomplete="PF('dlgServiceCreate').show()" icon="fa fa-plus"
+				value="Nuevo" styleClass="btn btn-default" />
+
+			<p:dataTable id="dtService" var="req"
+				value="#{requirementListBean.requirements}">
+				<p:column headerText="Nombre">
+					<h:outputText value="#{req.name}" />
+				</p:column>
+				<p:column headerText="Descripcion">
+					<h:outputText value="#{req.description}" />
+				</p:column>
+				<p:column headerText="Rol">
+					<h:outputText value="#{req.role.roleName}" />
+				</p:column>
+				<p:column style="text-align: center; width: 100 px">
+					<p:commandButton update=":formServiceEdit:opEdit" value="Editar"
+						oncomplete="PF('dlgServiceEdit').show()" icon="fa fa-fw fa-edit"
+						title="Editar">
+						<f:setPropertyActionListener value="#{req}"
+							target="#{requirementListBean.selectedRequierement}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+
+		<p:dialog header="Crear Requerimiento" widgetVar="dlgServiceCreate"
+			minHeight="100" modal="true">
+			<h:form id="formServiceCreate">
+				<p:outputPanel id="opCreate" style="text-align:center;">
+					<h:panelGrid columns="1" cellpadding="5">
+						<div class="panel-body">
+
+							<h:panelGroup layout="block" class="form-group">
+								<p:outputLabel for="txtName" value="Nombre"
+									styleClass="col-sm-2 control-label" />
+								<div class="col-sm-4">
+									<p:inputText id="txtName"
+										value="#{requirementListBean.selectedRequierement.name}"
+										required="true" requiredMessage="Campo requerido"
+										styleClass="form-control" />
+									<p:message for="txtName" />
+								</div>
+							</h:panelGroup>
+							
+							<h:panelGroup layout="block" class="form-group">
+								<p:outputLabel for="txtDes" value="Descripción"
+									styleClass="col-sm-2 control-label" />
+								<div class="col-sm-4">
+									<p:inputText id="txtDes"
+										value="#{requirementListBean.selectedRequierement.description}"
+										required="true" requiredMessage="Campo requerido"
+										styleClass="form-control" />
+									<p:message for="txtDes" />
+								</div>
+							</h:panelGroup>
+						</div>
+					</h:panelGrid>
+				</p:outputPanel>
+
+				<div align="right">
+					<p:commandButton ajax="true" action="faces-redirect=false"
+						update=":formServiceList:dtService"
+						oncomplete="PF('dlgServiceCreate').hide();"
+						actionListener="#{requirementListBean.createRequierement()}"
+						icon="ui-icon-disk" value="Guardar" styleClass="btn btn-default" />
+				</div>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog header="Editar Requerimiento" widgetVar="dlgServiceEdit"
+			minHeight="100" modal="true">
+			<h:form id="formServiceEdit">
+				<p:outputPanel id="opEdit" style="text-align:center;">
+					<h:panelGrid columns="1" cellpadding="5">
+						<div class="panel-body">
+
+							<h:panelGroup layout="block" class="form-group">
+								<p:outputLabel for="txtName2" value="Nombre"
+									styleClass="col-sm-2 control-label" />
+								<div class="col-sm-4">
+									<p:inputText id="txtName2"
+										value="#{requirementListBean.selectedRequierement.name}"
+										required="true" requiredMessage="Campo requerido"
+										styleClass="form-control" />
+									<p:message for="txtName2" />
+								</div>
+							</h:panelGroup>
+							
+							<h:panelGroup layout="block" class="form-group">
+								<p:outputLabel for="txtDes1" value="Descripción"
+									styleClass="col-sm-2 control-label" />
+								<div class="col-sm-4">
+									<p:inputText id="txtDes1"
+										value="#{requirementListBean.selectedRequierement.description}"
+										required="true" requiredMessage="Campo requerido"
+										styleClass="form-control" />
+									<p:message for="txtDes1" />
+								</div>
+							</h:panelGroup>
+						</div>
+					</h:panelGrid>
+				</p:outputPanel>
+
+				<div align="right">
+					<p:commandButton ajax="true" action="faces-redirect=false"
+						oncomplete="PF('dlgServiceEdit').hide();"
+						actionListener="#{requirementListBean.editRequierement()}"
+						icon="ui-icon-disk" value="Guardar" styleClass="btn btn-default" />
+				</div>
+			</h:form>
+		</p:dialog>
+
+
+	</ui:define>
+</ui:composition>
+</html>

@@ -12,7 +12,7 @@ public class RequirementDao extends GenericDaoImpl<Requirement> {
 
   @PostConstruct
   public void init() {
-    log.info("ServiceDao was successfully created");
+    log.info("RequirementDao was successfully created");
     setClazz(Requirement.class);
   }
 

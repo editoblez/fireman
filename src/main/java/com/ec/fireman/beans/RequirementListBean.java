@@ -6,11 +6,14 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
+import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.ec.fireman.data.dao.RoleDao;
 import com.ec.fireman.data.entities.Requierement;
 import com.ec.fireman.data.entities.Role;
 import com.ec.fireman.data.entities.State;
@@ -23,9 +26,13 @@ public class RequirementListBean implements Serializable {
 
 	private static final Logger LOG = LogManager.getLogger(RequirementListBean.class);
 
+	// TODO: IMPORT DAO
+	@Inject
+	private RoleDao roleDao;
+
 	private List<Requierement> requirements;
 	private Requierement selectedRequierement;
-	private String role;
+	private Role role;
 
 	@PostConstruct
 	public void init() {
@@ -46,26 +53,22 @@ public class RequirementListBean implements Serializable {
 		requirements.add(item);
 	}
 
+	@Transactional
 	public void createRequierement() {
 		// TODO: SAVE
-//		this.refreshRequierement();
+		this.refreshRequierement();
 		selectedRequierement = new Requierement();
 	}
 
+	@Transactional
 	public void editRequierement() {
 		// TODO: SAVE
-//		this.refreshRequierement();
+		this.refreshRequierement();
 		selectedRequierement = new Requierement();
 	}
 
-	public List<String> listRoles() {
-		// TODO: SEARCH THE ROLES IN THE DATABASE
-		List<String> roles = new ArrayList<String>();
-		roles.add("Administrador");
-		roles.add("Inspector");
-		roles.add("Contador");
-		roles.add("Bombero");
-		return roles;
+	public List<Role> listRoles() {
+		return roleDao.findAll();
 	}
 
 	public Requierement getSelectedRequierement() {
@@ -76,20 +79,20 @@ public class RequirementListBean implements Serializable {
 		this.selectedRequierement = selectedRequierement;
 	}
 
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
-	}
-
 	public List<Requierement> getRequirements() {
 		return requirements;
 	}
 
 	public void setRequirements(List<Requierement> requirements) {
 		this.requirements = requirements;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 }

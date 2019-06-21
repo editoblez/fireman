@@ -14,7 +14,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 
-import static com.ec.fireman.beans.PageNameConstants.ADMIN_LOGIN_PAGE;
 import static com.ec.fireman.beans.PageNameConstants.LOGIN_PAGE;
 
 @Data
@@ -25,7 +24,7 @@ public class LoginBean implements Serializable {
 
   public static final String LOGIN_ERROR_MESSAGES = "Usuario o clave inválida ";
   public static final String USER_PAGE = "pages/admin/userList.xhtml";
-  
+
   @Inject
   private UserAccountDao userAccountDao;
 

@@ -7,7 +7,7 @@
 	xmlns:f="http://java.sun.com/jsf/core">
 <ui:composition template="../../../template/template.xhtml">
 	<ui:define name="pageTitle">
-		Listar usuario
+		Listar usuario		
 	</ui:define>
 	<ui:define name="contenido">
 
@@ -41,9 +41,9 @@
 					</p:commandButton>
 				</p:column>
 				<p:column style="text-align: center">
-					<p:commandButton update=":formPassReset:opPassReset" value="Contraseña"
-						oncomplete="PF('dlgPassReset').show()" icon="fa fa-refresh"
-						title="Resetear Contraseña">
+					<p:commandButton update=":formPassReset:opPassReset"
+						value="Contraseña" oncomplete="PF('dlgPassReset').show()"
+						icon="fa fa-refresh" title="Resetear Contraseña">
 						<f:setPropertyActionListener value="#{user}"
 							target="#{userListBean.selectedUser}" />
 					</p:commandButton>
@@ -54,10 +54,10 @@
 		<p:dialog header="Crear Usuario" widgetVar="dlgUserCreate"
 			minHeight="100" modal="true">
 			<h:form id="formUserCreate">
-				<p:outputPanel id="opCreate" style="text-align:center;">
+				<p:outputPanel id="opCreate" >
 					<h:panelGrid columns="2" cellpadding="5">
 						<div class="panel-body">
-							<h:panelGroup layout="block" class="form-group">
+							<h:panelGroup class="form-group">
 								<p:outputLabel for="txtName" value="Primer Nombre"
 									styleClass="col-sm-2 control-label" />
 								<div class="col-sm-4">
@@ -68,7 +68,7 @@
 								</div>
 							</h:panelGroup>
 
-							<h:panelGroup layout="block" class="form-group">
+							<h:panelGroup class="form-group">
 								<p:outputLabel for="txtName2" value="Segundo Nombre"
 									styleClass="col-sm-2 control-label" />
 								<div class="col-sm-4">
@@ -80,7 +80,7 @@
 								</div>
 							</h:panelGroup>
 
-							<h:panelGroup layout="block" class="form-group">
+							<h:panelGroup class="form-group">
 								<p:outputLabel for="txtLastN1" value="Primer Apellido"
 									styleClass="col-sm-2 control-label" />
 								<div class="col-sm-4">
@@ -92,7 +92,7 @@
 								</div>
 							</h:panelGroup>
 
-							<h:panelGroup layout="block" class="form-group">
+							<h:panelGroup class="form-group">
 								<p:outputLabel for="txtLastN2" value="Segundo Apellido"
 									styleClass="col-sm-2 control-label" />
 								<div class="col-sm-4">
@@ -104,7 +104,7 @@
 								</div>
 							</h:panelGroup>
 
-							<h:panelGroup layout="block" class="form-group">
+							<h:panelGroup class="form-group">
 								<p:outputLabel for="txtCi" value="Cédula"
 									styleClass="col-sm-2 control-label" />
 								<div class="col-sm-4">
@@ -115,7 +115,7 @@
 								</div>
 							</h:panelGroup>
 
-							<h:panelGroup layout="block" class="form-group">
+							<h:panelGroup class="form-group">
 								<p:outputLabel for="txtEmail" value="Correo"
 									styleClass="col-sm-2 control-label" />
 								<div class="col-sm-4">
@@ -126,7 +126,7 @@
 								</div>
 							</h:panelGroup>
 
-							<h:panelGroup layout="block" class="form-group">
+							<h:panelGroup class="form-group">
 								<p:outputLabel for="txtPassw" value="Contraseña"
 									styleClass="col-sm-2 control-label" />
 								<div class="col-sm-4">
@@ -137,14 +137,20 @@
 								</div>
 							</h:panelGroup>
 
-							<h:panelGroup layout="block" class="form-group">
+							<h:panelGroup class="form-group">
 								<p:outputLabel for="cmbRol" value="Rol"
 									styleClass="col-sm-2 control-label" />
 								<div class="col-sm-4">
 									<p:selectOneMenu id="cmbRol" value="#{userListBean.role}"
-										style="width:125px">
-										<f:selectItem itemLabel="Seleccione" itemValue="" />
-										<f:selectItems value="#{userListBean.listRoles()}" />
+										converter="roleConverter" panelStyle="width:180px"
+										effect="fade" var="r" style="width:160px" filter="true"
+										filterMatchMode="startsWith">
+										<f:selectItem itemLabel="Seleccione" noSelectionOption="true" />
+										<f:selectItems value="#{userListBean.listRoles()}" var="role"
+											itemLabel="#{role.roleName}" itemValue="#{role}" />
+										<p:column>
+											<h:outputText value="#{r.roleName}" />
+										</p:column>
 									</p:selectOneMenu>
 									<p:message for="cmbRol" />
 								</div>
@@ -154,7 +160,9 @@
 				</p:outputPanel>
 
 				<div align="right">
-					<p:commandButton ajax="true" action="faces-redirect=false" oncomplete="PF('dlgUserCreate').hide();"
+					<p:commandButton ajax="true" action="faces-redirect=false"
+						update=":formUserList:dtUser"
+						oncomplete="PF('dlgUserCreate').hide();"
 						actionListener="#{userListBean.createUser()}" icon="ui-icon-disk"
 						value="Guardar" styleClass="btn btn-default" />
 				</div>
@@ -164,7 +172,7 @@
 		<p:dialog header="Editar Usuario" widgetVar="dlgUserEdit"
 			minHeight="100" modal="true">
 			<h:form id="formUserEdit">
-				<p:outputPanel id="opEdit" style="text-align:center;">
+				<p:outputPanel id="opEdit" >
 					<h:panelGrid columns="2" cellpadding="5">
 						<div class="panel-body">
 							<h:panelGroup layout="block" class="form-group">
@@ -218,9 +226,9 @@
 								<p:outputLabel for="txtCi2" value="Cédula"
 									styleClass="col-sm-2 control-label" />
 								<div class="col-sm-4">
-									<p:inputText id="txtCi2" value="#{userListBean.selectedUser.ci}"
-										required="true" requiredMessage="Campo requerido"
-										styleClass="form-control" />
+									<p:inputText id="txtCi2"
+										value="#{userListBean.selectedUser.ci}" required="true"
+										requiredMessage="Campo requerido" styleClass="form-control" />
 									<p:message for="txtCi2" />
 								</div>
 							</h:panelGroup>
@@ -241,9 +249,15 @@
 									styleClass="col-sm-2 control-label" />
 								<div class="col-sm-4">
 									<p:selectOneMenu id="cmbRol2" value="#{userListBean.role}"
-										style="width:125px">
-										<f:selectItem itemLabel="Seleccione" itemValue="" />
-										<f:selectItems value="#{userListBean.listRoles()}" />
+										converter="roleConverter" panelStyle="width:180px"
+										effect="fade" var="r" style="width:160px" filter="true"
+										filterMatchMode="startsWith">
+										<f:selectItem itemLabel="Seleccione" noSelectionOption="true" />
+										<f:selectItems value="#{userListBean.listRoles()}" var="role"
+											itemLabel="#{role.roleName}" itemValue="#{role}" />
+										<p:column>
+											<h:outputText value="#{r.roleName}" />
+										</p:column>
 									</p:selectOneMenu>
 									<p:message for="cmbRol2" />
 								</div>
@@ -253,7 +267,9 @@
 				</p:outputPanel>
 
 				<div align="right">
-					<p:commandButton ajax="true" action="faces-redirect=false" oncomplete="PF('dlgUserEdit').hide();"
+					<p:commandButton ajax="true" action="faces-redirect=false"
+						oncomplete="PF('dlgUserEdit').hide();"
+						update=":formUserList:dtUser"
 						actionListener="#{userListBean.editUser()}" icon="ui-icon-disk"
 						value="Guardar" styleClass="btn btn-default" />
 				</div>
@@ -263,7 +279,7 @@
 		<p:dialog header="Resetear Contraseña" widgetVar="dlgPassReset"
 			minHeight="100" modal="true">
 			<h:form id="formPassReset">
-				<p:outputPanel id="opPassReset" style="text-align:center;">
+				<p:outputPanel id="opPassReset" >
 					<h:panelGrid columns="2" cellpadding="5">
 						<div class="panel-body">
 							<h:panelGroup layout="block" class="form-group">

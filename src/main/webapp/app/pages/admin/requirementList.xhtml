@@ -11,13 +11,13 @@
 	</ui:define>
 	<ui:define name="contenido">
 
-		<h:form id="formServiceList">
+		<h:form id="formList">
 
-			<p:commandButton ajax="true" update=":formServiceList:dtService"
+			<p:commandButton ajax="true" update=":formList:dtList"
 				oncomplete="PF('dlgServiceCreate').show()" icon="fa fa-plus"
 				value="Nuevo" styleClass="btn btn-default" />
 
-			<p:dataTable id="dtService" var="req"
+			<p:dataTable id="dtList" var="req"
 				value="#{requirementListBean.requirements}">
 				<p:column headerText="Nombre">
 					<h:outputText value="#{req.name}" />
@@ -42,7 +42,7 @@
 		<p:dialog header="Crear Requerimiento" widgetVar="dlgServiceCreate"
 			minHeight="100" modal="true">
 			<h:form id="formServiceCreate">
-				<p:outputPanel id="opCreate" style="text-align:center;">
+				<p:outputPanel id="opCreate" >
 					<h:panelGrid columns="1" cellpadding="5">
 						<div class="panel-body">
 
@@ -57,7 +57,7 @@
 									<p:message for="txtName" />
 								</div>
 							</h:panelGroup>
-							
+
 							<h:panelGroup layout="block" class="form-group">
 								<p:outputLabel for="txtDes" value="Descripción"
 									styleClass="col-sm-2 control-label" />
@@ -69,13 +69,32 @@
 									<p:message for="txtDes" />
 								</div>
 							</h:panelGroup>
+
+							<h:panelGroup layout="block" class="form-group">
+								<p:outputLabel for="cmbRol" value="Rol"
+									styleClass="col-sm-2 control-label" />
+								<div class="col-sm-4">
+									<p:selectOneMenu id="cmbRol"
+										value="#{requirementListBean.role}" converter="roleConverter"
+										panelStyle="width:180px" effect="fade" var="r"
+										style="width:160px" filter="true" filterMatchMode="startsWith">
+										<f:selectItem itemLabel="Seleccione" noSelectionOption="true" />
+										<f:selectItems value="#{requirementListBean.listRoles()}"
+											var="role" itemLabel="#{role.roleName}" itemValue="#{role}" />
+										<p:column>
+											<h:outputText value="#{r.roleName}" />
+										</p:column>
+									</p:selectOneMenu>
+									<p:message for="cmbRol" />
+								</div>
+							</h:panelGroup>
 						</div>
 					</h:panelGrid>
 				</p:outputPanel>
 
 				<div align="right">
 					<p:commandButton ajax="true" action="faces-redirect=false"
-						update=":formServiceList:dtService"
+						update=":formList:dtList"
 						oncomplete="PF('dlgServiceCreate').hide();"
 						actionListener="#{requirementListBean.createRequierement()}"
 						icon="ui-icon-disk" value="Guardar" styleClass="btn btn-default" />
@@ -86,7 +105,7 @@
 		<p:dialog header="Editar Requerimiento" widgetVar="dlgServiceEdit"
 			minHeight="100" modal="true">
 			<h:form id="formServiceEdit">
-				<p:outputPanel id="opEdit" style="text-align:center;">
+				<p:outputPanel id="opEdit" >
 					<h:panelGrid columns="1" cellpadding="5">
 						<div class="panel-body">
 
@@ -101,7 +120,7 @@
 									<p:message for="txtName2" />
 								</div>
 							</h:panelGroup>
-							
+
 							<h:panelGroup layout="block" class="form-group">
 								<p:outputLabel for="txtDes1" value="Descripción"
 									styleClass="col-sm-2 control-label" />
@@ -117,9 +136,28 @@
 					</h:panelGrid>
 				</p:outputPanel>
 
+				<h:panelGroup layout="block" class="form-group">
+					<p:outputLabel for="cmbRol2" value="Rol"
+						styleClass="col-sm-2 control-label" />
+					<div class="col-sm-4">
+						<p:selectOneMenu id="cmbRol2" value="#{requirementListBean.role}"
+							converter="roleConverter" panelStyle="width:180px" effect="fade"
+							var="r" style="width:160px" filter="true"
+							filterMatchMode="startsWith">
+							<f:selectItem itemLabel="Seleccione" noSelectionOption="true" />
+							<f:selectItems value="#{requirementListBean.listRoles()}"
+								var="role" itemLabel="#{role.roleName}" itemValue="#{role}" />
+							<p:column>
+								<h:outputText value="#{r.roleName}" />
+							</p:column>
+						</p:selectOneMenu>
+						<p:message for="cmbRol2" />
+					</div>
+				</h:panelGroup>
+
 				<div align="right">
 					<p:commandButton ajax="true" action="faces-redirect=false"
-						oncomplete="PF('dlgServiceEdit').hide();"
+						oncomplete="PF('dlgServiceEdit').hide();" update=":formList:dtList"
 						actionListener="#{requirementListBean.editRequierement()}"
 						icon="ui-icon-disk" value="Guardar" styleClass="btn btn-default" />
 				</div>

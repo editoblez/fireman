@@ -14,24 +14,18 @@
 	<p:growl id="msg" showDetail="true" globalOnly="true" life="5000" />
 
 	<div align="center" style="padding-top: 10px; padding-bottom: 10px; width: 100%">
-		<h3>LOGO</h3>
+		<img src="../resources/images/logo.jpg" width="80"/>
 	</div>
 
 	<h:form id="navBar">
 		<p:menubar>
-			<p:menuitem value="Inicio"
-				url="../../pages/home.xhtml" />
+			<p:menuitem value="Inicio" url="../../app/pages/home.xhtml" />
 
-			<p:menuitem value="Personal" url="#" />
+			<p:menuitem value="Servicio" url="../../app/pages/admin/serviceList.xhtml" />
 
-			<p:menuitem value="Servicio" url="#" />
+			<p:menuitem value="Requerimientos" url="../../app/pages/admin/requirementList.xhtml" />
 
-			<p:menuitem value="Inspecciones" url="#" />
-
-			<p:menuitem value="Cuentas" url="#" />
-
-			<p:menuitem value="Usuarios"
-				url="../../pages/admin/userList.xhtml" />
+			<p:menuitem value="Usuarios" url="../../app/pages/admin/userList.xhtml" />
 		</p:menubar>
 	</h:form>
 	<b:container fluid="true">

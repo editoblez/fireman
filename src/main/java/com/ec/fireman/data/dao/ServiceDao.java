@@ -1,13 +1,11 @@
 package com.ec.fireman.data.dao;
 
 import com.ec.fireman.data.entities.Service;
-import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 
-@Data
 @Log4j2
 @Stateless
 public class ServiceDao extends GenericDaoImpl<Service> {
@@ -15,6 +13,7 @@ public class ServiceDao extends GenericDaoImpl<Service> {
   @PostConstruct
   public void init() {
     log.info("ServiceDao was successfully created");
+    setClazz(Service.class);
   }
 
   public Service findServiceByName(String serviceName) {

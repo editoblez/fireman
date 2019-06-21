@@ -16,7 +16,7 @@ public class PermissionRequestFiles implements BaseEntity {
   private byte[] data;
 
   @ManyToOne
-  private Requierement requierement;
+  private Requirement requirement;
 
   @ManyToOne
   private PermissionRequest permissionRequest;

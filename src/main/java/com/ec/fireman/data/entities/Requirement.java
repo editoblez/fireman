@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
-public class Requierement implements BaseEntity {
+public class Requirement implements BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)

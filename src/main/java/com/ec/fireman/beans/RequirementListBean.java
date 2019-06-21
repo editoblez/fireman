@@ -1,19 +1,17 @@
 package com.ec.fireman.beans;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import com.ec.fireman.data.entities.Requirement;
+import com.ec.fireman.data.entities.Role;
+import com.ec.fireman.data.entities.State;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import com.ec.fireman.data.entities.Requierement;
-import com.ec.fireman.data.entities.Role;
-import com.ec.fireman.data.entities.State;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Named
 @SessionScoped
@@ -23,21 +21,21 @@ public class RequirementListBean implements Serializable {
 
 	private static final Logger LOG = LogManager.getLogger(RequirementListBean.class);
 
-	private List<Requierement> requirements;
-	private Requierement selectedRequierement;
+	private List<Requirement> requirements;
+	private Requirement selectedRequirement;
 	private String role;
 
 	@PostConstruct
 	public void init() {
 		this.refreshRequierement();
-		selectedRequierement = new Requierement();
+		selectedRequirement = new Requirement();
 	}
 
 	public void refreshRequierement() {
 		// TODO:
 		requirements = new ArrayList<>();
-		Requierement item = new Requierement();
-		item.setDescription("Descripción requerimiento");
+		Requirement item = new Requirement();
+		item.setDescription("Descripciï¿½n requerimiento");
 		item.setName("Nombre requerimiento");
 		item.setState(State.ACTIVE);
 		Role role = new Role();
@@ -49,13 +47,13 @@ public class RequirementListBean implements Serializable {
 	public void createRequierement() {
 		// TODO: SAVE
 //		this.refreshRequierement();
-		selectedRequierement = new Requierement();
+		selectedRequirement = new Requirement();
 	}
 
 	public void editRequierement() {
 		// TODO: SAVE
 //		this.refreshRequierement();
-		selectedRequierement = new Requierement();
+		selectedRequirement = new Requirement();
 	}
 
 	public List<String> listRoles() {
@@ -68,12 +66,12 @@ public class RequirementListBean implements Serializable {
 		return roles;
 	}
 
-	public Requierement getSelectedRequierement() {
-		return selectedRequierement;
+	public Requirement getSelectedRequirement() {
+		return selectedRequirement;
 	}
 
-	public void setSelectedRequierement(Requierement selectedRequierement) {
-		this.selectedRequierement = selectedRequierement;
+	public void setSelectedRequirement(Requirement selectedRequirement) {
+		this.selectedRequirement = selectedRequirement;
 	}
 
 	public String getRole() {
@@ -84,11 +82,11 @@ public class RequirementListBean implements Serializable {
 		this.role = role;
 	}
 
-	public List<Requierement> getRequirements() {
+	public List<Requirement> getRequirements() {
 		return requirements;
 	}
 
-	public void setRequirements(List<Requierement> requirements) {
+	public void setRequirements(List<Requirement> requirements) {
 		this.requirements = requirements;
 	}
 

@@ -4,6 +4,13 @@ import lombok.Data;
 
 import javax.persistence.*;
 
+@NamedQueries({
+    @NamedQuery(
+        name = "findRequirementByName",
+        query = "from Requirement e where e.name = :name"
+    )
+})
+
 @Data
 @Entity
 public class Requirement implements BaseEntity {

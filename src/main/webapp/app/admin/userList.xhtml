@@ -5,7 +5,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:f="http://java.sun.com/jsf/core">
-<ui:composition template="../../../template/template.xhtml">
+<ui:composition template="../../template/template.xhtml">
 	<ui:define name="pageTitle">
 		Listar usuario		
 	</ui:define>
@@ -14,8 +14,8 @@
 		<h:form id="formUserList">
 
 			<p:commandButton ajax="true" update=":formUserList:dtUser"
-				oncomplete="PF('dlgUserCreate').show()" icon="fa fa-plus"
-				value="Nuevo" styleClass="btn btn-default" />
+				oncomplete="PF('dlgUserCreate').show()" value="Nuevo"
+				styleClass="btn btn-default" />
 			<p:dataTable id="dtUser" var="user" value="#{userListBean.users}">
 				<p:column headerText="CI">
 					<h:outputText value="#{user.ci}" />
@@ -34,8 +34,7 @@
 				</p:column>
 				<p:column style="text-align: center">
 					<p:commandButton update=":formUserEdit:opEdit" value="Editar"
-						oncomplete="PF('dlgUserEdit').show()" icon="fa fa-fw fa-edit"
-						title="Editar">
+						oncomplete="PF('dlgUserEdit').show()" title="Editar">
 						<f:setPropertyActionListener value="#{user}"
 							target="#{userListBean.selectedUser}" />
 					</p:commandButton>
@@ -43,7 +42,7 @@
 				<p:column style="text-align: center">
 					<p:commandButton update=":formPassReset:opPassReset"
 						value="Contraseña" oncomplete="PF('dlgPassReset').show()"
-						icon="fa fa-refresh" title="Resetear Contraseña">
+						title="Resetear Contraseña">
 						<f:setPropertyActionListener value="#{user}"
 							target="#{userListBean.selectedUser}" />
 					</p:commandButton>
@@ -163,8 +162,8 @@
 					<p:commandButton ajax="true" action="faces-redirect=false"
 						update=":formUserList:dtUser"
 						oncomplete="PF('dlgUserCreate').hide();"
-						actionListener="#{userListBean.createUser()}" icon="ui-icon-disk"
-						value="Guardar" styleClass="btn btn-default" />
+						actionListener="#{userListBean.createUser()}" value="Guardar"
+						styleClass="btn btn-default" />
 				</div>
 			</h:form>
 		</p:dialog>
@@ -270,8 +269,8 @@
 					<p:commandButton ajax="true" action="faces-redirect=false"
 						oncomplete="PF('dlgUserEdit').hide();"
 						update=":formUserList:dtUser"
-						actionListener="#{userListBean.editUser()}" icon="ui-icon-disk"
-						value="Guardar" styleClass="btn btn-default" />
+						actionListener="#{userListBean.editUser()}" value="Guardar"
+						styleClass="btn btn-default" />
 				</div>
 			</h:form>
 		</p:dialog>
@@ -346,8 +345,8 @@
 				<div align="right">
 					<p:commandButton ajax="true" action="faces-redirect=false"
 						oncomplete="PF('dlgPassReset').hide();"
-						actionListener="#{userListBean.resetPassword()}"
-						icon="ui-icon-disk" value="Guardar" styleClass="btn btn-default" />
+						actionListener="#{userListBean.resetPassword()}" value="Guardar"
+						styleClass="btn btn-default" />
 				</div>
 			</h:form>
 		</p:dialog>

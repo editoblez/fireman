@@ -4,12 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-@NamedQueries({
-    @NamedQuery(
-        name = "findServiceByName",
-        query = "from Service e where e.name = :name"
-    )
-})
+@NamedQueries({ @NamedQuery(name = "findServiceByName", query = "from Service e where e.name = :name") })
 
 @Data
 @Entity

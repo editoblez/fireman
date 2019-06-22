@@ -1,7 +1,6 @@
 package com.ec.fireman.beans;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -14,8 +13,12 @@ import com.ec.fireman.data.dao.RequirementDao;
 import com.ec.fireman.data.dao.RoleDao;
 import com.ec.fireman.data.entities.Requirement;
 import com.ec.fireman.data.entities.Role;
-import com.ec.fireman.data.entities.State;
 
+import lombok.Data;
+import lombok.extern.log4j.Log4j2;
+
+@Data
+@Log4j2
 @Named
 @SessionScoped
 public class RequirementListBean implements Serializable {
@@ -33,63 +36,33 @@ public class RequirementListBean implements Serializable {
 
   @PostConstruct
   public void init() {
-    this.refreshRequierement();
+    this.refreshRequirement();
     selectedRequirement = new Requirement();
   }
 
-  public void refreshRequierement() {
-    // TODO:
-    requirements = new ArrayList<>();
-    Requirement item = new Requirement();
-    item.setDescription("Descripci�n requerimiento");
-    item.setName("Nombre requerimiento");
-    item.setState(State.ACTIVE);
-    Role role = new Role();
-    role.setRoleName("Administrador");
-    item.setRole(role);
-    requirements.add(item);
+  public void refreshRequirement() {
+    requirements = requirementDao.findAll();
+    log.info("Requirements length: " + requirements != null ? requirements.size() : 0);
   }
 
   @Transactional
-  public void createRequierement() {
-    // TODO: SAVE
-    this.refreshRequierement();
+  public void createRequirement() {
+    selectedRequirement.setRole(role);
+    requirementDao.save(selectedRequirement);
+    this.refreshRequirement();
     selectedRequirement = new Requirement();
   }
 
   @Transactional
-  public void editRequierement() {
-    // TODO: SAVE
-    this.refreshRequierement();
+  public void editRequirement() {
+    selectedRequirement.setRole(role);
+    requirementDao.update(selectedRequirement);
+    this.refreshRequirement();
     selectedRequirement = new Requirement();
   }
 
   public List<Role> listRoles() {
     return roleDao.findAll();
-  }
-
-  public Requirement getSelectedRequirement() {
-    return selectedRequirement;
-  }
-
-  public void setSelectedRequirement(Requirement selectedRequirement) {
-    this.selectedRequirement = selectedRequirement;
-  }
-
-  public List<Requirement> getRequirements() {
-    return requirements;
-  }
-
-  public void setRequirements(List<Requirement> requirements) {
-    this.requirements = requirements;
-  }
-
-  public Role getRole() {
-    return role;
-  }
-
-  public void setRole(Role role) {
-    this.role = role;
   }
 
 }

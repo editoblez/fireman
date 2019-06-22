@@ -4,12 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-@NamedQueries({
-    @NamedQuery(
-        name = "findRequirementByName",
-        query = "from Requirement e where e.name = :name"
-    )
-})
+@NamedQueries({ @NamedQuery(name = "findRequirementByName", query = "from Requirement e where e.name = :name") })
 
 @Data
 @Entity

@@ -34,7 +34,7 @@ public class UserAccountDao extends GenericDaoImpl<UserAccount> {
           .setParameter("ci", ci)
           .getSingleResult();
     } catch (Exception ex) {
-      //TODO here must be a logging with the exception
+      log.error("Error to exceute findUserByCi: ", ex);
     }
     return account;
   }

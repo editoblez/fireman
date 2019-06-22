@@ -5,7 +5,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:f="http://java.sun.com/jsf/core">
-<ui:composition template="../../../template/template.xhtml">
+<ui:composition template="../../template/template.xhtml">
 	<ui:define name="pageTitle">
 		Listar servicios
 	</ui:define>
@@ -14,18 +14,17 @@
 		<h:form id="formServiceList">
 
 			<p:commandButton ajax="true" update=":formServiceList:dtService"
-				oncomplete="PF('dlgServiceCreate').show()" icon="fa fa-plus"
-				value="Nuevo" styleClass="btn btn-default" />
+				oncomplete="PF('dlgServiceCreate').show()" value="Nuevo"
+				styleClass="btn btn-default" />
 
 			<p:dataTable id="dtService" var="service"
 				value="#{serviceListBean.services}">
-				<p:column headerText="Nombre">
+				<p:column headerText="Nombre" width="80%">
 					<h:outputText value="#{service.name}" />
 				</p:column>
-				<p:column style="text-align: center; width: 100 px">
+				<p:column style="text-align: center;" width="20%">
 					<p:commandButton update=":formServiceEdit:opEdit" value="Editar"
-						oncomplete="PF('dlgServiceEdit').show()" icon="fa fa-fw fa-edit"
-						title="Editar">
+						oncomplete="PF('dlgServiceEdit').show()" title="Editar">
 						<f:setPropertyActionListener value="#{service}"
 							target="#{serviceListBean.selectedService}" />
 					</p:commandButton>
@@ -60,7 +59,7 @@
 						update=":formServiceList:dtService"
 						oncomplete="PF('dlgServiceCreate').hide();"
 						actionListener="#{serviceListBean.createService()}"
-						icon="ui-icon-disk" value="Guardar" styleClass="btn btn-default" />
+						value="Guardar" styleClass="btn btn-default" />
 				</div>
 			</h:form>
 		</p:dialog>
@@ -89,13 +88,13 @@
 
 				<div align="right">
 					<p:commandButton ajax="true" action="faces-redirect=false"
+						update=":formServiceList:dtService"
 						oncomplete="PF('dlgServiceEdit').hide();"
-						actionListener="#{serviceListBean.editService()}"
-						icon="ui-icon-disk" value="Guardar" styleClass="btn btn-default" />
+						actionListener="#{serviceListBean.editService()}" value="Guardar"
+						styleClass="btn btn-default" />
 				</div>
 			</h:form>
 		</p:dialog>
-
 
 	</ui:define>
 </ui:composition>

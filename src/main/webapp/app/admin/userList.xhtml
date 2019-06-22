@@ -1,0 +1,358 @@
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core">
+<ui:composition template="../../../template/template.xhtml">
+	<ui:define name="pageTitle">
+		Listar usuario		
+	</ui:define>
+	<ui:define name="contenido">
+
+		<h:form id="formUserList">
+
+			<p:commandButton ajax="true" update=":formUserList:dtUser"
+				oncomplete="PF('dlgUserCreate').show()" icon="fa fa-plus"
+				value="Nuevo" styleClass="btn btn-default" />
+			<p:dataTable id="dtUser" var="user" value="#{userListBean.users}">
+				<p:column headerText="CI">
+					<h:outputText value="#{user.ci}" />
+				</p:column>
+				<p:column headerText="Primer Nombre">
+					<h:outputText value="#{user.firstName}" />
+				</p:column>
+				<p:column headerText="Primer Apellido">
+					<h:outputText value="#{user.firstLastName}" />
+				</p:column>
+				<p:column headerText="Correo">
+					<h:outputText value="#{user.email}" />
+				</p:column>
+				<p:column headerText="Rol">
+					<h:outputText value="#{user.role.roleName}" />
+				</p:column>
+				<p:column style="text-align: center">
+					<p:commandButton update=":formUserEdit:opEdit" value="Editar"
+						oncomplete="PF('dlgUserEdit').show()" icon="fa fa-fw fa-edit"
+						title="Editar">
+						<f:setPropertyActionListener value="#{user}"
+							target="#{userListBean.selectedUser}" />
+					</p:commandButton>
+				</p:column>
+				<p:column style="text-align: center">
+					<p:commandButton update=":formPassReset:opPassReset"
+						value="Contraseña" oncomplete="PF('dlgPassReset').show()"
+						icon="fa fa-refresh" title="Resetear Contraseña">
+						<f:setPropertyActionListener value="#{user}"
+							target="#{userListBean.selectedUser}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+
+		<p:dialog header="Crear Usuario" widgetVar="dlgUserCreate"
+			minHeight="100" modal="true">
+			<h:form id="formUserCreate">
+				<p:outputPanel id="opCreate">
+					<h:panelGrid columns="2" cellpadding="5">
+						<div class="panel-body">
+							<h:panelGroup class="form-group">
+								<p:outputLabel for="txtName" value="Primer Nombre"
+									styleClass="col-sm-2 control-label" />
+								<div class="col-sm-4">
+									<p:inputText id="txtName"
+										value="#{userListBean.selectedUser.firstName}" required="true"
+										requiredMessage="Campo requerido" styleClass="form-control" />
+									<p:message for="txtName" />
+								</div>
+							</h:panelGroup>
+
+							<h:panelGroup class="form-group">
+								<p:outputLabel for="txtName2" value="Segundo Nombre"
+									styleClass="col-sm-2 control-label" />
+								<div class="col-sm-4">
+									<p:inputText id="txtName2"
+										value="#{userListBean.selectedUser.secondName}"
+										required="true" requiredMessage="Campo requerido"
+										styleClass="form-control" />
+									<p:message for="txtName2" />
+								</div>
+							</h:panelGroup>
+
+							<h:panelGroup class="form-group">
+								<p:outputLabel for="txtLastN1" value="Primer Apellido"
+									styleClass="col-sm-2 control-label" />
+								<div class="col-sm-4">
+									<p:inputText id="txtLastN1"
+										value="#{userListBean.selectedUser.firstLastName}"
+										required="true" requiredMessage="Campo requerido"
+										styleClass="form-control" />
+									<p:message for="txtLastN1" />
+								</div>
+							</h:panelGroup>
+
+							<h:panelGroup class="form-group">
+								<p:outputLabel for="txtLastN2" value="Segundo Apellido"
+									styleClass="col-sm-2 control-label" />
+								<div class="col-sm-4">
+									<p:inputText id="txtLastN2"
+										value="#{userListBean.selectedUser.secondLastName}"
+										required="true" requiredMessage="Campo requerido"
+										styleClass="form-control" />
+									<p:message for="txtLastN2" />
+								</div>
+							</h:panelGroup>
+
+							<h:panelGroup class="form-group">
+								<p:outputLabel for="txtCi" value="Cédula"
+									styleClass="col-sm-2 control-label" />
+								<div class="col-sm-4">
+									<p:inputText id="txtCi" value="#{userListBean.selectedUser.ci}"
+										required="true" requiredMessage="Campo requerido"
+										styleClass="form-control" />
+									<p:message for="txtCi" />
+								</div>
+							</h:panelGroup>
+
+							<h:panelGroup class="form-group">
+								<p:outputLabel for="txtEmail" value="Correo"
+									styleClass="col-sm-2 control-label" />
+								<div class="col-sm-4">
+									<p:inputText id="txtEmail"
+										value="#{userListBean.selectedUser.email}" required="true"
+										requiredMessage="Campo requerido" styleClass="form-control" />
+									<p:message for="txtEmail" />
+								</div>
+							</h:panelGroup>
+
+							<h:panelGroup class="form-group">
+								<p:outputLabel for="txtPassw" value="Contraseña"
+									styleClass="col-sm-2 control-label" />
+								<div class="col-sm-4">
+									<p:inputText id="txtPassw"
+										value="#{userListBean.selectedUser.password}" required="true"
+										requiredMessage="Campo requerido" styleClass="form-control" />
+									<p:message for="txtPassw" />
+								</div>
+							</h:panelGroup>
+
+							<h:panelGroup class="form-group">
+								<p:outputLabel for="cmbRol" value="Rol"
+									styleClass="col-sm-2 control-label" />
+								<div class="col-sm-4">
+									<p:selectOneMenu id="cmbRol" value="#{userListBean.role}"
+										converter="roleConverter" panelStyle="width:180px"
+										effect="fade" var="r" style="width:160px" filter="true"
+										filterMatchMode="startsWith">
+										<f:selectItem itemLabel="Seleccione" noSelectionOption="true" />
+										<f:selectItems value="#{userListBean.listRoles()}" var="role"
+											itemLabel="#{role.roleName}" itemValue="#{role}" />
+										<p:column>
+											<h:outputText value="#{r.roleName}" />
+										</p:column>
+									</p:selectOneMenu>
+									<p:message for="cmbRol" />
+								</div>
+							</h:panelGroup>
+						</div>
+					</h:panelGrid>
+				</p:outputPanel>
+
+				<div align="right">
+					<p:commandButton ajax="true" action="faces-redirect=false"
+						update=":formUserList:dtUser"
+						oncomplete="PF('dlgUserCreate').hide();"
+						actionListener="#{userListBean.createUser()}" icon="ui-icon-disk"
+						value="Guardar" styleClass="btn btn-default" />
+				</div>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog header="Editar Usuario" widgetVar="dlgUserEdit"
+			minHeight="100" modal="true">
+			<h:form id="formUserEdit">
+				<p:outputPanel id="opEdit">
+					<h:panelGrid columns="2" cellpadding="5">
+						<div class="panel-body">
+							<h:panelGroup layout="block" class="form-group">
+								<p:outputLabel for="txtName2" value="Primer Nombre"
+									styleClass="col-sm-2 control-label" />
+								<div class="col-sm-4">
+									<p:inputText id="txtName2"
+										value="#{userListBean.selectedUser.firstName}" required="true"
+										requiredMessage="Campo requerido" styleClass="form-control" />
+									<p:message for="txtName2" />
+								</div>
+							</h:panelGroup>
+
+							<h:panelGroup layout="block" class="form-group">
+								<p:outputLabel for="txtName22" value="Segundo Nombre"
+									styleClass="col-sm-2 control-label" />
+								<div class="col-sm-4">
+									<p:inputText id="txtName22"
+										value="#{userListBean.selectedUser.secondName}"
+										required="true" requiredMessage="Campo requerido"
+										styleClass="form-control" />
+									<p:message for="txtName22" />
+								</div>
+							</h:panelGroup>
+
+							<h:panelGroup layout="block" class="form-group">
+								<p:outputLabel for="txtLastN12" value="Primer Apellido"
+									styleClass="col-sm-2 control-label" />
+								<div class="col-sm-4">
+									<p:inputText id="txtLastN12"
+										value="#{userListBean.selectedUser.firstLastName}"
+										required="true" requiredMessage="Campo requerido"
+										styleClass="form-control" />
+									<p:message for="txtLastN12" />
+								</div>
+							</h:panelGroup>
+
+							<h:panelGroup layout="block" class="form-group">
+								<p:outputLabel for="txtLastN22" value="Segundo Apellido"
+									styleClass="col-sm-2 control-label" />
+								<div class="col-sm-4">
+									<p:inputText id="txtLastN22"
+										value="#{userListBean.selectedUser.secondLastName}"
+										required="true" requiredMessage="Campo requerido"
+										styleClass="form-control" />
+									<p:message for="txtLastN22" />
+								</div>
+							</h:panelGroup>
+
+							<h:panelGroup layout="block" class="form-group">
+								<p:outputLabel for="txtCi2" value="Cédula"
+									styleClass="col-sm-2 control-label" />
+								<div class="col-sm-4">
+									<p:inputText id="txtCi2"
+										value="#{userListBean.selectedUser.ci}" required="true"
+										requiredMessage="Campo requerido" styleClass="form-control" />
+									<p:message for="txtCi2" />
+								</div>
+							</h:panelGroup>
+
+							<h:panelGroup layout="block" class="form-group">
+								<p:outputLabel for="txtEmail2" value="Correo"
+									styleClass="col-sm-2 control-label" />
+								<div class="col-sm-4">
+									<p:inputText id="txtEmail2"
+										value="#{userListBean.selectedUser.email}" required="true"
+										requiredMessage="Campo requerido" styleClass="form-control" />
+									<p:message for="txtEmail2" />
+								</div>
+							</h:panelGroup>
+
+							<h:panelGroup layout="block" class="form-group">
+								<p:outputLabel for="cmbRol2" value="Rol"
+									styleClass="col-sm-2 control-label" />
+								<div class="col-sm-4">
+									<p:selectOneMenu id="cmbRol2" value="#{userListBean.role}"
+										converter="roleConverter" panelStyle="width:180px"
+										effect="fade" var="r" style="width:160px" filter="true"
+										filterMatchMode="startsWith">
+										<f:selectItem itemLabel="Seleccione" noSelectionOption="true" />
+										<f:selectItems value="#{userListBean.listRoles()}" var="role"
+											itemLabel="#{role.roleName}" itemValue="#{role}" />
+										<p:column>
+											<h:outputText value="#{r.roleName}" />
+										</p:column>
+									</p:selectOneMenu>
+									<p:message for="cmbRol2" />
+								</div>
+							</h:panelGroup>
+						</div>
+					</h:panelGrid>
+				</p:outputPanel>
+
+				<div align="right">
+					<p:commandButton ajax="true" action="faces-redirect=false"
+						oncomplete="PF('dlgUserEdit').hide();"
+						update=":formUserList:dtUser"
+						actionListener="#{userListBean.editUser()}" icon="ui-icon-disk"
+						value="Guardar" styleClass="btn btn-default" />
+				</div>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog header="Resetear Contraseña" widgetVar="dlgPassReset"
+			minHeight="100" modal="true">
+			<h:form id="formPassReset">
+				<p:outputPanel id="opPassReset">
+					<h:panelGrid columns="2" cellpadding="5">
+						<div class="panel-body">
+							<h:panelGroup layout="block" class="form-group">
+								<p:outputLabel for="txtName3" value="Primer Nombre"
+									styleClass="col-sm-2 control-label" />
+								<div class="col-sm-4">
+									<p:inputText id="txtName3"
+										value="#{userListBean.selectedUser.firstName}" required="true"
+										requiredMessage="Campo requerido" disabled="true"
+										styleClass="form-control" />
+									<p:message for="txtName3" />
+								</div>
+							</h:panelGroup>
+
+							<h:panelGroup layout="block" class="form-group">
+								<p:outputLabel for="txtLastN13" value="Primer Apellido"
+									styleClass="col-sm-2 control-label" />
+								<div class="col-sm-4">
+									<p:inputText id="txtLastN13"
+										value="#{userListBean.selectedUser.firstLastName}"
+										required="true" requiredMessage="Campo requerido"
+										disabled="true" styleClass="form-control" />
+									<p:message for="txtLastN13" />
+								</div>
+							</h:panelGroup>
+
+							<h:panelGroup layout="block" class="form-group">
+								<p:outputLabel for="txtCi3" value="Cédula"
+									styleClass="col-sm-2 control-label" />
+								<div class="col-sm-4">
+									<p:inputText id="txtCi3"
+										value="#{userListBean.selectedUser.ci}" required="true"
+										requiredMessage="Campo requerido" disabled="true"
+										styleClass="form-control" />
+									<p:message for="txtCi3" />
+								</div>
+							</h:panelGroup>
+
+							<h:panelGroup layout="block" class="form-group">
+								<p:outputLabel for="txtPassR1" value="Nueva Contraseña"
+									styleClass="col-sm-2 control-label" />
+								<div class="col-sm-4">
+									<p:inputText id="txtPassR1" value="#{userListBean.passReset1}"
+										required="true" requiredMessage="Campo requerido"
+										styleClass="form-control" />
+									<p:message for="txtPassR1" />
+								</div>
+							</h:panelGroup>
+
+							<h:panelGroup layout="block" class="form-group">
+								<p:outputLabel for="txtPassR2" value="Confirmar Contraseña"
+									styleClass="col-sm-2 control-label" />
+								<div class="col-sm-4">
+									<p:inputText id="txtPassR2" value="#{userListBean.passReset2}"
+										required="true" requiredMessage="Campo requerido"
+										styleClass="form-control" />
+									<p:message for="txtPassR2" />
+								</div>
+							</h:panelGroup>
+						</div>
+					</h:panelGrid>
+				</p:outputPanel>
+
+				<div align="right">
+					<p:commandButton ajax="true" action="faces-redirect=false"
+						oncomplete="PF('dlgPassReset').hide();"
+						actionListener="#{userListBean.resetPassword()}"
+						icon="ui-icon-disk" value="Guardar" styleClass="btn btn-default" />
+				</div>
+			</h:form>
+		</p:dialog>
+
+
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Fireman</title>
+	<h:outputStylesheet name="../resources/css/bootstrap.min.css" />
+</h:head>
+<h:body>
+	<p:growl id="msg" showDetail="true" globalOnly="true" life="5000" />
+
+	<div align="center"
+		style="padding-top: 10px; padding-bottom: 10px; width: 100%">
+		<img src="../resources/images/logo.jpg" width="80" />
+	</div>
+
+	<h:form id="navBar">
+		<p:menubar>
+			<p:menuitem value="Inicio" url="../../app/pages/home.xhtml" />
+
+			<p:menuitem value="Servicio"
+				url="../../app/pages/admin/serviceList.xhtml" />
+
+			<p:menuitem value="Requerimientos"
+				url="../../app/pages/admin/requirementList.xhtml" />
+
+			<p:menuitem value="Usuarios"
+				url="../../app/pages/admin/userList.xhtml" />
+		</p:menubar>
+	</h:form>
+	<b:container fluid="true">
+		<b:row>
+			<b:column col-md="10" col-sm="9" styleClass="conteiner">
+				<div class="title_page">
+					<br /> <label><ui:insert name="pageTitle" /> </label> <br />
+				</div>
+				<div class="content">
+					<ui:insert name="contenido" />
+				</div>
+			</b:column>
+		</b:row>
+	</b:container>
+</h:body>
+</html>
+

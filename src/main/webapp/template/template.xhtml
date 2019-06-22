@@ -8,28 +8,49 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title>Fireman</title>
-	<h:outputStylesheet name="../resources/css/bootstrap.min.css" />
+	<h:outputStylesheet name="../../resources/css/bootstrap.min.css" />
 </h:head>
+
+<script type="text/javascript">
+function handleDialogSubmit(xhr, status, args, dialog) {
+    if (args.validationFailed) {
+    	dialog.show();
+    } else {
+    	dialog.hide();
+    }
+}
+</script>
+
 <h:body>
-	<p:growl id="msg" showDetail="true" globalOnly="true" life="5000" />
+	<p:growl id="growl" sticky="true" showDetail="true" life="300" />
 
 	<div align="center"
 		style="padding-top: 10px; padding-bottom: 10px; width: 100%">
-		<img src="../resources/images/logo.jpg" width="80" />
+		<img src="../../resources/images/logo.jpg" width="80" />
 	</div>
 
 	<h:form id="navBar">
 		<p:menubar>
-			<p:menuitem value="Inicio" url="../../app/home.xhtml" />
+			<p:menuitem value="Inicio" url="../../app/common/home.xhtml" />
 
-			<p:menuitem value="Servicio"
-				url="../../app/admin/serviceList.xhtml" />
+			<p:menuitem value="Servicio" url="../../app/admin/serviceList.xhtml" />
 
 			<p:menuitem value="Requerimientos"
 				url="../../app/admin/requirementList.xhtml" />
 
-			<p:menuitem value="Usuarios"
-				url="../../app/admin/userList.xhtml" />
+			<p:menuitem value="Usuarios" url="../../app/admin/userList.xhtml" />
+
+			<f:facet name="options">
+				<table cellpadding="0" cellspacing="0">
+					<tr>
+						<td style="padding-right: 10px"><p:outputLabel
+								value="#{loginBean.loggedUser()}" /></td>
+						<td><p:commandButton ajax="true" title="Cerrar Sessión"
+								action="#{logoutBean.logout}" icon="ui-icon-extlink" /></td>
+					</tr>
+				</table>
+
+			</f:facet>
 		</p:menubar>
 	</h:form>
 	<b:container fluid="true">

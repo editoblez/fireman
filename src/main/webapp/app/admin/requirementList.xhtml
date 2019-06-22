@@ -13,7 +13,7 @@
 
 		<h:form id="formList">
 
-			<p:commandButton ajax="true" update=":formList:dtList"
+			<p:commandButton ajax="true" update=":formList:dtList growl"
 				oncomplete="PF('dlgServiceCreate').show()" value="Nuevo"
 				styleClass="btn btn-default" />
 
@@ -28,9 +28,11 @@
 				<p:column headerText="Rol" width="20%">
 					<h:outputText value="#{req.role.roleName}" />
 				</p:column>
-				<p:column style="text-align: center;" width="10%">
-					<p:commandButton update=":formServiceEdit:opEdit" value="Editar"
-						oncomplete="PF('dlgServiceEdit').show()" title="Editar">
+				<p:column style="text-align: center;" width="10%"
+					headerText="Editar">
+					<p:commandButton update=":formServiceEdit:opEdit growl"
+						icon="ui-icon-pencil" oncomplete="PF('dlgServiceEdit').show()"
+						title="Editar">
 						<f:setPropertyActionListener value="#{req}"
 							target="#{requirementListBean.selectedRequirement}" />
 					</p:commandButton>
@@ -51,7 +53,7 @@
 								<div class="col-sm-4">
 									<p:inputText id="txtName"
 										value="#{requirementListBean.selectedRequirement.name}"
-										required="true" requiredMessage="Campo requerido"
+										required="true" requiredMessage="Nombre requerido"
 										styleClass="form-control" />
 									<p:message for="txtName" />
 								</div>
@@ -63,7 +65,7 @@
 								<div class="col-sm-4">
 									<p:inputText id="txtDes"
 										value="#{requirementListBean.selectedRequirement.description}"
-										required="true" requiredMessage="Campo requerido"
+										required="true" requiredMessage="Descripción requerida"
 										styleClass="form-control" />
 									<p:message for="txtDes" />
 								</div>
@@ -93,8 +95,8 @@
 
 				<div align="right">
 					<p:commandButton ajax="true" action="faces-redirect=false"
-						update=":formList:dtList"
-						oncomplete="PF('dlgServiceCreate').hide();"
+						update=":formList:dtList growl"
+						oncomplete="handleDialogSubmit(xhr, status, args, PF('dlgServiceCreate'))"
 						actionListener="#{requirementListBean.createRequirement()}"
 						value="Guardar" styleClass="btn btn-default" />
 				</div>
@@ -114,7 +116,7 @@
 								<div class="col-sm-4">
 									<p:inputText id="txtName2"
 										value="#{requirementListBean.selectedRequirement.name}"
-										required="true" requiredMessage="Campo requerido"
+										required="true" requiredMessage="Nombre requerido"
 										styleClass="form-control" />
 									<p:message for="txtName2" />
 								</div>
@@ -126,7 +128,7 @@
 								<div class="col-sm-4">
 									<p:inputText id="txtDes1"
 										value="#{requirementListBean.selectedRequirement.description}"
-										required="true" requiredMessage="Campo requerido"
+										required="true" requiredMessage="Descripción requerida"
 										styleClass="form-control" />
 									<p:message for="txtDes1" />
 								</div>
@@ -143,7 +145,6 @@
 							converter="roleConverter" panelStyle="width:180px" effect="fade"
 							var="r" style="width:160px" filter="true"
 							filterMatchMode="startsWith">
-							<f:selectItem itemLabel="Seleccione" noSelectionOption="true" />
 							<f:selectItems value="#{requirementListBean.listRoles()}"
 								var="role" itemLabel="#{role.roleName}" itemValue="#{role}" />
 							<p:column>
@@ -156,8 +157,8 @@
 
 				<div align="right">
 					<p:commandButton ajax="true" action="faces-redirect=false"
-						oncomplete="PF('dlgServiceEdit').hide();"
-						update=":formList:dtList"
+						oncomplete="handleDialogSubmit(xhr, status, args, PF('dlgServiceEdit'))"
+						update=":formList:dtList growl"
 						actionListener="#{requirementListBean.editRequirement()}"
 						value="Guardar" styleClass="btn btn-default" />
 				</div>

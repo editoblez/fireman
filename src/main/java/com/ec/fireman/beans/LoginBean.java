@@ -49,5 +49,9 @@ public class LoginBean implements Serializable {
     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login Error", LOGIN_ERROR_MESSAGES));
     return LOGIN_PAGE;
   }
+  
+  public String loggedUser() {
+    return SessionUtils.retrieveLoggedUser().getUserId();
+  }
 
 }

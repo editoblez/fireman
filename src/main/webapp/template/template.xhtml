@@ -31,16 +31,16 @@ function handleDialogSubmit(xhr, status, args, dialog) {
 
 	<h:form id="navBar">
 		<p:menubar>
-			<p:menuitem value="Inicio" url="../../app/common/home.xhtml" />
+            <p:menuitem value="Inicio" outcome="/app/common/home.xhtml"/>
 
-			<p:menuitem value="Servicio" url="../../app/admin/serviceList.xhtml" />
+            <p:menuitem value="Servicio" outcome="/app/admin/serviceList.xhtml"/>
 
 			<p:menuitem value="Requerimientos"
-                    url="app/admin/requirementList.xhtml"/>
+                    outcome="/app/admin/requirementList.xhtml"/>
 
-			<p:menuitem value="Usuarios" url="../../app/admin/userList.xhtml" />
+            <p:menuitem value="Usuarios" outcome="/app/admin/userList.xhtml"/>
 
-            <p:menuitem value="Locales" url="../../app/client/localList.xhtml" />
+            <p:menuitem value="Locales" outcome="/app/client/localList.xhtml"/>
 
 			<f:facet name="options">
 				<table cellpadding="0" cellspacing="0">

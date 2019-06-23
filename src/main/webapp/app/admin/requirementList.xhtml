@@ -76,7 +76,7 @@
 									styleClass="col-sm-2 control-label" />
 								<div class="col-sm-4">
 									<p:selectOneMenu id="cmbRol"
-										value="#{requirementListBean.role}" converter="roleConverter"
+										value="#{requirementListBean.role}" converter="selectOneMenuConverter"
 										panelStyle="width:180px" effect="fade" var="r"
 										style="width:160px" filter="true" filterMatchMode="startsWith">
 										<f:selectItem itemLabel="Seleccione" noSelectionOption="true" />
@@ -142,7 +142,7 @@
 						styleClass="col-sm-2 control-label" />
 					<div class="col-sm-4">
 						<p:selectOneMenu id="cmbRol2" value="#{requirementListBean.role}"
-							converter="roleConverter" panelStyle="width:180px" effect="fade"
+							converter="selectOneMenuConverter" panelStyle="width:180px" effect="fade"
 							var="r" style="width:160px" filter="true"
 							filterMatchMode="startsWith">
 							<f:selectItems value="#{requirementListBean.listRoles()}"

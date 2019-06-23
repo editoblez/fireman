@@ -15,6 +15,7 @@ import javax.inject.Named;
 import java.io.Serializable;
 
 import static com.ec.fireman.beans.PageNameConstants.LOGIN_PAGE;
+import static com.ec.fireman.beans.PageNameConstants.HOME_PAGE;
 
 @Data
 @Log4j2
@@ -23,7 +24,6 @@ import static com.ec.fireman.beans.PageNameConstants.LOGIN_PAGE;
 public class LoginBean implements Serializable {
 
   public static final String LOGIN_ERROR_MESSAGES = "Usuario o clave inválida ";
-  public static final String USER_PAGE = "pages/admin/userList.xhtml";
 
   @Inject
   private UserAccountDao userAccountDao;
@@ -44,7 +44,7 @@ public class LoginBean implements Serializable {
     if (PasswordUtil.encrypt(password).equals(account.getPassword())) {
       log.debug("Authentication successful for user: " + ci);
       SessionUtils.saveLoggingInfo(account.getCi(), account.getRole().getRoleName());
-      return USER_PAGE;
+      return HOME_PAGE;
     }
     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login Error", LOGIN_ERROR_MESSAGES));
     return LOGIN_PAGE;

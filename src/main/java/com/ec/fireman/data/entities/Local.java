@@ -10,7 +10,7 @@ public class Local implements BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private String id;
+  private long id;
 
   @Column(nullable = false)
   private String address;

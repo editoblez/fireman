@@ -3,8 +3,10 @@ package com.ec.fireman.util;
 import com.ec.fireman.data.representation.User;
 import lombok.extern.log4j.Log4j2;
 
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @Log4j2
@@ -19,6 +21,18 @@ public class SessionUtils {
 
   public static HttpServletRequest getRequest() {
     return (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+  }
+
+  public static HttpServletResponse getResponse() {
+    return (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+  }
+
+  public static ExternalContext retrieveCurrentJsfContext() {
+    return FacesContext.getCurrentInstance().getExternalContext();
+  }
+
+  public static String buildJsfUrl(String url) {
+    return retrieveCurrentJsfContext().getRequestContextPath() + url;
   }
 
   public static User retrieveLoggedUser() {

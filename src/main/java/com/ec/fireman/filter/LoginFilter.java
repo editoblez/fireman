@@ -1,5 +1,6 @@
 package com.ec.fireman.filter;
 
+import com.ec.fireman.beans.PageNameConstants;
 import org.omnifaces.filter.HttpFilter;
 import org.omnifaces.util.Servlets;
 
@@ -16,7 +17,7 @@ import java.util.Locale;
 
 public class LoginFilter extends HttpFilter {
 
-  private static final String INDEX_PAGE = "app/index.xhtml";
+  private static final String INDEX_PAGE = PageNameConstants.HOME_PAGE;
   private static final String LOGIN_PAGE = "app/login.xhtml";
   private static final Locale DEFAULT_LOCALE = new Locale("es");
 

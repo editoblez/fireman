@@ -6,13 +6,16 @@ import com.ec.fireman.util.PasswordUtil;
 import com.ec.fireman.util.SessionUtils;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
+import org.omnifaces.util.Servlets;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.Objects;
 
 import static com.ec.fireman.beans.PageNameConstants.HOME_PAGE;
 import static com.ec.fireman.beans.PageNameConstants.LOGIN_PAGE;
@@ -31,7 +34,7 @@ public class LoginBean implements Serializable {
   private String ci;
   private String password;
 
-  public String validateUserAndPassword() {
+  public String validateUserAndPassword() throws IOException {
     log.debug("attempt to login the user: " + ci);
     UserAccount account = userAccountDao.findUserByCi(ci);
 
@@ -44,6 +47,7 @@ public class LoginBean implements Serializable {
     if (PasswordUtil.encrypt(password).equals(account.getPassword())) {
       log.debug("Authentication successful for user: " + ci);
       SessionUtils.saveLoggingInfo(account.getCi(), account.getRole().getRoleName().getValue());
+      Servlets.facesRedirect(SessionUtils.getRequest(), SessionUtils.getResponse(), HOME_PAGE);
       return HOME_PAGE;
     }
     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login Error", LOGIN_ERROR_MESSAGES));
@@ -51,7 +55,7 @@ public class LoginBean implements Serializable {
   }
 
   public String loggedUser() {
-    return SessionUtils.retrieveLoggedUser().getUserId();
+    return Objects.requireNonNull(SessionUtils.retrieveLoggedUser()).getUserId();
   }
 
 }

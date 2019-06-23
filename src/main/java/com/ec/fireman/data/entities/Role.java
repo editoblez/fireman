@@ -4,9 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-import static com.ec.fireman.data.entities.EntityConstants.GENERIC_COLUMN_SIZE;
-
-@NamedQueries({ @NamedQuery(name = "findRoleByName", query = "from Role e where e.roleName = :roleName") })
+@NamedQueries({@NamedQuery(name = "findRoleByName", query = "from Role e where e.roleName = :roleName")})
 
 @Data
 @Entity
@@ -15,8 +13,8 @@ public class Role implements BaseEntity {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
 
-  @Column(unique = true, length = GENERIC_COLUMN_SIZE, nullable = false)
-  private String roleName;
+  @Enumerated(EnumType.STRING)
+  private RoleTypes roleName;
 
   @Enumerated(EnumType.STRING)
   private State state;
@@ -25,7 +23,7 @@ public class Role implements BaseEntity {
     this.state = State.ACTIVE;
   }
 
-  public Role(String roleName) {
+  public Role(RoleTypes roleName) {
     this();
     this.roleName = roleName;
   }

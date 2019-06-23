@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 import static com.ec.fireman.data.entities.EntityConstants.GENERIC_COLUMN_SIZE;
 
-@NamedQueries({ @NamedQuery(name = "findUserByCi", query = "from UserAccount e where e.ci = :ci") })
+@NamedQueries({@NamedQuery(name = "findUserByCi", query = "from UserAccount e where e.ci = :ci")})
 
 @Data
 @Entity
@@ -36,7 +36,7 @@ public class UserAccount implements BaseEntity {
   @Column(unique = true, length = GENERIC_COLUMN_SIZE, nullable = false)
   private String email;
 
-  @ManyToOne(cascade = { CascadeType.MERGE })
+  @ManyToOne(cascade = CascadeType.ALL)
   private Role role;
 
   @Enumerated(EnumType.STRING)
@@ -46,7 +46,7 @@ public class UserAccount implements BaseEntity {
   }
 
   public UserAccount(String firstName, String secondName, String firstLastName, String secondLastName, String ci,
-      String password, String email, Role role) {
+                     String password, String email, Role role) {
     this.firstName = firstName;
     this.secondName = secondName;
     this.firstLastName = firstLastName;

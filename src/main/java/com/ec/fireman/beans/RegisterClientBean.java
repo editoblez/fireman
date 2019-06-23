@@ -3,6 +3,7 @@ package com.ec.fireman.beans;
 import com.ec.fireman.data.dao.RoleDao;
 import com.ec.fireman.data.dao.UserAccountDao;
 import com.ec.fireman.data.entities.Role;
+import com.ec.fireman.data.entities.RoleTypes;
 import com.ec.fireman.data.entities.UserAccount;
 import com.ec.fireman.util.PasswordUtil;
 import lombok.Data;
@@ -14,15 +15,12 @@ import javax.inject.Named;
 import javax.transaction.Transactional;
 import java.io.Serializable;
 
-import static com.ec.fireman.beans.PageNameConstants.LOGIN_PAGE;
-
 @Data
 @Log4j2
 @Named
 @ViewScoped
 public class RegisterClientBean implements Serializable {
 
-  public static final String CLIENT_ROLE = "client";
   @Inject
   private UserAccountDao userAccountDao;
 
@@ -38,12 +36,16 @@ public class RegisterClientBean implements Serializable {
 
   @Transactional
   public String register() {
-    Role role = roleDao.findRolByName(CLIENT_ROLE);
+    Role role = roleDao.findRolByName(RoleTypes.CLIENT);
+    if (role == null) {
+      log.error("Error to execute findRoleByName, the role don't exists in db");
+      return PageNameConstants.REGISTER_CLIENT_PAGE;
+    }
     log.debug("Registering a user: " + toString());
     UserAccount client = new UserAccount(firstName, secondName, firstLastName, secondLastName, ci,
-        PasswordUtil.encrypt(ci), email, role == null ? new Role(CLIENT_ROLE) : role);
+        PasswordUtil.encrypt(ci), email, role);
     userAccountDao.save(client);
-    return LOGIN_PAGE;
+    return PageNameConstants.LOGIN_PAGE;
   }
 
 }

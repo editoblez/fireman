@@ -13,6 +13,7 @@ import com.ec.fireman.data.dao.RoleDao;
 import com.ec.fireman.data.dao.UserAccountDao;
 import com.ec.fireman.data.entities.Role;
 import com.ec.fireman.data.entities.UserAccount;
+import com.ec.fireman.util.PasswordUtil;
 
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
@@ -25,7 +26,7 @@ public class UserListBean implements Serializable {
 
   private static final long serialVersionUID = -5468228478359216158L;
 
-  private static final String MSG_ERROR_PASSWORD = "Las contraseñas no coinciden";
+  private static final String MSG_ERROR_PASSWORD = "Las contraseï¿½as no coinciden";
 
   @Inject
   private UserAccountDao userAccountDao;
@@ -50,8 +51,9 @@ public class UserListBean implements Serializable {
   }
 
   @Transactional
-  public void createUser() {
-    selectedUser.setRole(role);
+  public void createUser() {	  
+    selectedUser.setRole(roleDao.findById(role.getId()));
+    selectedUser.setPassword(PasswordUtil.encrypt(selectedUser.getPassword()));
     userAccountDao.save(selectedUser);
     this.refreshUsers();
     selectedUser = new UserAccount();
@@ -59,7 +61,7 @@ public class UserListBean implements Serializable {
 
   @Transactional
   public void editUser() {
-    selectedUser.setRole(role);
+    selectedUser.setRole(roleDao.findById(role.getId()));
     userAccountDao.update(selectedUser);
     this.refreshUsers();
     selectedUser = new UserAccount();
@@ -70,7 +72,7 @@ public class UserListBean implements Serializable {
     if (!passReset1.equals(passReset2)) {
       return MSG_ERROR_PASSWORD;
     }
-    selectedUser.setPassword(passReset1);
+    selectedUser.setPassword(PasswordUtil.encrypt(passReset1));
     userAccountDao.update(selectedUser);
     selectedUser = new UserAccount();
     return "OK";

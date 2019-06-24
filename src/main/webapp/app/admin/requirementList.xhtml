@@ -41,61 +41,54 @@
 		</h:form>
 
 		<p:dialog header="Crear Requerimiento" widgetVar="dlgServiceCreate"
-			minHeight="100" modal="true">
+			modal="true">
 			<h:form id="formServiceCreate">
 				<p:outputPanel id="opCreate">
 					<h:panelGrid columns="1" cellpadding="5">
-						<div class="panel-body">
 
-							<h:panelGroup layout="block" class="form-group">
-								<p:outputLabel for="txtName" value="Nombre"
-									styleClass="col-sm-2 control-label" />
-								<div class="col-sm-4">
-									<p:inputText id="txtName"
-										value="#{requirementListBean.selectedRequirement.name}"
-										required="true" requiredMessage="Nombre requerido"
-										styleClass="form-control" />
-									<p:message for="txtName" />
-								</div>
-							</h:panelGroup>
+						<h:panelGroup layout="block">
+							<p:outputLabel for="txtName" value="Nombre" />
+							<div>
+								<p:inputText id="txtName"
+									value="#{requirementListBean.selectedRequirement.name}"
+									required="true" requiredMessage="Nombre requerido" />
+								<p:message for="txtName" />
+							</div>
+						</h:panelGroup>
 
-							<h:panelGroup layout="block" class="form-group">
-								<p:outputLabel for="txtDes" value="Descripción"
-									styleClass="col-sm-2 control-label" />
-								<div class="col-sm-4">
-									<p:inputText id="txtDes"
-										value="#{requirementListBean.selectedRequirement.description}"
-										required="true" requiredMessage="Descripción requerida"
-										styleClass="form-control" />
-									<p:message for="txtDes" />
-								</div>
-							</h:panelGroup>
+						<h:panelGroup layout="block" style="padding-top: 8px;">
+							<p:outputLabel for="txtDes" value="Descripción" />
+							<div>
+								<p:inputText id="txtDes"
+									value="#{requirementListBean.selectedRequirement.description}"
+									required="true" requiredMessage="Descripción requerida" />
+								<p:message for="txtDes" />
+							</div>
+						</h:panelGroup>
 
-							<h:panelGroup layout="block" class="form-group">
-								<p:outputLabel for="cmbRol" value="Rol"
-									styleClass="col-sm-2 control-label" />
-								<div class="col-sm-4">
-									<p:selectOneMenu id="cmbRol"
-										value="#{requirementListBean.role}" converter="selectOneMenuConverter"
-										panelStyle="width:180px" effect="fade" var="r"
-										style="width:160px" filter="true" filterMatchMode="startsWith">
-										<f:selectItem itemLabel="Seleccione" noSelectionOption="true" />
-										<f:selectItems value="#{requirementListBean.listRoles()}"
-											var="role" itemLabel="#{role.roleName}" itemValue="#{role}" />
-										<p:column>
-											<h:outputText value="#{r.roleName}" />
-										</p:column>
-									</p:selectOneMenu>
-									<p:message for="cmbRol" />
-								</div>
-							</h:panelGroup>
-						</div>
+						<h:panelGroup layout="block" style="padding-top: 8px;">
+							<p:outputLabel for="cmbRol" value="Rol" />
+							<div>
+								<p:selectOneMenu id="cmbRol" value="#{requirementListBean.role}"
+									converter="selectOneMenuConverter" panelStyle="width:180px"
+									effect="fade" var="r" style="width:160px" filter="true"
+									filterMatchMode="startsWith">
+									<f:selectItem itemLabel="Seleccione" noSelectionOption="true" />
+									<f:selectItems value="#{requirementListBean.listRoles()}"
+										var="role" itemLabel="#{role.roleName}" itemValue="#{role}" />
+									<p:column>
+										<h:outputText value="#{r.roleName}" />
+									</p:column>
+								</p:selectOneMenu>
+								<p:message for="cmbRol" />
+							</div>
+						</h:panelGroup>
 					</h:panelGrid>
 				</p:outputPanel>
 
-				<div align="right">
+				<div align="right" style="padding-top: 15px;">
 					<p:commandButton ajax="true" action="faces-redirect=false"
-						update=":formList:dtList growl"
+						update=":formList:dtList growl opCreate"
 						oncomplete="handleDialogSubmit(xhr, status, args, PF('dlgServiceCreate'))"
 						actionListener="#{requirementListBean.createRequirement()}"
 						value="Guardar" styleClass="btn btn-default" />
@@ -104,61 +97,55 @@
 		</p:dialog>
 
 		<p:dialog header="Editar Requerimiento" widgetVar="dlgServiceEdit"
-			minHeight="100" modal="true">
+			modal="true">
 			<h:form id="formServiceEdit">
 				<p:outputPanel id="opEdit">
 					<h:panelGrid columns="1" cellpadding="5">
-						<div class="panel-body">
 
-							<h:panelGroup layout="block" class="form-group">
-								<p:outputLabel for="txtName2" value="Nombre"
-									styleClass="col-sm-2 control-label" />
-								<div class="col-sm-4">
-									<p:inputText id="txtName2"
-										value="#{requirementListBean.selectedRequirement.name}"
-										required="true" requiredMessage="Nombre requerido"
-										styleClass="form-control" />
-									<p:message for="txtName2" />
-								</div>
-							</h:panelGroup>
+						<h:panelGroup layout="block">
+							<p:outputLabel for="txtName2" value="Nombre" />
+							<div>
+								<p:inputText id="txtName2"
+									value="#{requirementListBean.selectedRequirement.name}"
+									required="true" requiredMessage="Nombre requerido" />
+								<p:message for="txtName2" />
+							</div>
+						</h:panelGroup>
 
-							<h:panelGroup layout="block" class="form-group">
-								<p:outputLabel for="txtDes1" value="Descripción"
-									styleClass="col-sm-2 control-label" />
-								<div class="col-sm-4">
-									<p:inputText id="txtDes1"
-										value="#{requirementListBean.selectedRequirement.description}"
-										required="true" requiredMessage="Descripción requerida"
-										styleClass="form-control" />
-									<p:message for="txtDes1" />
-								</div>
-							</h:panelGroup>
-						</div>
+						<h:panelGroup layout="block" style="padding-top: 8px;">
+							<p:outputLabel for="txtDes1" value="Descripción" />
+							<div>
+								<p:inputText id="txtDes1"
+									value="#{requirementListBean.selectedRequirement.description}"
+									required="true" requiredMessage="Descripción requerida" />
+								<p:message for="txtDes1" />
+							</div>
+						</h:panelGroup>
+
+						<h:panelGroup layout="block" style="padding-top: 8px;">
+							<p:outputLabel for="cmbRol2" value="Rol" />
+							<div>
+								<p:selectOneMenu id="cmbRol2"
+									value="#{requirementListBean.role}"
+									converter="selectOneMenuConverter" panelStyle="width:180px"
+									effect="fade" var="r" style="width:160px" filter="true"
+									filterMatchMode="startsWith">
+									<f:selectItems value="#{requirementListBean.listRoles()}"
+										var="role" itemLabel="#{role.roleName}" itemValue="#{role}" />
+									<p:column>
+										<h:outputText value="#{r.roleName}" />
+									</p:column>
+								</p:selectOneMenu>
+								<p:message for="cmbRol2" />
+							</div>
+						</h:panelGroup>
 					</h:panelGrid>
 				</p:outputPanel>
 
-				<h:panelGroup layout="block" class="form-group">
-					<p:outputLabel for="cmbRol2" value="Rol"
-						styleClass="col-sm-2 control-label" />
-					<div class="col-sm-4">
-						<p:selectOneMenu id="cmbRol2" value="#{requirementListBean.role}"
-							converter="selectOneMenuConverter" panelStyle="width:180px" effect="fade"
-							var="r" style="width:160px" filter="true"
-							filterMatchMode="startsWith">
-							<f:selectItems value="#{requirementListBean.listRoles()}"
-								var="role" itemLabel="#{role.roleName}" itemValue="#{role}" />
-							<p:column>
-								<h:outputText value="#{r.roleName}" />
-							</p:column>
-						</p:selectOneMenu>
-						<p:message for="cmbRol2" />
-					</div>
-				</h:panelGroup>
-
-				<div align="right">
+				<div align="right" style="padding-top: 15px;">
 					<p:commandButton ajax="true" action="faces-redirect=false"
 						oncomplete="handleDialogSubmit(xhr, status, args, PF('dlgServiceEdit'))"
-						update=":formList:dtList growl"
+						update=":formList:dtList growl opEdit"
 						actionListener="#{requirementListBean.editRequirement()}"
 						value="Guardar" styleClass="btn btn-default" />
 				</div>

@@ -1,28 +1,41 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:h="http://java.sun.com/jsf/html"
-        xmlns:p="http://primefaces.org/ui">
-    <h:head>
-        <title>Login</title>
-    </h:head>
-    <h:body>
-        <p:panel id="panel" header="Autenticación Sistgema de Bomberos" style="margin-bottom:10px;">
-            <h:form>
-                <p:messages id="messages" showDetail="true" closable="true"/>
-                <h:panelGrid columns="3" cellpadding="5">
-                    <h:outputLabel for="username" value="Username"/>
-                    <p:inputText id="username" required="true" value="#{loginBean.ci}"/>
-                    <p:message for="username"/>
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Login</title>
+</h:head>
+<style>
+.centered {
+	margin: auto;
+	width: 500px;
+	margin-top: 10%;
+	position: relative;
+	height: 100%;
+	box-sizing: border-box;
+}
+</style>
+<h:body>
+	<p:panel id="panel" header="Autenticación Sistgema de Bomberos"
+		styleClass="centered">
+		<h:form>
+			<p:messages id="messages" showDetail="true" closable="true" />
+			<h:panelGrid columns="3" cellpadding="5">
+				<h:outputLabel for="username" value="Username" />
+				<p:inputText id="username" required="true" value="#{loginBean.ci}" />
+				<p:message for="username" />
 
-                    <h:outputLabel for="password" value="Clave"/>
-                    <p:password id="password" required="true" value="#{loginBean.password}"/>
-                    <p:message for="password"/>
-                </h:panelGrid>
-                <p:commandButton value="Login" action="#{loginBean.validateUserAndPassword}" update="panel"/>
-                <p:separator/>
-                <p:link outcome="register-client" value="Registrar"/>
-            </h:form>
-        </p:panel>
-    </h:body>
+				<h:outputLabel for="password" value="Clave" />
+				<p:password id="password" required="true"
+					value="#{loginBean.password}" />
+				<p:message for="password" />
+			</h:panelGrid>
+			<p:commandButton value="Login"
+				action="#{loginBean.validateUserAndPassword}" update="panel" />
+			<p:separator />
+			<p:link outcome="register-client" value="Registrar" />
+		</h:form>
+	</p:panel>
+</h:body>
 </html>

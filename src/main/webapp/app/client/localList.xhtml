@@ -1,0 +1,221 @@
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core">
+<ui:composition template="../../template/template.xhtml">
+	<ui:define name="pageTitle">
+		Gestionar Locales		
+	</ui:define>
+	<ui:define name="contenido">
+
+		<h:form id="formList">
+
+			<p:commandButton ajax="true" update=":formList:dtList growl"
+				oncomplete="PF('dlgCreate').show()" value="Nuevo"
+				styleClass="btn btn-default" />
+
+			<p:dataTable id="dtList" var="item" value="#{clientLocalBean.locals}">
+				<p:column headerText="Dirección">
+					<h:outputText value="#{item.address}" />
+				</p:column>
+				<p:column headerText="Servicio">
+					<h:outputText value="#{item.service.name}" />
+				</p:column>
+				<p:column headerText="Estado">
+					<h:outputText value="#{item.state}" />
+				</p:column>
+				<p:column style="text-align: center" headerText="Editar">
+					<p:commandButton update=":formEdit:opEdit growl"
+						icon="ui-icon-pencil" oncomplete="PF('dlgEdit').show()"
+						title="Editar">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{clientLocalBean.selectedLocal}" />
+					</p:commandButton>
+				</p:column>
+				<p:column style="text-align: center" headerText="Eliminar">
+					<p:commandButton update=":formDelete:opDelete growl"
+						icon="ui-icon-trash" oncomplete="PF('dlgEliminar').show()"
+						title="Resetear Contraseña">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{clientLocalBean.selectedLocal}" />
+					</p:commandButton>
+				</p:column>
+				<p:column style="text-align: center" headerText="Documentos">
+					<p:commandButton update=":formFiles:opFiles growl"
+						icon="ui-icon-folder-open" oncomplete="PF('dlgFiles').show()"
+						title="Cargar documentos">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{clientLocalBean.selectedLocal}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+
+		<p:dialog header="Crear Local" widgetVar="dlgCreate" width="600"
+			modal="true">
+			<h:form id="formUserCreate" prependId="false">
+				<p:outputPanel id="opCreate">
+					<p:panelGrid columns="1" cellpadding="5" layout="grid"
+						styleClass="ui-noborder">
+						<div>
+
+							<h:panelGroup>
+								<p:outputLabel for="txtAddress" value="Dirección" />
+								<div>
+									<p:inputText id="txtAddress"
+										value="#{clientLocalBean.selectedLocal.address}"
+										required="true" requiredMessage="Dirección requerida" />
+									<p:message for="txtAddress" />
+								</div>
+							</h:panelGroup>
+
+							<h:panelGroup>
+								<p:outputLabel for="cmbService" value="Servicio" />
+								<div>
+									<p:selectOneMenu id="cmbService"
+										value="#{clientLocalBean.service}"
+										converter="selectOneMenuConverter" panelStyle="width:180px"
+										effect="fade" var="s" style="width:160px" filter="true"
+										filterMatchMode="startsWith">
+										<f:selectItems value="#{clientLocalBean.listServices()}"
+											var="serv" itemLabel="#{serv.name}" itemValue="#{serv}" />
+										<p:column>
+											<h:outputText value="#{s.name}" />
+										</p:column>
+									</p:selectOneMenu>
+									<p:message for="cmbService" />
+								</div>
+							</h:panelGroup>
+						</div>
+					</p:panelGrid>
+				</p:outputPanel>
+
+				<script type="text/javascript"
+					src="https://maps.google.com/maps/api/js?sensor=false"></script>
+
+				<p:gmap id="gmap" center="#{clientLocalBean.mapPosition}" zoom="15"
+					type="ROADMAP" style="width:100%;height:300px">
+					<p:ajax event="pointSelect"
+						listener="#{clientLocalBean.onPointSelect}" update="growl" />
+				</p:gmap>
+
+				<div align="right" style="padding-top: 15px;">
+					<p:commandButton ajax="true" action="faces-redirect=false"
+						update=":formList:dtList growl"
+						oncomplete="handleDialogSubmit(xhr, status, args, PF('dlgCreate'))"
+						actionListener="#{clientLocalBean.createLocal()}" value="Guardar"
+						styleClass="btn btn-default" />
+				</div>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog header="Editar Local" widgetVar="dlgEdit" width="600"
+			modal="true">
+			<h:form id="formEdit">
+				<p:outputPanel id="opEdit">
+					<p:panelGrid columns="1" cellpadding="5" layout="grid"
+						styleClass="ui-noborder">
+						<div>
+							<h:panelGroup>
+								<p:outputLabel for="txtAddress2" value="Dirección" />
+								<div>
+									<p:inputText id="txtAddress2"
+										value="#{clientLocalBean.selectedLocal.address}"
+										required="true" requiredMessage="Dirección requerida" />
+									<p:message for="txtAddress2" />
+								</div>
+							</h:panelGroup>
+
+							<h:panelGroup>
+								<p:outputLabel for="cmbService2" value="Servicio" />
+								<div>
+									<p:selectOneMenu id="cmbService2"
+										value="#{clientLocalBean.service}"
+										converter="selectOneMenuConverter" panelStyle="width:180px"
+										effect="fade" var="s" style="width:160px" filter="true"
+										filterMatchMode="startsWith">
+										<f:selectItems value="#{clientLocalBean.listServices()}"
+											var="serv" itemLabel="#{serv.name}" itemValue="#{serv}" />
+										<p:column>
+											<h:outputText value="#{s.name}" />
+										</p:column>
+									</p:selectOneMenu>
+									<p:message for="cmbService2" />
+								</div>
+							</h:panelGroup>
+						</div>
+					</p:panelGrid>
+				</p:outputPanel>
+
+				<script type="text/javascript"
+					src="https://maps.google.com/maps/api/js?sensor=false"></script>
+
+				<p:gmap id="gmapEdit"
+					center="#{clientLocalBean.generateMapPosition()}" zoom="15"
+					type="ROADMAP" style="width:100%;height:300px">
+					<p:ajax event="pointSelect"
+						listener="#{clientLocalBean.onPointSelect}" update="growl" />
+				</p:gmap>
+
+				<div align="right" style="padding-top: 15px;">
+					<p:commandButton ajax="true" action="faces-redirect=false"
+						oncomplete="handleDialogSubmit(xhr, status, args, PF('dlgEdit'))"
+						update=":formList:dtList growl opEdit"
+						actionListener="#{clientLocalBean.editLocal()}" value="Guardar"
+						styleClass="btn btn-default" />
+				</div>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog header="Eliminar Local" widgetVar="dlgEliminar" width="255"
+			height="130" resizable="false" modal="true">
+			<h:form id="formDelete">
+				<p:outputPanel id="opDelete" style="text-align: center;">
+					<h:outputText
+						value="Está seguro que desea eliminar este registro?. Si selecciona SI, perderá todos los datos." />
+				</p:outputPanel>
+
+				<div align="center" style="padding-top: 15px;">
+					<p:commandButton ajax="true" action="faces-redirect=false"
+						update="growl" oncomplete="PF('dlgEliminar').hide();"
+						actionListener="#{clientLocalBean.deleteLocal()}" value="SI"
+						styleClass="btn btn-default" />
+
+					<p:commandButton ajax="true" action="faces-redirect=false"
+						update="growl" oncomplete="PF('dlgEliminar').hide();"
+						actionListener="#{clientLocalBean.clearData()}" value="NO"
+						styleClass="btn btn-default" />
+				</div>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog header="Cargar Documentos" widgetVar="dlgFiles" width="600"
+			modal="true">
+			<h:form id="formFiles" enctype="multipart/form-data">
+				<p:outputPanel id="opFiles">
+
+					<p:repeat value="#{clientLocalBean.listRequirements()}" var="item">
+						<p:panelGrid columns="2" cellpadding="5" layout="grid">
+							<h:outputText value="#{item.requirementName}" />
+							<p:fileUpload value="#{item.file}" mode="simple"
+								skinSimple="true" label="Seleccionar" />
+						</p:panelGrid>
+					</p:repeat>
+
+				</p:outputPanel>
+
+				<div align="center" style="padding-top: 15px;">
+					<p:commandButton ajax="false" action="faces-redirect=false"
+						update="growl" oncomplete="PF('dlgFiles').hide();"
+						actionListener="#{clientLocalBean.upload()}"
+						value="Guardar Documentos" styleClass="btn btn-default" />
+				</div>
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>
+</html>

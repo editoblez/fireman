@@ -1,52 +1,45 @@
 package com.ec.fireman.util;
 
+import com.ec.fireman.data.entities.RoleTypes;
 import com.ec.fireman.data.representation.User;
 import lombok.extern.log4j.Log4j2;
+import org.omnifaces.util.Faces;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.Optional;
 
 @Log4j2
 public class SessionUtils {
 
-  public static final String USER_ID = "userid";
-  public static final String ROL = "rol";
-
-  public static HttpSession getSession() {
-    return (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
-  }
+  private static final String USER_ID = "userid";
+  private static final String ROLE = "rol";
 
   public static HttpServletRequest getRequest() {
     return (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
   }
 
-  public static User retrieveLoggedUser() {
-    HttpSession session = getSession();
-    if (session != null) {
-      return new User((String) session.getAttribute(USER_ID), (String) session.getAttribute(ROL));
-    }
-    return null;
+  public static HttpServletResponse getResponse() {
+    return (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
   }
 
-  public static void saveLoggingInfo(String userId, String rol) {
-    HttpSession session = getSession();
-    if (session != null) {
-      session.setAttribute(USER_ID, userId);
-      session.setAttribute(ROL, rol);
-      return;
+  public static User retrieveLoggedUser() {
+    String roleFromSession = Faces.getSessionAttribute(ROLE);
+    if (roleFromSession == null) {
+      return null;
     }
-    log.error("There are no session");
+    Optional<RoleTypes> roleType = Arrays.stream(RoleTypes.values()).filter(it -> it.getValue().equals(roleFromSession)).findFirst();
+    return roleType.map(role -> new User(Faces.getSessionAttribute(USER_ID), role)).orElse(null);
+  }
+
+  public static void saveLoggingInfo(String userId, RoleTypes role) {
+    Faces.setSessionAttribute(USER_ID, userId);
+    Faces.setSessionAttribute(ROLE, role.getValue());
   }
 
   public static void closeSession() {
-    HttpSession session = getSession();
-    if (session != null) {
-      session.removeAttribute(USER_ID);
-      session.removeAttribute(ROL);
-      session.invalidate();
-      return;
-    }
-    log.error("There are no session");
+    Faces.invalidateSession();
   }
 }

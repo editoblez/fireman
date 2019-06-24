@@ -9,8 +9,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-@FacesConverter("roleConverter")
-public class RoleConverter implements Converter {
+@FacesConverter("selectOneMenuConverter")
+public class SelectOneMenuConverter implements Converter {
 
   @Override
   public Object getAsObject(final FacesContext arg0, final UIComponent arg1, final String objectString) {
@@ -28,6 +28,7 @@ public class RoleConverter implements Converter {
     return object.getClass() + "@" + object.hashCode();
   }
 
+  @SuppressWarnings("unchecked")
   private Object fromSelect(final UIComponent currentcomponent, final String objectString) {
 
     if (currentcomponent.getClass() == UISelectItem.class) {

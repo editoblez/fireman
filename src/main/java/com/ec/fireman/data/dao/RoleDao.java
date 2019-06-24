@@ -23,7 +23,7 @@ public class RoleDao extends GenericDaoImpl<Role> {
     RoleTypes[] roles = RoleTypes.values();
     List<Role> dbRoles = findAll();
     for (RoleTypes roleType : roles) {
-      if (dbRoles.stream().noneMatch(it -> it.getRoleName().equals(roleType.getValue()))) {
+      if (dbRoles.stream().noneMatch(it -> it.getRoleName() == roleType)) {
         log.debug("Creating a new rol calling " + roleType);
         save(new Role(roleType));
       }
@@ -37,7 +37,6 @@ public class RoleDao extends GenericDaoImpl<Role> {
           .setParameter("roleName", roleName)
           .getSingleResult();
     } catch (Exception ex) {
-
       log.error("Error to execute findRoleByName", ex);
     }
     return role;

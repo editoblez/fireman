@@ -6,14 +6,20 @@ import com.ec.fireman.data.entities.Role;
 import com.ec.fireman.data.entities.RoleTypes;
 import com.ec.fireman.data.entities.UserAccount;
 import com.ec.fireman.util.PasswordUtil;
+import com.ec.fireman.util.SessionUtils;
+import com.ec.fireman.util.UriUtil;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
+import org.omnifaces.util.Servlets;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.io.Serializable;
+
+import static com.ec.fireman.beans.PageNameConstants.LOGIN_PAGE;
 
 @Data
 @Log4j2
@@ -45,7 +51,11 @@ public class RegisterClientBean implements Serializable {
     UserAccount client = new UserAccount(firstName, secondName, firstLastName, secondLastName, ci,
         PasswordUtil.encrypt(ci), email, role);
     userAccountDao.save(client);
-    return PageNameConstants.LOGIN_PAGE;
+    return LOGIN_PAGE;
+  }
+
+  public void goToLogin() throws IOException {
+    Servlets.facesRedirect(SessionUtils.getRequest(), SessionUtils.getResponse(), UriUtil.removeStaringSlash(LOGIN_PAGE));
   }
 
 }

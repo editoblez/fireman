@@ -14,6 +14,7 @@ public class Role implements BaseEntity {
   private long id;
 
   @Enumerated(EnumType.STRING)
+  @Column(unique = true)
   private RoleTypes roleName;
 
   @Enumerated(EnumType.STRING)
@@ -26,10 +27,5 @@ public class Role implements BaseEntity {
   public Role(RoleTypes roleName) {
     this();
     this.roleName = roleName;
-  }
-
-  public Role(long id) {
-    super();
-    this.id = id;
   }
 }

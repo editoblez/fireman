@@ -1,72 +1,67 @@
 <!DOCTYPE html >
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui">
-<h:head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<title>Fireman</title>
-    <h:outputStylesheet library="css" name="bootstrap.min.css"/>
-</h:head>
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:b="http://bootsfaces.net/ui"
+        xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>Fireman</title>
+        <h:outputStylesheet library="css" name="bootstrap.min.css"/>
+    </h:head>
 
-<script type="text/javascript">
-function handleDialogSubmit(xhr, status, args, dialog) {
-    if (args.validationFailed) {
-    	dialog.show();
-    } else {
-    	dialog.hide();
-    }
-}
-</script>
+    <script type="text/javascript">
+      function handleDialogSubmit(xhr, status, args, dialog) {
+        if (args.validationFailed) {
+          dialog.show();
+        } else {
+          dialog.hide();
+        }
+      }
+    </script>
 
-<h:body>
-	<p:growl id="growl" sticky="true" showDetail="true" life="300" />
+    <h:body>
+        <p:growl id="growl" sticky="true" showDetail="true" life="300"/>
 
-	<div align="center"
-		style="padding-top: 10px; padding-bottom: 10px; width: 100%">
-        <p:graphicImage library="images" name="logo.jpg" width="80"/>
-	</div>
+        <div align="center"
+                style="padding-top: 10px; padding-bottom: 10px; width: 100%">
+            <p:graphicImage library="images" name="logo.jpg" width="80"/>
+        </div>
 
-	<h:form id="navBar">
-		<p:menubar>
-            <p:menuitem value="Inicio" outcome="/app/common/home.xhtml"/>
+        <h:form id="navBar">
+            <p:menubar>
+                <p:menuitem value="#{menuView.home.name}" outcome="#{menuView.home.uri}" rendered="#{menuView.home.rendered}"/>
+                <p:menuitem value="#{menuView.service.name}" outcome="#{menuView.service.uri}" rendered="#{menuView.service.rendered}"/>
+                <p:menuitem value="#{menuView.requirement.name}" outcome="#{menuView.requirement.uri}" rendered="#{menuView.requirement.rendered}"/>
+                <p:menuitem value="#{menuView.user.name}" outcome="#{menuView.user.uri}" rendered="#{menuView.user.rendered}"/>
+                <p:menuitem value="#{menuView.local.name}" outcome="#{menuView.local.uri}" rendered="#{menuView.local.rendered}"/>
+                <f:facet name="options">
+                    <table cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td style="padding-right: 10px"><p:outputLabel
+                                    value="#{loginBean.loggedUser()}"/></td>
+                            <td><p:commandButton ajax="true" title="Cerrar Sessión"
+                                    action="#{logoutBean.logout}" icon="ui-icon-extlink"/></td>
+                        </tr>
+                    </table>
 
-            <p:menuitem value="Servicio" outcome="/app/admin/serviceList.xhtml"/>
-
-			<p:menuitem value="Requerimientos"
-                    outcome="/app/admin/requirementList.xhtml"/>
-
-            <p:menuitem value="Usuarios" outcome="/app/admin/userList.xhtml"/>
-
-            <p:menuitem value="Locales" outcome="/app/client/localList.xhtml"/>
-
-			<f:facet name="options">
-				<table cellpadding="0" cellspacing="0">
-					<tr>
-						<td style="padding-right: 10px"><p:outputLabel
-								value="#{loginBean.loggedUser()}" /></td>
-						<td><p:commandButton ajax="true" title="Cerrar Sessión"
-								action="#{logoutBean.logout}" icon="ui-icon-extlink" /></td>
-					</tr>
-				</table>
-
-			</f:facet>
-		</p:menubar>
-	</h:form>
-	<b:container fluid="true">
-		<b:row>
-			<b:column col-md="10" col-sm="9" styleClass="conteiner">
-				<div class="title_page">
-					<br /> <label><ui:insert name="pageTitle" /> </label> <br />
-				</div>
-				<div class="content">
-					<ui:insert name="contenido" />
-				</div>
-			</b:column>
-		</b:row>
-	</b:container>
-</h:body>
+                </f:facet>
+            </p:menubar>
+        </h:form>
+        <b:container fluid="true">
+            <b:row>
+                <b:column col-md="10" col-sm="9" styleClass="conteiner">
+                    <div class="title_page">
+                        <br/> <label><ui:insert name="pageTitle"/> </label> <br/>
+                    </div>
+                    <div class="content">
+                        <ui:insert name="contenido"/>
+                    </div>
+                </b:column>
+            </b:row>
+        </b:container>
+    </h:body>
 </html>
 

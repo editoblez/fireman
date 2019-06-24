@@ -1,6 +1,7 @@
 package com.ec.fireman.filter;
 
 import com.ec.fireman.beans.PageNameConstants;
+import com.ec.fireman.util.UriUtil;
 import org.omnifaces.filter.HttpFilter;
 import org.omnifaces.util.Servlets;
 
@@ -18,7 +19,7 @@ import java.util.Locale;
 public class LoginFilter extends HttpFilter {
 
   private static final String INDEX_PAGE = PageNameConstants.HOME_PAGE;
-  private static final String LOGIN_PAGE = "app/login.xhtml";
+  private static final String LOGIN_PAGE = PageNameConstants.LOGIN_PAGE;
   private static final Locale DEFAULT_LOCALE = new Locale("es");
 
   @Override
@@ -29,14 +30,14 @@ public class LoginFilter extends HttpFilter {
     boolean richRequest = request.getRequestURI().startsWith(request.getContextPath() + "/faces/rfRes");
     updateCurrentLocale();
     if (isAuthenticated(session) && (request.getRequestURI().contains("login"))) {
-      Servlets.facesRedirect(request, response, INDEX_PAGE);
+      Servlets.facesRedirect(request, response, UriUtil.removeStaringSlash(INDEX_PAGE));
       return;
     }
     if (isAuthenticated(session) || urlIsAllowed(request) || resourceRequest || richRequest) {
       chain.doFilter(request, response);
       return;
     }
-    Servlets.facesRedirect(request, response, LOGIN_PAGE);
+    Servlets.facesRedirect(request, response, UriUtil.removeStaringSlash(LOGIN_PAGE));
   }
 
   private void updateCurrentLocale() {

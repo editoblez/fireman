@@ -27,13 +27,13 @@ public class UserAccount implements BaseEntity {
   @Column(length = GENERIC_COLUMN_SIZE, nullable = false)
   private String secondLastName;
 
-  @Column(length = GENERIC_COLUMN_SIZE, nullable = false)
+  @Column(length = GENERIC_COLUMN_SIZE, nullable = false, unique = true)
   private String ci;
 
   @Column(length = GENERIC_COLUMN_SIZE, nullable = false)
   private String password;
 
-  @Column(unique = true, length = GENERIC_COLUMN_SIZE, nullable = false)
+  @Column(length = GENERIC_COLUMN_SIZE)
   private String email;
 
   @ManyToOne(cascade = CascadeType.ALL)

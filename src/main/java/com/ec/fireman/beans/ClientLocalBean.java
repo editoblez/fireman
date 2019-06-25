@@ -22,6 +22,7 @@ import com.ec.fireman.data.dao.ServiceDao;
 import com.ec.fireman.data.entities.Local;
 import com.ec.fireman.data.entities.Requirement;
 import com.ec.fireman.data.entities.Service;
+import com.ec.fireman.data.entities.State;
 import com.ec.fireman.data.representation.RequirementFileUpload;
 import com.ec.fireman.util.Base64Util;
 
@@ -67,6 +68,9 @@ public class ClientLocalBean implements Serializable {
 
   @Transactional
   public void createLocal() {
+    //TODO: CHANGE ENTITY CLIENT FOR USER
+    //selectedLocal.setClient(client);
+    selectedLocal.setState(State.ACTIVE);
     selectedLocal.setService(service);
     log.info(selectedLocal.toString());
     localDao.save(selectedLocal);
@@ -86,9 +90,14 @@ public class ClientLocalBean implements Serializable {
   @Transactional
   public void deleteLocal() {
     log.info(selectedLocal.toString());
-    localDao.removeById(selectedLocal.getId());
+    selectedLocal.setState(State.INACTIVE);
+    localDao.update(selectedLocal);
     this.refreshLocals();
     this.clearData();
+  }
+  
+  public void localRequest() {
+    //TODO: SAVE PERMISSION-REQUEST
   }
 
   public List<Service> listServices() {

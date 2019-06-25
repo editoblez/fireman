@@ -27,23 +27,28 @@
 				<p:column headerText="Estado">
 					<h:outputText value="#{item.state}" />
 				</p:column>
-				<p:column style="text-align: center" headerText="Editar">
+				<p:column style="text-align: center; width: 200px" headerText="Acciones">
 					<p:commandButton update=":formEdit:opEdit growl"
 						icon="ui-icon-pencil" oncomplete="PF('dlgEdit').show()"
 						title="Editar">
 						<f:setPropertyActionListener value="#{item}"
 							target="#{clientLocalBean.selectedLocal}" />
 					</p:commandButton>
-				</p:column>
-				<p:column style="text-align: center" headerText="Eliminar">
-					<p:commandButton update=":formDelete:opDelete growl"
+				
+					<p:commandButton update=":formDelete:opDelete growl" rendered="#{item.state == 'ACTIVE'}"
 						icon="ui-icon-trash" oncomplete="PF('dlgEliminar').show()"
-						title="Resetear Contraseña">
+						title="Inactivar Local">
 						<f:setPropertyActionListener value="#{item}"
 							target="#{clientLocalBean.selectedLocal}" />
 					</p:commandButton>
-				</p:column>
-				<p:column style="text-align: center" headerText="Documentos">
+					
+					<p:commandButton update=":formRequest:opRequest growl"
+						icon="ui-icon-clipboard" oncomplete="PF('dlgRequest').show()"
+						title="Solicitar permiso">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{clientLocalBean.selectedLocal}" />
+					</p:commandButton>
+				
 					<p:commandButton update=":formFiles:opFiles growl"
 						icon="ui-icon-folder-open" oncomplete="PF('dlgFiles').show()"
 						title="Cargar documentos">
@@ -93,15 +98,6 @@
 					</p:panelGrid>
 				</p:outputPanel>
 
-				<script type="text/javascript"
-					src="https://maps.google.com/maps/api/js?sensor=false"></script>
-
-				<p:gmap id="gmap" center="#{clientLocalBean.mapPosition}" zoom="15"
-					type="ROADMAP" style="width:100%;height:300px">
-					<p:ajax event="pointSelect"
-						listener="#{clientLocalBean.onPointSelect}" update="growl" />
-				</p:gmap>
-
 				<div align="right" style="padding-top: 15px;">
 					<p:commandButton ajax="true" action="faces-redirect=false"
 						update=":formList:dtList growl"
@@ -150,16 +146,6 @@
 					</p:panelGrid>
 				</p:outputPanel>
 
-				<script type="text/javascript"
-					src="https://maps.google.com/maps/api/js?sensor=false"></script>
-
-				<p:gmap id="gmapEdit"
-					center="#{clientLocalBean.generateMapPosition()}" zoom="15"
-					type="ROADMAP" style="width:100%;height:300px">
-					<p:ajax event="pointSelect"
-						listener="#{clientLocalBean.onPointSelect}" update="growl" />
-				</p:gmap>
-
 				<div align="right" style="padding-top: 15px;">
 					<p:commandButton ajax="true" action="faces-redirect=false"
 						oncomplete="handleDialogSubmit(xhr, status, args, PF('dlgEdit'))"
@@ -180,12 +166,34 @@
 
 				<div align="center" style="padding-top: 15px;">
 					<p:commandButton ajax="true" action="faces-redirect=false"
-						update="growl" oncomplete="PF('dlgEliminar').hide();"
+						update="growl :formList:dtList" oncomplete="PF('dlgEliminar').hide();"
 						actionListener="#{clientLocalBean.deleteLocal()}" value="SI"
 						styleClass="btn btn-default" />
 
 					<p:commandButton ajax="true" action="faces-redirect=false"
 						update="growl" oncomplete="PF('dlgEliminar').hide();"
+						actionListener="#{clientLocalBean.clearData()}" value="NO"
+						styleClass="btn btn-default" />
+				</div>
+			</h:form>
+		</p:dialog>
+		
+		<p:dialog header="Solicitar Permiso" widgetVar="dlgRequest" width="255"
+			height="130" resizable="false" modal="true">
+			<h:form id="formRequest">
+				<p:outputPanel id="opRequest" style="text-align: center;">
+					<h:outputText
+						value="Está seguro que desea slicitar el permiso de funcionamiento?." />
+				</p:outputPanel>
+
+				<div align="center" style="padding-top: 15px;">
+					<p:commandButton ajax="true" action="faces-redirect=false"
+						update="growl :formList:dtList" oncomplete="PF('dlgRequest').hide();"
+						actionListener="#{clientLocalBean.localRequest()}" value="SI"
+						styleClass="btn btn-default" />
+
+					<p:commandButton ajax="true" action="faces-redirect=false"
+						update="growl" oncomplete="PF('dlgRequest').hide();"
 						actionListener="#{clientLocalBean.clearData()}" value="NO"
 						styleClass="btn btn-default" />
 				</div>

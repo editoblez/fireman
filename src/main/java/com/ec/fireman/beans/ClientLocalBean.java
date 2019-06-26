@@ -13,13 +13,14 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
 
-import org.primefaces.event.map.PointSelectEvent;
-import org.primefaces.model.map.LatLng;
-
 import com.ec.fireman.data.dao.LocalDao;
+import com.ec.fireman.data.dao.PermissionRequestDao;
+import com.ec.fireman.data.dao.PermissionRequestFilesDao;
 import com.ec.fireman.data.dao.RequirementDao;
 import com.ec.fireman.data.dao.ServiceDao;
 import com.ec.fireman.data.entities.Local;
+import com.ec.fireman.data.entities.PermissionRequest;
+import com.ec.fireman.data.entities.PermissionRequestStatus;
 import com.ec.fireman.data.entities.Requirement;
 import com.ec.fireman.data.entities.Service;
 import com.ec.fireman.data.entities.State;
@@ -43,6 +44,10 @@ public class ClientLocalBean implements Serializable {
   private ServiceDao serviceDao;
   @Inject
   private RequirementDao requirementDao;
+  @Inject
+  private PermissionRequestDao permissionRequestDao;
+  @Inject
+  private PermissionRequestFilesDao permissionRequestFilesDao;
 
   private List<Local> locals;
   private Local selectedLocal;
@@ -68,8 +73,8 @@ public class ClientLocalBean implements Serializable {
 
   @Transactional
   public void createLocal() {
-    //TODO: CHANGE ENTITY CLIENT FOR USER
-    //selectedLocal.setClient(client);
+    // TODO: CHANGE ENTITY CLIENT FOR USER
+    // selectedLocal.setClient(client);
     selectedLocal.setState(State.ACTIVE);
     selectedLocal.setService(service);
     log.info(selectedLocal.toString());
@@ -95,9 +100,15 @@ public class ClientLocalBean implements Serializable {
     this.refreshLocals();
     this.clearData();
   }
-  
+
+  @Transactional
   public void localRequest() {
-    //TODO: SAVE PERMISSION-REQUEST
+    PermissionRequest request = new PermissionRequest();
+    request.setLocal(localDao.findById(selectedLocal.getId()));
+    request.setPermissionRequestStatus(PermissionRequestStatus.IN_PROGRESS);
+    request.setState(State.ACTIVE);
+    permissionRequestDao.save(request);
+    log.info(request.toString());
   }
 
   public List<Service> listServices() {
@@ -132,22 +143,6 @@ public class ClientLocalBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, message);
       }
     }
-  }
-
-  public void onPointSelect(PointSelectEvent event) {
-    LatLng latlng = event.getLatLng();
-    selectedLocal.setLatitude(String.valueOf(latlng.getLat()));
-    selectedLocal.setLongitude(String.valueOf(latlng.getLng()));
-    
-    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Point Selected",
-        "Lat:" + latlng.getLat() + ", Lng:" + latlng.getLng()));
-  }
-  
-  public String generateMapPosition() {
-    if (selectedLocal.getLatitude() != null && selectedLocal.getLongitude() != null) {
-      return selectedLocal.getLatitude() + ", " + selectedLocal.getLongitude();
-    }
-    return mapPosition;
   }
 
 }

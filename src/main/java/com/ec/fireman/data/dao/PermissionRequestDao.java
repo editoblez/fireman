@@ -1,5 +1,7 @@
 package com.ec.fireman.data.dao;
 
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 
@@ -17,5 +19,15 @@ public class PermissionRequestDao extends GenericDaoImpl<PermissionRequest> {
     setClazz(PermissionRequest.class);
   }
 
-}
+  public PermissionRequest findPermissionRequestByLocal(long localId) {
+    try {
+      List<PermissionRequest> list = entityManager.createNamedQuery("findPermissionRequestByLocal")
+          .setParameter("localId", localId).getResultList();
+      return list != null && !list.isEmpty() ? list.get(0) : null;
+    } catch (Exception ex) {
+      log.error("Error to execute findPermissionRequestByLocal", ex);
+    }
+    return null;
+  }
 
+}

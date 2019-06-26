@@ -24,6 +24,7 @@ import com.ec.fireman.data.entities.PermissionRequestStatus;
 import com.ec.fireman.data.entities.Requirement;
 import com.ec.fireman.data.entities.Service;
 import com.ec.fireman.data.entities.State;
+import com.ec.fireman.data.representation.LocalRequest;
 import com.ec.fireman.data.representation.RequirementFileUpload;
 import com.ec.fireman.util.Base64Util;
 
@@ -49,26 +50,32 @@ public class ClientLocalBean implements Serializable {
   @Inject
   private PermissionRequestFilesDao permissionRequestFilesDao;
 
-  private List<Local> locals;
+  private List<LocalRequest> locals;
   private Local selectedLocal;
   private Service service;
   private List<RequirementFileUpload> files;
-  private String mapPosition;
+  private PermissionRequest selectedRequest;
 
   @PostConstruct
   public void init() {
     this.refreshLocals();
     selectedLocal = new Local();
-    mapPosition = "-0.176116, -78.485530";
+    selectedRequest = new PermissionRequest();
   }
 
   public void refreshLocals() {
-    locals = localDao.findAll();
+    List<Local> localList = localDao.findAll();
+    locals = new ArrayList<LocalRequest>();
+    for (Local local : localList) {
+      PermissionRequest pr = permissionRequestDao.findPermissionRequestByLocal(local.getId());
+      locals.add(new LocalRequest(local, pr));
+    }
     log.info("Locals length: " + (locals != null ? locals.size() : 0));
   }
 
   public void clearData() {
     selectedLocal = new Local();
+    selectedRequest = new PermissionRequest();
   }
 
   @Transactional
@@ -109,23 +116,20 @@ public class ClientLocalBean implements Serializable {
     request.setState(State.ACTIVE);
     permissionRequestDao.save(request);
     log.info(request.toString());
+    this.sendFacesMessage("Solicitud", "Permiso de funcionamiento solicitado correctaente");
+    this.refreshLocals();
+    this.clearData();
   }
 
-  public List<Service> listServices() {
-    return serviceDao.findAll();
+  @Transactional
+  public void cancelRequest() {
+    selectedRequest.setPermissionRequestStatus(PermissionRequestStatus.CLOSED);
+    permissionRequestDao.update(selectedRequest);
+    this.sendFacesMessage("Cancelación", "Permiso de funcionamiento cancelado correctaente");
+    this.refreshLocals();
+    this.clearData();
   }
-
-  public List<RequirementFileUpload> listRequirements() {
-    List<Requirement> requirements = requirementDao.findAll();
-    files = new ArrayList<RequirementFileUpload>();
-    if (requirements != null && !requirements.isEmpty()) {
-      for (Requirement req : requirements) {
-        files.add(new RequirementFileUpload(req.getId(), req.getName()));
-      }
-    }
-    return files;
-  }
-
+  
   public void upload() {
     for (RequirementFileUpload requirementFileUpload : files) {
       log.info(requirementFileUpload.toString());
@@ -138,11 +142,30 @@ public class ClientLocalBean implements Serializable {
           log.error(e.getMessage());
         }
 
-        FacesMessage message = new FacesMessage("Succesful",
-            requirementFileUpload.getFile().getFileName() + " is uploaded.");
-        FacesContext.getCurrentInstance().addMessage(null, message);
+        this.sendFacesMessage("Succesful", requirementFileUpload.getFile().getFileName() + " is uploaded.");
       }
     }
+  }
+
+  public List<Service> listServices() {
+    return serviceDao.findAll();
+  }
+
+  public List<RequirementFileUpload> listRequirements() {
+    // TODO: LIST ACTIVE REQUIREMENTS BY ROLE (DAO)
+    List<Requirement> requirements = requirementDao.findAll();
+    files = new ArrayList<RequirementFileUpload>();
+    if (requirements != null && !requirements.isEmpty()) {
+      for (Requirement req : requirements) {
+        files.add(new RequirementFileUpload(req.getId(), req.getName()));
+      }
+    }
+    return files;
+  }
+
+  private void sendFacesMessage(String title, String description) {
+    FacesMessage message = new FacesMessage(title, description);
+    FacesContext.getCurrentInstance().addMessage(null, message);
   }
 
 }

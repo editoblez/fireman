@@ -19,35 +19,57 @@
 
 			<p:dataTable id="dtList" var="item" value="#{clientLocalBean.locals}">
 				<p:column headerText="Dirección">
-					<h:outputText value="#{item.address}" />
+					<h:outputText value="#{item.local.address}" />
 				</p:column>
 				<p:column headerText="Servicio">
-					<h:outputText value="#{item.service.name}" />
+					<h:outputText value="#{item.local.service.name}" />
 				</p:column>
 				<p:column headerText="Estado">
-					<h:outputText value="#{item.state}" />
+					<h:outputText rendered="#{item.permissionRequest == null}"
+						value="#{item.local.state}" />
+					<h:outputText rendered="#{item.permissionRequest != null}"
+						value="#{item.permissionRequest.permissionRequestStatus}" />
 				</p:column>
-				<p:column style="text-align: center" headerText="Editar">
+				<p:column style="text-align: center; width: 200px"
+					headerText="Acciones">
 					<p:commandButton update=":formEdit:opEdit growl"
+						rendered="#{item.permissionRequest == null and item.local.state == 'ACTIVE'}"
 						icon="ui-icon-pencil" oncomplete="PF('dlgEdit').show()"
 						title="Editar">
-						<f:setPropertyActionListener value="#{item}"
+						<f:setPropertyActionListener value="#{item.local}"
 							target="#{clientLocalBean.selectedLocal}" />
 					</p:commandButton>
-				</p:column>
-				<p:column style="text-align: center" headerText="Eliminar">
+
 					<p:commandButton update=":formDelete:opDelete growl"
-						icon="ui-icon-trash" oncomplete="PF('dlgEliminar').show()"
-						title="Resetear Contraseña">
-						<f:setPropertyActionListener value="#{item}"
+						disabled="#{item.local.state == 'INACTIVE'}"
+						rendered="#{item.permissionRequest == null}" icon="ui-icon-trash"
+						oncomplete="PF('dlgEliminar').show()" title="Inactivar Local">
+						<f:setPropertyActionListener value="#{item.local}"
 							target="#{clientLocalBean.selectedLocal}" />
 					</p:commandButton>
-				</p:column>
-				<p:column style="text-align: center" headerText="Documentos">
+
+					<p:commandButton update=":formRequest:opRequest growl"
+						rendered="#{item.permissionRequest == null and item.local.state == 'ACTIVE'}"
+						icon="ui-icon-clipboard" oncomplete="PF('dlgRequest').show()"
+						title="Solicitar permiso">
+						<f:setPropertyActionListener value="#{item.local}"
+							target="#{clientLocalBean.selectedLocal}" />
+					</p:commandButton>
+
+					<p:commandButton update=":formCancel:opCancel growl"
+						rendered="#{item.permissionRequest.permissionRequestStatus == 'SUBMITTED' or item.permissionRequest.permissionRequestStatus == 'CLOSED'}"
+						disabled="#{item.permissionRequest.permissionRequestStatus == 'CLOSED'}"
+						icon="ui-icon-circle-close" oncomplete="PF('dlgCancel').show()"
+						title="Cancelar solicitud">
+						<f:setPropertyActionListener value="#{item.permissionRequest}"
+							target="#{clientLocalBean.selectedRequest}" />
+					</p:commandButton>
+
 					<p:commandButton update=":formFiles:opFiles growl"
+						rendered="#{item.permissionRequest.permissionRequestStatus == 'IN_PROGRESS'}"
 						icon="ui-icon-folder-open" oncomplete="PF('dlgFiles').show()"
 						title="Cargar documentos">
-						<f:setPropertyActionListener value="#{item}"
+						<f:setPropertyActionListener value="#{item.local}"
 							target="#{clientLocalBean.selectedLocal}" />
 					</p:commandButton>
 				</p:column>
@@ -92,15 +114,6 @@
 						</div>
 					</p:panelGrid>
 				</p:outputPanel>
-
-				<script type="text/javascript"
-					src="https://maps.google.com/maps/api/js?sensor=false"></script>
-
-				<p:gmap id="gmap" center="#{clientLocalBean.mapPosition}" zoom="15"
-					type="ROADMAP" style="width:100%;height:300px">
-					<p:ajax event="pointSelect"
-						listener="#{clientLocalBean.onPointSelect}" update="growl" />
-				</p:gmap>
 
 				<div align="right" style="padding-top: 15px;">
 					<p:commandButton ajax="true" action="faces-redirect=false"
@@ -150,16 +163,6 @@
 					</p:panelGrid>
 				</p:outputPanel>
 
-				<script type="text/javascript"
-					src="https://maps.google.com/maps/api/js?sensor=false"></script>
-
-				<p:gmap id="gmapEdit"
-					center="#{clientLocalBean.generateMapPosition()}" zoom="15"
-					type="ROADMAP" style="width:100%;height:300px">
-					<p:ajax event="pointSelect"
-						listener="#{clientLocalBean.onPointSelect}" update="growl" />
-				</p:gmap>
-
 				<div align="right" style="padding-top: 15px;">
 					<p:commandButton ajax="true" action="faces-redirect=false"
 						oncomplete="handleDialogSubmit(xhr, status, args, PF('dlgEdit'))"
@@ -180,12 +183,59 @@
 
 				<div align="center" style="padding-top: 15px;">
 					<p:commandButton ajax="true" action="faces-redirect=false"
-						update="growl" oncomplete="PF('dlgEliminar').hide();"
+						update="growl :formList:dtList"
+						oncomplete="PF('dlgEliminar').hide();"
 						actionListener="#{clientLocalBean.deleteLocal()}" value="SI"
 						styleClass="btn btn-default" />
 
 					<p:commandButton ajax="true" action="faces-redirect=false"
 						update="growl" oncomplete="PF('dlgEliminar').hide();"
+						actionListener="#{clientLocalBean.clearData()}" value="NO"
+						styleClass="btn btn-default" />
+				</div>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog header="Solicitar Permiso" widgetVar="dlgRequest"
+			width="255" height="110" resizable="false" modal="true">
+			<h:form id="formRequest">
+				<p:outputPanel id="opRequest" style="text-align: center;">
+					<h:outputText
+						value="Está seguro que desea solicitar el permiso de funcionamiento?." />
+				</p:outputPanel>
+
+				<div align="center" style="padding-top: 15px;">
+					<p:commandButton ajax="true" action="faces-redirect=false"
+						update="growl :formList:dtList"
+						oncomplete="PF('dlgRequest').hide();"
+						actionListener="#{clientLocalBean.localRequest()}" value="SI"
+						styleClass="btn btn-default" />
+
+					<p:commandButton ajax="true" action="faces-redirect=false"
+						update="growl" oncomplete="PF('dlgRequest').hide();"
+						actionListener="#{clientLocalBean.clearData()}" value="NO"
+						styleClass="btn btn-default" />
+				</div>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog header="Cancelar Solicitud" widgetVar="dlgCancel"
+			width="255" height="110" resizable="false" modal="true">
+			<h:form id="formCancel">
+				<p:outputPanel id="opCancel" style="text-align: center;">
+					<h:outputText
+						value="Está seguro que desea cancelar la solicitud del permiso de funcionamiento?." />
+				</p:outputPanel>
+
+				<div align="center" style="padding-top: 15px;">
+					<p:commandButton ajax="true" action="faces-redirect=false"
+						update="growl :formList:dtList"
+						oncomplete="PF('dlgCancel').hide();"
+						actionListener="#{clientLocalBean.cancelRequest()}" value="SI"
+						styleClass="btn btn-default" />
+
+					<p:commandButton ajax="true" action="faces-redirect=false"
+						update="growl" oncomplete="PF('dlgCancel').hide();"
 						actionListener="#{clientLocalBean.clearData()}" value="NO"
 						styleClass="btn btn-default" />
 				</div>

@@ -4,6 +4,8 @@ import lombok.Data;
 
 import javax.persistence.*;
 
+@NamedQueries({@NamedQuery(name = "findPermissionRequestByLocal", query = "from PermissionRequest pr where pr.local.id = :localId")})
+
 @Data
 @Entity
 public class PermissionRequest implements BaseEntity {

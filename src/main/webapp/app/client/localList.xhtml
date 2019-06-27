@@ -56,8 +56,16 @@
 							target="#{clientLocalBean.selectedLocal}" />
 					</p:commandButton>
 
+					<p:commandButton update=":formFiles:opFiles growl"
+						rendered="#{item.permissionRequest.permissionRequestStatus == 'SUBMITTED'}"
+						icon="ui-icon-folder-open" oncomplete="PF('dlgFiles').show()"
+						title="Cargar documentos">
+						<f:setPropertyActionListener value="#{item.local}"
+							target="#{clientLocalBean.selectedLocal}" />
+					</p:commandButton>
+
 					<p:commandButton update=":formCancel:opCancel growl"
-						rendered="#{item.permissionRequest.permissionRequestStatus == 'SUBMITTED' or item.permissionRequest.permissionRequestStatus == 'CLOSED'}"
+						rendered="#{item.permissionRequest.permissionRequestStatus == 'SUBMITTED' or item.permissionRequest.permissionRequestStatus == 'IN_PROGRESS' or item.permissionRequest.permissionRequestStatus == 'CLOSED'}"
 						disabled="#{item.permissionRequest.permissionRequestStatus == 'CLOSED'}"
 						icon="ui-icon-circle-close" oncomplete="PF('dlgCancel').show()"
 						title="Cancelar solicitud">
@@ -65,13 +73,6 @@
 							target="#{clientLocalBean.selectedRequest}" />
 					</p:commandButton>
 
-					<p:commandButton update=":formFiles:opFiles growl"
-						rendered="#{item.permissionRequest.permissionRequestStatus == 'IN_PROGRESS'}"
-						icon="ui-icon-folder-open" oncomplete="PF('dlgFiles').show()"
-						title="Cargar documentos">
-						<f:setPropertyActionListener value="#{item.local}"
-							target="#{clientLocalBean.selectedLocal}" />
-					</p:commandButton>
 				</p:column>
 			</p:dataTable>
 		</h:form>

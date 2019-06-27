@@ -117,7 +117,7 @@ public class ClientLocalBean implements Serializable {
   public void localRequest() {
     PermissionRequest request = new PermissionRequest();
     request.setLocal(localDao.findById(selectedLocal.getId()));
-    request.setPermissionRequestStatus(PermissionRequestStatus.IN_PROGRESS);
+    request.setPermissionRequestStatus(PermissionRequestStatus.SUBMITTED);
     request.setState(State.ACTIVE);
     permissionRequestDao.save(request);
     log.info(request.toString());
@@ -130,7 +130,7 @@ public class ClientLocalBean implements Serializable {
   public void cancelRequest() {
     selectedRequest.setPermissionRequestStatus(PermissionRequestStatus.CLOSED);
     permissionRequestDao.update(selectedRequest);
-    this.sendFacesMessage("Cancelación", "Permiso de funcionamiento cancelado correctaente");
+    this.sendFacesMessage("Cancelaciï¿½n", "Permiso de funcionamiento cancelado correctaente");
     this.refreshLocals();
     this.clearData();
   }

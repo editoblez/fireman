@@ -38,10 +38,10 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @Named
 @SessionScoped
-public class ClientLocalBean implements Serializable {
+public class InspectorBean implements Serializable {
 
-  private static final long serialVersionUID = -5093549162702207471L;
-
+  private static final long serialVersionUID = 8632563163040959753L;
+  
   @Inject
   private LocalDao localDao;
   @Inject

@@ -76,42 +76,49 @@
 			</p:dataTable>
 		</h:form>
 
-		<p:dialog header="Crear Local" widgetVar="dlgCreate" width="600"
-			modal="true">
+		<p:dialog header="Crear Local" widgetVar="dlgCreate" modal="true">
 			<h:form id="formUserCreate" prependId="false">
 				<p:outputPanel id="opCreate">
 					<p:panelGrid columns="1" cellpadding="5" layout="grid"
 						styleClass="ui-noborder">
-						<div>
 
-							<h:panelGroup>
-								<p:outputLabel for="txtAddress" value="Dirección" />
-								<div>
-									<p:inputText id="txtAddress"
-										value="#{clientLocalBean.selectedLocal.address}"
-										required="true" requiredMessage="Dirección requerida" />
-									<p:message for="txtAddress" />
-								</div>
-							</h:panelGroup>
+						<h:panelGroup>
+							<p:outputLabel for="txtAddress" value="Dirección" />
+							<div>
+								<p:inputText id="txtAddress"
+									value="#{clientLocalBean.selectedLocal.address}"
+									required="true" requiredMessage="Dirección requerida" />
+								<p:message for="txtAddress" />
+							</div>
+						</h:panelGroup>
 
-							<h:panelGroup>
-								<p:outputLabel for="cmbService" value="Servicio" />
-								<div>
-									<p:selectOneMenu id="cmbService"
-										value="#{clientLocalBean.service}"
-										converter="selectOneMenuConverter" panelStyle="width:180px"
-										effect="fade" var="s" style="width:160px" filter="true"
-										filterMatchMode="startsWith">
-										<f:selectItems value="#{clientLocalBean.listServices()}"
-											var="serv" itemLabel="#{serv.name}" itemValue="#{serv}" />
-										<p:column>
-											<h:outputText value="#{s.name}" />
-										</p:column>
-									</p:selectOneMenu>
-									<p:message for="cmbService" />
-								</div>
-							</h:panelGroup>
-						</div>
+						<h:panelGroup>
+							<p:outputLabel for="txtUrl" value="URL mapa" />
+							<div>
+								<p:inputText id="txtUrl"
+									value="#{clientLocalBean.selectedLocal.mapUrl}" required="true"
+									requiredMessage="URL del mapa requerido" />
+								<p:message for="txtUrl" />
+							</div>
+						</h:panelGroup>
+
+						<h:panelGroup>
+							<p:outputLabel for="cmbService" value="Servicio" />
+							<div>
+								<p:selectOneMenu id="cmbService"
+									value="#{clientLocalBean.service}"
+									converter="selectOneMenuConverter" panelStyle="width:180px"
+									effect="fade" var="s" style="width:160px" filter="true"
+									filterMatchMode="startsWith">
+									<f:selectItems value="#{clientLocalBean.listServices()}"
+										var="serv" itemLabel="#{serv.name}" itemValue="#{serv}" />
+									<p:column>
+										<h:outputText value="#{s.name}" />
+									</p:column>
+								</p:selectOneMenu>
+								<p:message for="cmbService" />
+							</div>
+						</h:panelGroup>
 					</p:panelGrid>
 				</p:outputPanel>
 
@@ -125,41 +132,49 @@
 			</h:form>
 		</p:dialog>
 
-		<p:dialog header="Editar Local" widgetVar="dlgEdit" width="600"
-			modal="true">
+		<p:dialog header="Editar Local" widgetVar="dlgEdit" modal="true">
 			<h:form id="formEdit">
 				<p:outputPanel id="opEdit">
 					<p:panelGrid columns="1" cellpadding="5" layout="grid"
 						styleClass="ui-noborder">
-						<div>
-							<h:panelGroup>
-								<p:outputLabel for="txtAddress2" value="Dirección" />
-								<div>
-									<p:inputText id="txtAddress2"
-										value="#{clientLocalBean.selectedLocal.address}"
-										required="true" requiredMessage="Dirección requerida" />
-									<p:message for="txtAddress2" />
-								</div>
-							</h:panelGroup>
 
-							<h:panelGroup>
-								<p:outputLabel for="cmbService2" value="Servicio" />
-								<div>
-									<p:selectOneMenu id="cmbService2"
-										value="#{clientLocalBean.service}"
-										converter="selectOneMenuConverter" panelStyle="width:180px"
-										effect="fade" var="s" style="width:160px" filter="true"
-										filterMatchMode="startsWith">
-										<f:selectItems value="#{clientLocalBean.listServices()}"
-											var="serv" itemLabel="#{serv.name}" itemValue="#{serv}" />
-										<p:column>
-											<h:outputText value="#{s.name}" />
-										</p:column>
-									</p:selectOneMenu>
-									<p:message for="cmbService2" />
-								</div>
-							</h:panelGroup>
-						</div>
+						<h:panelGroup>
+							<p:outputLabel for="txtAddress2" value="Dirección" />
+							<div>
+								<p:inputText id="txtAddress2"
+									value="#{clientLocalBean.selectedLocal.address}"
+									required="true" requiredMessage="Dirección requerida" />
+								<p:message for="txtAddress2" />
+							</div>
+						</h:panelGroup>
+
+						<h:panelGroup>
+							<p:outputLabel for="txtUrl2" value="URL mapa" />
+							<div>
+								<p:inputText id="txtUrl2"
+									value="#{clientLocalBean.selectedLocal.mapUrl}" required="true"
+									requiredMessage="URL del mapa requerido" />
+								<p:message for="txtUrl2" />
+							</div>
+						</h:panelGroup>
+
+						<h:panelGroup>
+							<p:outputLabel for="cmbService2" value="Servicio" />
+							<div>
+								<p:selectOneMenu id="cmbService2"
+									value="#{clientLocalBean.service}"
+									converter="selectOneMenuConverter" panelStyle="width:180px"
+									effect="fade" var="s" style="width:160px" filter="true"
+									filterMatchMode="startsWith">
+									<f:selectItems value="#{clientLocalBean.listServices()}"
+										var="serv" itemLabel="#{serv.name}" itemValue="#{serv}" />
+									<p:column>
+										<h:outputText value="#{s.name}" />
+									</p:column>
+								</p:selectOneMenu>
+								<p:message for="cmbService2" />
+							</div>
+						</h:panelGroup>
 					</p:panelGrid>
 				</p:outputPanel>
 

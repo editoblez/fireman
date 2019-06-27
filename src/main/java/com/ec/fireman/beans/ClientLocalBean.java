@@ -13,20 +13,24 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
 
+import org.apache.commons.io.IOUtils;
+
 import com.ec.fireman.data.dao.LocalDao;
 import com.ec.fireman.data.dao.PermissionRequestDao;
 import com.ec.fireman.data.dao.PermissionRequestFilesDao;
 import com.ec.fireman.data.dao.RequirementDao;
 import com.ec.fireman.data.dao.ServiceDao;
+import com.ec.fireman.data.dao.UserAccountDao;
 import com.ec.fireman.data.entities.Local;
 import com.ec.fireman.data.entities.PermissionRequest;
+import com.ec.fireman.data.entities.PermissionRequestFiles;
 import com.ec.fireman.data.entities.PermissionRequestStatus;
 import com.ec.fireman.data.entities.Requirement;
 import com.ec.fireman.data.entities.Service;
 import com.ec.fireman.data.entities.State;
 import com.ec.fireman.data.representation.LocalRequest;
 import com.ec.fireman.data.representation.RequirementFileUpload;
-import com.ec.fireman.util.Base64Util;
+import com.ec.fireman.util.SessionUtils;
 
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
@@ -43,6 +47,8 @@ public class ClientLocalBean implements Serializable {
   private LocalDao localDao;
   @Inject
   private ServiceDao serviceDao;
+  @Inject
+  private UserAccountDao userAccountDao;
   @Inject
   private RequirementDao requirementDao;
   @Inject
@@ -64,7 +70,7 @@ public class ClientLocalBean implements Serializable {
   }
 
   public void refreshLocals() {
-    List<Local> localList = localDao.findAll();
+    List<Local> localList = localDao.findLocalByUser(SessionUtils.retrieveLoggedUser().getUserId());
     locals = new ArrayList<LocalRequest>();
     for (Local local : localList) {
       PermissionRequest pr = permissionRequestDao.findPermissionRequestByLocal(local.getId());
@@ -80,8 +86,7 @@ public class ClientLocalBean implements Serializable {
 
   @Transactional
   public void createLocal() {
-    // TODO: CHANGE ENTITY CLIENT FOR USER
-    // selectedLocal.setClient(client);
+    selectedLocal.setUserAccount(userAccountDao.findUserByCi(SessionUtils.retrieveLoggedUser().getUserId()));
     selectedLocal.setState(State.ACTIVE);
     selectedLocal.setService(service);
     log.info(selectedLocal.toString());
@@ -129,18 +134,25 @@ public class ClientLocalBean implements Serializable {
     this.refreshLocals();
     this.clearData();
   }
-  
+
   public void upload() {
     for (RequirementFileUpload requirementFileUpload : files) {
       log.info(requirementFileUpload.toString());
       if (requirementFileUpload.getFile() != null) {
-
-        // TODO: SAVE INTO DATABASE (PermissionRequestFiles)
+        byte[] bytes = null;
         try {
-          log.info(Base64Util.inputStreamToBase64(requirementFileUpload.getFile().getInputstream()));
+          bytes = IOUtils.toByteArray(requirementFileUpload.getFile().getInputstream());
         } catch (IOException e) {
           log.error(e.getMessage());
         }
+        PermissionRequest permissionRequest = permissionRequestDao.findPermissionRequestByLocal(selectedLocal.getId());
+        PermissionRequestFiles prf = new PermissionRequestFiles();
+        prf.setPermissionRequest(permissionRequest);
+        prf.setRequirement(requirementDao.findById(requirementFileUpload.getRequirementId()));
+        prf.setState(State.ACTIVE);
+        prf.setData(bytes);
+        prf.setFileName(requirementFileUpload.getFile().getFileName());
+        permissionRequestFilesDao.save(prf);
 
         this.sendFacesMessage("Succesful", requirementFileUpload.getFile().getFileName() + " is uploaded.");
       }

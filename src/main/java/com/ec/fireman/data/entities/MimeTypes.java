@@ -3,8 +3,20 @@ package com.ec.fireman.data.entities;
 import java.util.Arrays;
 
 public enum MimeTypes {
-  WORD("application/msword", ".doc"), EXCEL("application/excel", ".xls"), PDF("application/pdf",
-      ".pdf"), JPG("image/jpeg", ".jpg"), JPEG("image/jpeg", ".jpeg"), PNG("image/png", ".png");
+  
+  DOC("application/msword", ".doc"), 
+  XLS("application/excel", ".xls"), 
+  DOCX("application/vnd.openxmlformats-officedocument.wordprocessingml.document",".docx"), 
+  XLSX("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ".xlsx"), 
+  PDF("application/pdf", ".pdf"), 
+  JPG("image/jpeg", ".jpg"), 
+  JPEG("image/jpeg", ".jpeg"), 
+  PNG("image/png", ".png"), 
+  TXT("text/plain", ".txt"), 
+  CSV("text/csv", ".csv"),
+  HTML("text/html", ".html"), 
+  ZIP("application/x-compressed", ".zip"), 
+  RAR("application/x-rar-compressed", ".rar");
 
   private String mimeType;
   private String suffix;

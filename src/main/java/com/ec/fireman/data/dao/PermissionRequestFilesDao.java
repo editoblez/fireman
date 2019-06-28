@@ -1,5 +1,7 @@
 package com.ec.fireman.data.dao;
 
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 
@@ -13,9 +15,18 @@ public class PermissionRequestFilesDao extends GenericDaoImpl<PermissionRequestF
 
   @PostConstruct
   public void init() {
-    log.info("LocalDao was successfully created");
+    log.info("PermissionRequestFilesDao was successfully created");
     setClazz(PermissionRequestFiles.class);
   }
 
-}
+  public List<PermissionRequestFiles> findPermissionRequestFilesByRequest(long requestId) {
+    try {
+      return entityManager.createNamedQuery("findPermissionRequestFilesByRequest").setParameter("requestId", requestId)
+          .getResultList();
+    } catch (Exception ex) {
+      log.error("Error to execute findPermissionRequestFilesByRequest", ex);
+    }
+    return null;
+  }
 
+}

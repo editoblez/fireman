@@ -10,13 +10,17 @@ import com.ec.fireman.util.MessageUtil;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.IOUtils;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -110,6 +114,19 @@ public class CounterBean implements Serializable {
       }
     }
     return files;
+  }
+
+  public StreamedContent download(PermissionRequestFiles prf) {
+    InputStream stream = new ByteArrayInputStream(prf.getData());
+    String suffix = prf.getFileName().substring(prf.getFileName().lastIndexOf("."));
+    return new DefaultStreamedContent(stream, MimeTypes.findBySuffix(suffix).getMimeType(), prf.getFileName());
+  }
+
+  public List<PermissionRequestFiles> listFiles() {
+    List<PermissionRequestFiles> list = permissionRequestFilesDao
+            .findPermissionRequestFilesByRequest(selectedRequest.getId());
+    log.info("Files length: " + (list != null ? list.size() : 0));
+    return list;
   }
 
 }

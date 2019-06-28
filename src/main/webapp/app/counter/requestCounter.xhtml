@@ -79,32 +79,20 @@
 						update="growl" oncomplete="PF('dlgRequest').hide();"
 						actionListener="#{counterBean.clearData()}" value="NO"
 						styleClass="btn btn-default" />
-
-					<p:commandButton update=":formCancel:opCancel growl"
-									 rendered="#{item.permissionRequestStatus == 'SUBMITTED' or
-									 item.permissionRequestStatus == 'IN_PROGRESS' or
-									 item.permissionRequestStatus == 'CLOSED' or
-									 item.permissionRequestStatus == 'INSPECTED'}"
-									 disabled="#{item.permissionRequestStatus == 'CLOSED'}"
-									 icon="ui-icon-circle-close" oncomplete="PF('dlgCancel').show()"
-									 title="Cancelar solicitud">
-						<f:setPropertyActionListener value="#{item}"
-													 target="#{counterBean.selectedRequest}" />
-					</p:commandButton>
 				</div>
 			</h:form>
 		</p:dialog>
 
-		<p:dialog header="Revisar Documentos" widgetVar="dlgFiles" width="600"
-			modal="true">
+		<p:dialog header="Cargar Documentos" widgetVar="dlgFiles" width="600"
+				  modal="true">
 			<h:form id="formFiles" enctype="multipart/form-data">
 				<p:outputPanel id="opFiles">
 
-					<p:repeat value="#{counterBean.listRequirements()}" var="item">
+					<p:repeat value="#{clientLocalBean.listRequirements()}" var="item">
 						<p:panelGrid columns="2" cellpadding="5" layout="grid">
 							<h:outputText value="#{item.requirementName}" />
 							<p:fileUpload value="#{item.file}" mode="simple"
-								skinSimple="true" label="Seleccionar" />
+										  skinSimple="true" label="Seleccionar" />
 						</p:panelGrid>
 					</p:repeat>
 
@@ -112,9 +100,9 @@
 
 				<div align="center" style="padding-top: 15px;">
 					<p:commandButton ajax="false" action="faces-redirect=false"
-						update="growl" oncomplete="PF('dlgFiles').hide();"
-						actionListener="#{counterBean.upload()}"
-						value="Guardar Documentos" styleClass="btn btn-default" />
+									 update="growl" oncomplete="PF('dlgFiles').hide();"
+									 actionListener="#{clientLocalBean.upload()}"
+									 value="Guardar Documentos" styleClass="btn btn-default" />
 				</div>
 			</h:form>
 		</p:dialog>

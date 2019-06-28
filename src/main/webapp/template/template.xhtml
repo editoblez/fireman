@@ -3,11 +3,33 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:mp="http://primefaces.org/ui/material"
         xmlns:b="http://bootsfaces.net/ui"
         xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title><ui:insert name="title" /></title>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="A front-end template that helps you build fast, modern mobile web apps." />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <!-- Add to homescreen for Chrome on Android -->
+        <meta name="mobile-web-app-capable" content="yes" />
+<!--        <link rel="icon" sizes="192x192" href="images/touch/chrome-touch-icon-192x192.png" />-->
+        <!-- Add to homescreen for Safari on iOS -->
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <meta name="apple-mobile-web-app-title" content="Material Design Lite" />
+<!--        <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-precomposed.png" />-->
+        <!-- Tile icon for Win8 (144x144 + tile color) -->
+        <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png" />
+        <meta name="msapplication-TileColor" content="#3372DF" />
+        <!-- SEO: If your mobile URL is different from the desktop URL, add a canonical link to the desktop page https://developers.google.com/webmasters/smartphone-sites/feature-phones -->
+        <!--
+          <link rel="canonical" href="http://www.example.com/">
+          -->
+        <link href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en"
+              rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
         <title>Fireman</title>
         <h:outputStylesheet library="css" name="bootstrap.min.css"/>
     </h:head>
@@ -23,6 +45,9 @@
     </script>
 
     <h:body>
+        <f:facet name="last">
+            <h:outputStylesheet library="css" name="fireman.style.css"/>
+        </f:facet>
         <p:growl id="growl" sticky="true" showDetail="true" life="300"/>
 
         <div align="center"
@@ -38,13 +63,17 @@
                 <p:menuitem value="#{menuView.user.name}" outcome="#{menuView.user.uri}" rendered="#{menuView.user.rendered}"/>
                 <p:menuitem value="#{menuView.local.name}" outcome="#{menuView.local.uri}" rendered="#{menuView.local.rendered}"/>
                 <p:menuitem value="#{menuView.inspector.name}" outcome="#{menuView.inspector.uri}" rendered="#{menuView.inspector.rendered}"/>
+                <p:menuitem value="#{menuView.counter.name}" outcome="#{menuView.counter.uri}" rendered="#{menuView.counter.rendered}"/>
                 <f:facet name="options">
                     <table cellpadding="0" cellspacing="0">
                         <tr>
                             <td style="padding-right: 10px"><p:outputLabel
-                                    value="#{loginBean.loggedUser()}"/></td>
-                            <td><p:commandButton ajax="true" title="Cerrar Sessión"
-                                    action="#{logoutBean.logout}" icon="ui-icon-extlink"/></td>
+                                    value="#{loginBean.loggedUser()}"/>
+                            </td>
+                            <td>
+                                <p:commandButton ajax="true" title="Cerrar Sessión"
+                                    action="#{logoutBean.logout}" icon="mdi-action-account-circle"/>
+                            </td>
                         </tr>
                     </table>
 

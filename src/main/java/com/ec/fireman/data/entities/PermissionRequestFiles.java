@@ -4,6 +4,9 @@ import lombok.Data;
 
 import javax.persistence.*;
 
+@NamedQueries({
+    @NamedQuery(name = "findPermissionRequestFilesByRequest", query = "from PermissionRequestFiles pr where pr.permissionRequest.id = :requestId") })
+
 @Data
 @Entity
 public class PermissionRequestFiles implements BaseEntity {
@@ -14,7 +17,7 @@ public class PermissionRequestFiles implements BaseEntity {
   @Lob
   @Column(length = 100000)
   private byte[] data;
-  
+
   @Column
   private String fileName;
 

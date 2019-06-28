@@ -1,8 +1,8 @@
 package com.ec.fireman.beans;
 
-import java.io.IOException;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -11,17 +11,17 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
 
-import org.apache.commons.io.IOUtils;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 import com.ec.fireman.data.dao.LocalDao;
 import com.ec.fireman.data.dao.PermissionRequestDao;
 import com.ec.fireman.data.dao.PermissionRequestFilesDao;
 import com.ec.fireman.data.dao.RequirementDao;
+import com.ec.fireman.data.entities.MimeTypes;
 import com.ec.fireman.data.entities.PermissionRequest;
 import com.ec.fireman.data.entities.PermissionRequestFiles;
 import com.ec.fireman.data.entities.PermissionRequestStatus;
-import com.ec.fireman.data.entities.Requirement;
-import com.ec.fireman.data.entities.State;
 import com.ec.fireman.data.representation.RequirementFileUpload;
 import com.ec.fireman.util.MessageUtil;
 
@@ -48,6 +48,7 @@ public class InspectorBean implements Serializable {
   private List<PermissionRequest> requests;
   private List<RequirementFileUpload> files;
   private PermissionRequest selectedRequest;
+  private PermissionRequestFiles selectedPRF;
 
   @PostConstruct
   public void init() {
@@ -57,7 +58,7 @@ public class InspectorBean implements Serializable {
 
   public void refreshRequests() {
     requests = permissionRequestDao.findPermissionRequestByPermissionRequestStatus(PermissionRequestStatus.SUBMITTED);
-    log.info("Locals length: " + (requests != null ? requests.size() : 0));
+    log.info("Requests length: " + (requests != null ? requests.size() : 0));
   }
 
   public void clearData() {
@@ -74,40 +75,17 @@ public class InspectorBean implements Serializable {
     this.clearData();
   }
 
-  public void upload() {
-    for (RequirementFileUpload requirementFileUpload : files) {
-      log.info(requirementFileUpload.toString());
-      if (requirementFileUpload.getFile() != null) {
-        byte[] bytes = null;
-        try {
-          bytes = IOUtils.toByteArray(requirementFileUpload.getFile().getInputstream());
-        } catch (IOException e) {
-          log.error(e.getMessage());
-        }
-//        PermissionRequest permissionRequest = permissionRequestDao.findPermissionRequestByLocal(selectedLocal.getId());
-        PermissionRequestFiles prf = new PermissionRequestFiles();
-//        prf.setPermissionRequest(permissionRequest);
-        prf.setRequirement(requirementDao.findById(requirementFileUpload.getRequirementId()));
-        prf.setState(State.ACTIVE);
-        prf.setData(bytes);
-        prf.setFileName(requirementFileUpload.getFile().getFileName());
-        permissionRequestFilesDao.save(prf);
-
-        MessageUtil.sendFacesMessage("Succesful", requirementFileUpload.getFile().getFileName() + " is uploaded.");
-      }
-    }
+  public StreamedContent download(PermissionRequestFiles prf) {
+    InputStream stream = new ByteArrayInputStream(prf.getData());
+    String suffix = prf.getFileName().substring(prf.getFileName().lastIndexOf("."));
+    return new DefaultStreamedContent(stream, MimeTypes.findBySuffix(suffix).getMimeType(), prf.getFileName());
   }
 
-  public List<RequirementFileUpload> listRequirements() {
-    // TODO: LIST ACTIVE REQUIREMENTS BY ROLE (DAO)
-    List<Requirement> requirements = requirementDao.findAll();
-    files = new ArrayList<RequirementFileUpload>();
-    if (requirements != null && !requirements.isEmpty()) {
-      for (Requirement req : requirements) {
-        files.add(new RequirementFileUpload(req.getId(), req.getName()));
-      }
-    }
-    return files;
+  public List<PermissionRequestFiles> listFiles() {
+    List<PermissionRequestFiles> list = permissionRequestFilesDao
+        .findPermissionRequestFilesByRequest(selectedRequest.getId());
+    log.info("Files length: " + (list != null ? list.size() : 0));
+    return list;
   }
 
 }

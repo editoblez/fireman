@@ -20,6 +20,7 @@ import com.ec.fireman.data.dao.RequirementDao;
 import com.ec.fireman.data.dao.ServiceDao;
 import com.ec.fireman.data.dao.UserAccountDao;
 import com.ec.fireman.data.entities.Local;
+import com.ec.fireman.data.entities.MimeTypes;
 import com.ec.fireman.data.entities.PermissionRequest;
 import com.ec.fireman.data.entities.PermissionRequestFiles;
 import com.ec.fireman.data.entities.PermissionRequestStatus;
@@ -135,9 +136,19 @@ public class ClientLocalBean implements Serializable {
   }
 
   public void upload() {
+    // TODO: verificar que el archivo del requerimiento que se va a subir
+    // no esté cargado, en caso de que ya lo esté, se debe eliminar y subirlo
+    // nuevamente
     for (RequirementFileUpload requirementFileUpload : files) {
       log.info(requirementFileUpload.toString());
       if (requirementFileUpload.getFile() != null) {
+        String suffix = requirementFileUpload.getFile().getFileName()
+            .substring(requirementFileUpload.getFile().getFileName().lastIndexOf("."));
+        if (MimeTypes.findBySuffix(suffix) == null) {
+          MessageUtil.errorFacesMessage("Carga Archivo",
+              "La extensión del archivo " + requirementFileUpload.getFile().getFileName() + " no es permitida.");
+          continue;
+        }
         byte[] bytes = null;
         try {
           bytes = IOUtils.toByteArray(requirementFileUpload.getFile().getInputstream());
@@ -153,7 +164,8 @@ public class ClientLocalBean implements Serializable {
         prf.setFileName(requirementFileUpload.getFile().getFileName());
         permissionRequestFilesDao.save(prf);
 
-        MessageUtil.infoFacesMessage("Succesful", requirementFileUpload.getFile().getFileName() + " is uploaded.");
+        MessageUtil.infoFacesMessage("Carga Archivo",
+            requirementFileUpload.getFile().getFileName() + " subido correctamente.");
       }
     }
   }

@@ -120,7 +120,7 @@ public class ClientLocalBean implements Serializable {
     request.setState(State.ACTIVE);
     permissionRequestDao.save(request);
     log.info(request.toString());
-    MessageUtil.sendFacesMessage("Solicitud", "Permiso de funcionamiento solicitado correctaente");
+    MessageUtil.infoFacesMessage("Solicitud", "Permiso de funcionamiento solicitado correctaente");
     this.refreshLocals();
     this.clearData();
   }
@@ -129,7 +129,7 @@ public class ClientLocalBean implements Serializable {
   public void cancelRequest() {
     selectedRequest.setPermissionRequestStatus(PermissionRequestStatus.CLOSED);
     permissionRequestDao.update(selectedRequest);
-    MessageUtil.sendFacesMessage("Cancelaci�n", "Permiso de funcionamiento cancelado correctaente");
+    MessageUtil.infoFacesMessage("Cancelaci�n", "Permiso de funcionamiento cancelado correctaente");
     this.refreshLocals();
     this.clearData();
   }
@@ -153,7 +153,7 @@ public class ClientLocalBean implements Serializable {
         prf.setFileName(requirementFileUpload.getFile().getFileName());
         permissionRequestFilesDao.save(prf);
 
-        MessageUtil.sendFacesMessage("Succesful", requirementFileUpload.getFile().getFileName() + " is uploaded.");
+        MessageUtil.infoFacesMessage("Succesful", requirementFileUpload.getFile().getFileName() + " is uploaded.");
       }
     }
   }

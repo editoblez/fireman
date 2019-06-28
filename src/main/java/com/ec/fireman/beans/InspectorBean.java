@@ -17,19 +17,13 @@ import com.ec.fireman.data.dao.LocalDao;
 import com.ec.fireman.data.dao.PermissionRequestDao;
 import com.ec.fireman.data.dao.PermissionRequestFilesDao;
 import com.ec.fireman.data.dao.RequirementDao;
-import com.ec.fireman.data.dao.ServiceDao;
-import com.ec.fireman.data.dao.UserAccountDao;
-import com.ec.fireman.data.entities.Local;
 import com.ec.fireman.data.entities.PermissionRequest;
 import com.ec.fireman.data.entities.PermissionRequestFiles;
 import com.ec.fireman.data.entities.PermissionRequestStatus;
 import com.ec.fireman.data.entities.Requirement;
-import com.ec.fireman.data.entities.Service;
 import com.ec.fireman.data.entities.State;
-import com.ec.fireman.data.representation.LocalRequest;
 import com.ec.fireman.data.representation.RequirementFileUpload;
 import com.ec.fireman.util.MessageUtil;
-import com.ec.fireman.util.SessionUtils;
 
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
@@ -41,13 +35,9 @@ import lombok.extern.log4j.Log4j2;
 public class InspectorBean implements Serializable {
 
   private static final long serialVersionUID = 8632563163040959753L;
-  
+
   @Inject
   private LocalDao localDao;
-  @Inject
-  private ServiceDao serviceDao;
-  @Inject
-  private UserAccountDao userAccountDao;
   @Inject
   private RequirementDao requirementDao;
   @Inject
@@ -55,82 +45,32 @@ public class InspectorBean implements Serializable {
   @Inject
   private PermissionRequestFilesDao permissionRequestFilesDao;
 
-  private List<LocalRequest> locals;
-  private Local selectedLocal;
-  private Service service;
+  private List<PermissionRequest> requests;
   private List<RequirementFileUpload> files;
   private PermissionRequest selectedRequest;
 
   @PostConstruct
   public void init() {
-    this.refreshLocals();
-    selectedLocal = new Local();
+    this.refreshRequests();
     selectedRequest = new PermissionRequest();
   }
 
-  public void refreshLocals() {
-    List<Local> localList = localDao.findLocalByUser(SessionUtils.retrieveLoggedUser().getUserId());
-    locals = new ArrayList<LocalRequest>();
-    for (Local local : localList) {
-      PermissionRequest pr = permissionRequestDao.findPermissionRequestByLocal(local.getId());
-      locals.add(new LocalRequest(local, pr));
-    }
-    log.info("Locals length: " + (locals != null ? locals.size() : 0));
+  public void refreshRequests() {
+    requests = permissionRequestDao.findPermissionRequestByPermissionRequestStatus(PermissionRequestStatus.SUBMITTED);
+    log.info("Locals length: " + (requests != null ? requests.size() : 0));
   }
 
   public void clearData() {
-    selectedLocal = new Local();
     selectedRequest = new PermissionRequest();
   }
 
   @Transactional
-  public void createLocal() {
-    selectedLocal.setUserAccount(userAccountDao.findUserByCi(SessionUtils.retrieveLoggedUser().getUserId()));
-    selectedLocal.setState(State.ACTIVE);
-    selectedLocal.setService(service);
-    log.info(selectedLocal.toString());
-    localDao.save(selectedLocal);
-    this.refreshLocals();
-    this.clearData();
-  }
-
-  @Transactional
-  public void editLocal() {
-    selectedLocal.setService(service);
-    log.info(selectedLocal.toString());
-    localDao.update(selectedLocal);
-    this.refreshLocals();
-    this.clearData();
-  }
-
-  @Transactional
-  public void deleteLocal() {
-    log.info(selectedLocal.toString());
-    selectedLocal.setState(State.INACTIVE);
-    localDao.update(selectedLocal);
-    this.refreshLocals();
-    this.clearData();
-  }
-
-  @Transactional
-  public void localRequest() {
-    PermissionRequest request = new PermissionRequest();
-    request.setLocal(localDao.findById(selectedLocal.getId()));
-    request.setPermissionRequestStatus(PermissionRequestStatus.SUBMITTED);
-    request.setState(State.ACTIVE);
-    permissionRequestDao.save(request);
-    log.info(request.toString());
-    MessageUtil.sendFacesMessage("Solicitud", "Permiso de funcionamiento solicitado correctaente");
-    this.refreshLocals();
-    this.clearData();
-  }
-
-  @Transactional
-  public void cancelRequest() {
-    selectedRequest.setPermissionRequestStatus(PermissionRequestStatus.CLOSED);
+  public void editRequest() {
+    selectedRequest.setPermissionRequestStatus(PermissionRequestStatus.IN_PROGRESS);
     permissionRequestDao.update(selectedRequest);
-    MessageUtil.sendFacesMessage("Cancelaci�n", "Permiso de funcionamiento cancelado correctaente");
-    this.refreshLocals();
+    log.info(selectedRequest.toString());
+    MessageUtil.sendFacesMessage("Solicitud", "Permiso validado correctaente");
+    this.refreshRequests();
     this.clearData();
   }
 
@@ -144,9 +84,9 @@ public class InspectorBean implements Serializable {
         } catch (IOException e) {
           log.error(e.getMessage());
         }
-        PermissionRequest permissionRequest = permissionRequestDao.findPermissionRequestByLocal(selectedLocal.getId());
+//        PermissionRequest permissionRequest = permissionRequestDao.findPermissionRequestByLocal(selectedLocal.getId());
         PermissionRequestFiles prf = new PermissionRequestFiles();
-        prf.setPermissionRequest(permissionRequest);
+//        prf.setPermissionRequest(permissionRequest);
         prf.setRequirement(requirementDao.findById(requirementFileUpload.getRequirementId()));
         prf.setState(State.ACTIVE);
         prf.setData(bytes);
@@ -156,10 +96,6 @@ public class InspectorBean implements Serializable {
         MessageUtil.sendFacesMessage("Succesful", requirementFileUpload.getFile().getFileName() + " is uploaded.");
       }
     }
-  }
-
-  public List<Service> listServices() {
-    return serviceDao.findAll();
   }
 
   public List<RequirementFileUpload> listRequirements() {

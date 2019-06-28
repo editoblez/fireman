@@ -24,6 +24,7 @@ public class MenuView implements Serializable {
   private MenuItem requirement;
   private MenuItem user;
   private MenuItem local;
+  private MenuItem inspector;
 
   @PostConstruct
   public void init() {
@@ -35,5 +36,6 @@ public class MenuView implements Serializable {
     requirement = new MenuItem("Requerimiento", PageNameConstants.REQUIREMENT_ADMIN_PAGE, roleType == RoleTypes.ADMIN);
     user = new MenuItem("Usuario", PageNameConstants.USER_ADMIN_PAGE, roleType == RoleTypes.ADMIN);
     local = new MenuItem("Local", PageNameConstants.LOCAL_CLIENT_PAGE, roleType == RoleTypes.CLIENT);
+    inspector = new MenuItem("Inspector", PageNameConstants.INSPECTOR_PAGE, roleType == RoleTypes.INSPECTOR);
   }
 }

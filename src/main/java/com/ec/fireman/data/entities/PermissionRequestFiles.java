@@ -14,6 +14,9 @@ public class PermissionRequestFiles implements BaseEntity {
   @Lob
   @Column(length = 100000)
   private byte[] data;
+  
+  @Column
+  private String fileName;
 
   @ManyToOne
   private Requirement requirement;

@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 import static com.ec.fireman.data.entities.EntityConstants.GENERIC_COLUMN_SIZE;
 
-@NamedQueries({@NamedQuery(name = "findUserByCi", query = "from UserAccount e where e.ci = :ci")})
+@NamedQueries({ @NamedQuery(name = "findUserByCi", query = "from UserAccount e where e.ci = :ci") })
 
 @Data
 @Entity
@@ -46,7 +46,7 @@ public class UserAccount implements BaseEntity {
   }
 
   public UserAccount(String firstName, String secondName, String firstLastName, String secondLastName, String ci,
-                     String password, String email, Role role) {
+      String password, String email, Role role) {
     this.firstName = firstName;
     this.secondName = secondName;
     this.firstLastName = firstLastName;
@@ -58,71 +58,4 @@ public class UserAccount implements BaseEntity {
     state = State.ACTIVE;
   }
 
-  public long getId() {
-    return id;
-  }
-
-  public void setId(long id) {
-    this.id = id;
-  }
-
-  public String getFirstName() {
-    return firstName;
-  }
-
-  public void setFirstName(String firstName) {
-    this.firstName = firstName;
-  }
-
-  public String getSecondName() {
-    return secondName;
-  }
-
-  public void setSecondName(String secondName) {
-    this.secondName = secondName;
-  }
-
-  public String getFirstLastName() {
-    return firstLastName;
-  }
-
-  public void setFirstLastName(String firstLastName) {
-    this.firstLastName = firstLastName;
-  }
-
-  public String getSecondLastName() {
-    return secondLastName;
-  }
-
-  public void setSecondLastName(String secondLastName) {
-    this.secondLastName = secondLastName;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
-  public Role getRole() {
-    return role;
-  }
-
-  public void setRole(Role role) {
-    this.role = role;
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
-  public String getCi() {
-    return ci;
-  }
-
-  public void setCi(String ci) {
-    this.ci = ci;
-  }
 }

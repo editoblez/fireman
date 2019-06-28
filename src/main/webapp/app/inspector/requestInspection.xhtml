@@ -7,7 +7,7 @@
 	xmlns:f="http://java.sun.com/jsf/core">
 <ui:composition template="../../template/template.xhtml">
 	<ui:define name="pageTitle">
-		Gestionar Locales		
+		Gestionar Solicitudes		
 	</ui:define>
 	<ui:define name="contenido">
 
@@ -17,7 +17,7 @@
 				oncomplete="PF('dlgCreate').show()" value="Nuevo"
 				styleClass="btn btn-default" />
 
-			<p:dataTable id="dtList" var="item" value="#{clientLocalBean.locals}">
+			<p:dataTable id="dtList" var="item" value="#{inspectorBean.locals}">
 				<p:column headerText="Dirección">
 					<h:outputText value="#{item.local.address}" />
 				</p:column>
@@ -37,7 +37,7 @@
 						icon="ui-icon-pencil" oncomplete="PF('dlgEdit').show()"
 						title="Editar">
 						<f:setPropertyActionListener value="#{item.local}"
-							target="#{clientLocalBean.selectedLocal}" />
+							target="#{inspectorBean.selectedLocal}" />
 					</p:commandButton>
 
 					<p:commandButton update=":formDelete:opDelete growl"
@@ -45,7 +45,7 @@
 						rendered="#{item.permissionRequest == null}" icon="ui-icon-trash"
 						oncomplete="PF('dlgEliminar').show()" title="Inactivar Local">
 						<f:setPropertyActionListener value="#{item.local}"
-							target="#{clientLocalBean.selectedLocal}" />
+							target="#{inspectorBean.selectedLocal}" />
 					</p:commandButton>
 
 					<p:commandButton update=":formRequest:opRequest growl"
@@ -53,7 +53,7 @@
 						icon="ui-icon-clipboard" oncomplete="PF('dlgRequest').show()"
 						title="Solicitar permiso">
 						<f:setPropertyActionListener value="#{item.local}"
-							target="#{clientLocalBean.selectedLocal}" />
+							target="#{inspectorBean.selectedLocal}" />
 					</p:commandButton>
 
 					<p:commandButton update=":formFiles:opFiles growl"
@@ -61,7 +61,7 @@
 						icon="ui-icon-folder-open" oncomplete="PF('dlgFiles').show()"
 						title="Cargar documentos">
 						<f:setPropertyActionListener value="#{item.local}"
-							target="#{clientLocalBean.selectedLocal}" />
+							target="#{inspectorBean.selectedLocal}" />
 					</p:commandButton>
 
 					<p:commandButton update=":formCancel:opCancel growl"
@@ -70,7 +70,7 @@
 						icon="ui-icon-circle-close" oncomplete="PF('dlgCancel').show()"
 						title="Cancelar solicitud">
 						<f:setPropertyActionListener value="#{item.permissionRequest}"
-							target="#{clientLocalBean.selectedRequest}" />
+							target="#{inspectorBean.selectedRequest}" />
 					</p:commandButton>
 
 				</p:column>
@@ -87,7 +87,7 @@
 							<p:outputLabel for="txtAddress" value="Dirección" />
 							<div>
 								<p:inputText id="txtAddress"
-									value="#{clientLocalBean.selectedLocal.address}"
+									value="#{inspectorBean.selectedLocal.address}"
 									required="true" requiredMessage="Dirección requerida" />
 								<p:message for="txtAddress" />
 							</div>
@@ -97,7 +97,7 @@
 							<p:outputLabel for="txtUrl" value="URL mapa" />
 							<div>
 								<p:inputText id="txtUrl"
-									value="#{clientLocalBean.selectedLocal.mapUrl}" required="true"
+									value="#{inspectorBean.selectedLocal.mapUrl}" required="true"
 									requiredMessage="URL del mapa requerido" />
 								<p:message for="txtUrl" />
 							</div>
@@ -107,11 +107,11 @@
 							<p:outputLabel for="cmbService" value="Servicio" />
 							<div>
 								<p:selectOneMenu id="cmbService"
-									value="#{clientLocalBean.service}"
+									value="#{inspectorBean.service}"
 									converter="selectOneMenuConverter" panelStyle="width:180px"
 									effect="fade" var="s" style="width:160px" filter="true"
 									filterMatchMode="startsWith">
-									<f:selectItems value="#{clientLocalBean.listServices()}"
+									<f:selectItems value="#{inspectorBean.listServices()}"
 										var="serv" itemLabel="#{serv.name}" itemValue="#{serv}" />
 									<p:column>
 										<h:outputText value="#{s.name}" />
@@ -127,7 +127,7 @@
 					<p:commandButton ajax="true" action="faces-redirect=false"
 						update=":formList:dtList growl"
 						oncomplete="handleDialogSubmit(xhr, status, args, PF('dlgCreate'))"
-						actionListener="#{clientLocalBean.createLocal()}" value="Guardar"
+						actionListener="#{inspectorBean.createLocal()}" value="Guardar"
 						styleClass="btn btn-default" />
 				</div>
 			</h:form>
@@ -143,7 +143,7 @@
 							<p:outputLabel for="txtAddress2" value="Dirección" />
 							<div>
 								<p:inputText id="txtAddress2"
-									value="#{clientLocalBean.selectedLocal.address}"
+									value="#{inspectorBean.selectedLocal.address}"
 									required="true" requiredMessage="Dirección requerida" />
 								<p:message for="txtAddress2" />
 							</div>
@@ -153,7 +153,7 @@
 							<p:outputLabel for="txtUrl2" value="URL mapa" />
 							<div>
 								<p:inputText id="txtUrl2"
-									value="#{clientLocalBean.selectedLocal.mapUrl}" required="true"
+									value="#{inspectorBean.selectedLocal.mapUrl}" required="true"
 									requiredMessage="URL del mapa requerido" />
 								<p:message for="txtUrl2" />
 							</div>
@@ -163,11 +163,11 @@
 							<p:outputLabel for="cmbService2" value="Servicio" />
 							<div>
 								<p:selectOneMenu id="cmbService2"
-									value="#{clientLocalBean.service}"
+									value="#{inspectorBean.service}"
 									converter="selectOneMenuConverter" panelStyle="width:180px"
 									effect="fade" var="s" style="width:160px" filter="true"
 									filterMatchMode="startsWith">
-									<f:selectItems value="#{clientLocalBean.listServices()}"
+									<f:selectItems value="#{inspectorBean.listServices()}"
 										var="serv" itemLabel="#{serv.name}" itemValue="#{serv}" />
 									<p:column>
 										<h:outputText value="#{s.name}" />
@@ -183,7 +183,7 @@
 					<p:commandButton ajax="true" action="faces-redirect=false"
 						oncomplete="handleDialogSubmit(xhr, status, args, PF('dlgEdit'))"
 						update=":formList:dtList growl opEdit"
-						actionListener="#{clientLocalBean.editLocal()}" value="Guardar"
+						actionListener="#{inspectorBean.editLocal()}" value="Guardar"
 						styleClass="btn btn-default" />
 				</div>
 			</h:form>
@@ -201,12 +201,12 @@
 					<p:commandButton ajax="true" action="faces-redirect=false"
 						update="growl :formList:dtList"
 						oncomplete="PF('dlgEliminar').hide();"
-						actionListener="#{clientLocalBean.deleteLocal()}" value="SI"
+						actionListener="#{inspectorBean.deleteLocal()}" value="SI"
 						styleClass="btn btn-default" />
 
 					<p:commandButton ajax="true" action="faces-redirect=false"
 						update="growl" oncomplete="PF('dlgEliminar').hide();"
-						actionListener="#{clientLocalBean.clearData()}" value="NO"
+						actionListener="#{inspectorBean.clearData()}" value="NO"
 						styleClass="btn btn-default" />
 				</div>
 			</h:form>
@@ -224,12 +224,12 @@
 					<p:commandButton ajax="true" action="faces-redirect=false"
 						update="growl :formList:dtList"
 						oncomplete="PF('dlgRequest').hide();"
-						actionListener="#{clientLocalBean.localRequest()}" value="SI"
+						actionListener="#{inspectorBean.localRequest()}" value="SI"
 						styleClass="btn btn-default" />
 
 					<p:commandButton ajax="true" action="faces-redirect=false"
 						update="growl" oncomplete="PF('dlgRequest').hide();"
-						actionListener="#{clientLocalBean.clearData()}" value="NO"
+						actionListener="#{inspectorBean.clearData()}" value="NO"
 						styleClass="btn btn-default" />
 				</div>
 			</h:form>
@@ -247,12 +247,12 @@
 					<p:commandButton ajax="true" action="faces-redirect=false"
 						update="growl :formList:dtList"
 						oncomplete="PF('dlgCancel').hide();"
-						actionListener="#{clientLocalBean.cancelRequest()}" value="SI"
+						actionListener="#{inspectorBean.cancelRequest()}" value="SI"
 						styleClass="btn btn-default" />
 
 					<p:commandButton ajax="true" action="faces-redirect=false"
 						update="growl" oncomplete="PF('dlgCancel').hide();"
-						actionListener="#{clientLocalBean.clearData()}" value="NO"
+						actionListener="#{inspectorBean.clearData()}" value="NO"
 						styleClass="btn btn-default" />
 				</div>
 			</h:form>
@@ -263,7 +263,7 @@
 			<h:form id="formFiles" enctype="multipart/form-data">
 				<p:outputPanel id="opFiles">
 
-					<p:repeat value="#{clientLocalBean.listRequirements()}" var="item">
+					<p:repeat value="#{inspectorBean.listRequirements()}" var="item">
 						<p:panelGrid columns="2" cellpadding="5" layout="grid">
 							<h:outputText value="#{item.requirementName}" />
 							<p:fileUpload value="#{item.file}" mode="simple"
@@ -276,7 +276,7 @@
 				<div align="center" style="padding-top: 15px;">
 					<p:commandButton ajax="false" action="faces-redirect=false"
 						update="growl" oncomplete="PF('dlgFiles').hide();"
-						actionListener="#{clientLocalBean.upload()}"
+						actionListener="#{inspectorBean.upload()}"
 						value="Guardar Documentos" styleClass="btn btn-default" />
 				</div>
 			</h:form>

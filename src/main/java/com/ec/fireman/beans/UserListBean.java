@@ -61,7 +61,7 @@ public class UserListBean implements Serializable {
 
   @Transactional
   public void editUser() {
-    selectedUser.setRole(roleDao.findById(role.getId()));
+    selectedUser.setRole(roleDao.findById(selectedUser.getRole().getId()));
     userAccountDao.update(selectedUser);
     this.refreshUsers();
     selectedUser = new UserAccount();

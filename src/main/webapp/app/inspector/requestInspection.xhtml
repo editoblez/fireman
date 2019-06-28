@@ -30,13 +30,70 @@
 				<p:column style="text-align: center; width: 200px"
 					headerText="Acciones">
 
-					
+					<p:commandButton update=":formFiles:opFiles growl"
+						icon="ui-icon-folder-collapsed" oncomplete="PF('dlgFiles').show()"
+						title="Cargar documentos">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{inspectorBean.selectedRequest}" />
+					</p:commandButton>
+
+					<p:commandButton update=":formRequest:opRequest growl"
+						icon="ui-icon-clipboard" oncomplete="PF('dlgRequest').show()"
+						title="Solicitar permiso">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{inspectorBean.selectedRequest}" />
+					</p:commandButton>
 
 				</p:column>
 			</p:dataTable>
 		</h:form>
 
-		
+		<p:dialog header="Aprobar Permiso" widgetVar="dlgRequest" width="255"
+			height="110" resizable="false" modal="true">
+			<h:form id="formRequest">
+				<p:outputPanel id="opRequest" style="text-align: center;">
+					<h:outputText
+						value="Está seguro que desea aprobar el permiso de funcionamiento?." />
+				</p:outputPanel>
+
+				<div align="center" style="padding-top: 15px;">
+					<p:commandButton ajax="true" action="faces-redirect=false"
+						update="growl :formList:dtList"
+						oncomplete="PF('dlgRequest').hide();"
+						actionListener="#{inspectorBean.editRequest()}" value="SI"
+						styleClass="btn btn-default" />
+
+					<p:commandButton ajax="true" action="faces-redirect=false"
+						update="growl" oncomplete="PF('dlgRequest').hide();"
+						actionListener="#{inspectorBean.clearData()}" value="NO"
+						styleClass="btn btn-default" />
+				</div>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog header="Revisar Documentos" widgetVar="dlgFiles" width="600"
+			modal="true">
+			<h:form id="formFiles" enctype="multipart/form-data">
+				<p:outputPanel id="opFiles">
+
+					<p:repeat value="#{inspectorBean.listRequirements()}" var="item">
+						<p:panelGrid columns="2" cellpadding="5" layout="grid">
+							<h:outputText value="#{item.requirementName}" />
+							<p:fileUpload value="#{item.file}" mode="simple"
+								skinSimple="true" label="Seleccionar" />
+						</p:panelGrid>
+					</p:repeat>
+
+				</p:outputPanel>
+
+				<div align="center" style="padding-top: 15px;">
+					<p:commandButton ajax="false" action="faces-redirect=false"
+						update="growl" oncomplete="PF('dlgFiles').hide();"
+						actionListener="#{inspectorBean.upload()}"
+						value="Guardar Documentos" styleClass="btn btn-default" />
+				</div>
+			</h:form>
+		</p:dialog>
 
 	</ui:define>
 </ui:composition>

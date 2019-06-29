@@ -121,7 +121,7 @@
 						<h:panelGroup style="padding-top: 8px;">
 							<p:outputLabel for="txtPassw" value="Contraseña" />
 							<div>
-								<p:inputText id="txtPassw"
+								<p:password id="txtPassw"
 									value="#{userListBean.selectedUser.password}" required="true"
 									requiredMessage="Contraseña requerida" />
 								<p:message for="txtPassw" />
@@ -302,7 +302,7 @@
 						<h:panelGroup style="padding-top: 8px;">
 							<p:outputLabel for="txtPassR1" value="Nueva Contraseña" />
 							<div>
-								<p:inputText id="txtPassR1" value="#{userListBean.passReset1}"
+								<p:password id="txtPassR1" value="#{userListBean.passReset1}"
 									required="true" requiredMessage="Campo requerido" />
 								<p:message for="txtPassR1" />
 							</div>
@@ -311,7 +311,7 @@
 						<h:panelGroup style="padding-top: 8px;">
 							<p:outputLabel for="txtPassR2" value="Confirmar Contraseña" />
 							<div>
-								<p:inputText id="txtPassR2" value="#{userListBean.passReset2}"
+								<p:password id="txtPassR2" value="#{userListBean.passReset2}"
 									required="true" requiredMessage="Campo requerido" />
 								<p:message for="txtPassR2" />
 							</div>

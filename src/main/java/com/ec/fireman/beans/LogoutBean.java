@@ -24,6 +24,6 @@ public class LogoutBean implements Serializable {
       return "login";
     }
     SessionUtils.closeSession();
-    return "login";
+    return "/app/login.xhtml";
   }
 }

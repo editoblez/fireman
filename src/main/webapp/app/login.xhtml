@@ -31,10 +31,11 @@
 					value="#{loginBean.password}" />
 				<p:message for="password" />
 			</h:panelGrid>
-			<p:commandButton value="Login"
+			<p:commandButton value="Login" id="loginBtn" ajax="false"
 				action="#{loginBean.validateUserAndPassword}" update="panel" />
 			<p:separator />
 			<p:link outcome="register-client" value="Registrar" />
+			<p:blockUI block="panel" trigger="loginBtn" />
 		</h:form>
 	</p:panel>
 </h:body>

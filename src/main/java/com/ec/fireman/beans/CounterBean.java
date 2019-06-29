@@ -66,7 +66,7 @@ public class CounterBean implements Serializable {
     selectedRequest.setPermissionRequestStatus(PermissionRequestStatus.PERMISSION_ISSUED);
     permissionRequestDao.update(selectedRequest);
     log.info(selectedRequest.toString());
-    MessageUtil.sendFacesMessage("Solicitud", "Permiso de funcionamiento emitido");
+    MessageUtil.infoFacesMessage("Solicitud", "Permiso de funcionamiento emitido");
     this.refreshRequests();
     this.clearData();
   }
@@ -90,19 +90,19 @@ public class CounterBean implements Serializable {
         prf.setFileName(requirementFileUpload.getFile().getFileName());
         permissionRequestFilesDao.save(prf);
 
-        MessageUtil.sendFacesMessage("Succesful", requirementFileUpload.getFile().getFileName() + " is uploaded.");
+        MessageUtil.infoFacesMessage("Succesful", requirementFileUpload.getFile().getFileName() + " is uploaded.");
       }
     }
   }
 
-    @Transactional
-    public void cancelRequest() {
-        selectedRequest.setPermissionRequestStatus(PermissionRequestStatus.CLOSED);
-        permissionRequestDao.update(selectedRequest);
-        MessageUtil.sendFacesMessage("Cancelaci�n", "Permiso de funcionamiento cancelado correctaente");
-        this.refreshRequests();
-        this.clearData();
-    }
+  @Transactional
+  public void cancelRequest() {
+    selectedRequest.setPermissionRequestStatus(PermissionRequestStatus.CLOSED);
+    permissionRequestDao.update(selectedRequest);
+    MessageUtil.infoFacesMessage("Cancelaci�n", "Permiso de funcionamiento cancelado correctaente");
+    this.refreshRequests();
+    this.clearData();
+  }
 
   public List<RequirementFileUpload> listRequirements() {
     // TODO: LIST ACTIVE REQUIREMENTS BY ROLE (DAO)
@@ -124,7 +124,7 @@ public class CounterBean implements Serializable {
 
   public List<PermissionRequestFiles> listFiles() {
     List<PermissionRequestFiles> list = permissionRequestFilesDao
-            .findPermissionRequestFilesByRequest(selectedRequest.getId());
+        .findPermissionRequestFilesByRequest(selectedRequest.getId());
     log.info("Files length: " + (list != null ? list.size() : 0));
     return list;
   }

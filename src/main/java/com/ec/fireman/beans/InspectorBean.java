@@ -70,7 +70,7 @@ public class InspectorBean implements Serializable {
     selectedRequest.setPermissionRequestStatus(PermissionRequestStatus.IN_PROGRESS);
     permissionRequestDao.update(selectedRequest);
     log.info(selectedRequest.toString());
-    MessageUtil.sendFacesMessage("Solicitud", "Permiso validado correctaente");
+    MessageUtil.infoFacesMessage("Solicitud", "Permiso validado correctaente");
     this.refreshRequests();
     this.clearData();
   }

@@ -22,7 +22,19 @@
 	<artifactId>fireman</artifactId>
 	<version>1.0-SNAPSHOT</version>
 
+
+
+
 	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>jasperreports-maven-plugin</artifactId>
+					<version>1.0-beta-1</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 		<plugins>
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
@@ -48,6 +60,29 @@
 					<target>8</target>
 				</configuration>
 			</plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jasperreports-maven-plugin</artifactId>
+				<configuration>
+					<sourceDirectory>C:\\workspace\\fireman\\src\\main\\resources\\reports</sourceDirectory>
+					<outputDirectory>C:\\workspace\\fireman\\src\\main\\resources\\reportsCompiled</outputDirectory>
+				</configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile-reports</goal>
+                        </goals>
+                        <phase>compile</phase>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>jasperreports</groupId>
+                        <artifactId>jasperreports</artifactId>
+                        <version>3.0.0</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
 		</plugins>
 	</build>
 
@@ -120,7 +155,24 @@
 			<artifactId>omnifaces</artifactId>
 			<version>2.7.1</version>
 		</dependency>
+		<dependency>
+			<groupId>com.github.MaterialPrime</groupId>
+			<artifactId>material-prime</artifactId>
+			<version>v0.0.2</version>
+		</dependency>
+		<dependency>
+			<groupId>jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+			<version>3.0.0</version>
+		</dependency>
 
 	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+	</repositories>
 
 </project>

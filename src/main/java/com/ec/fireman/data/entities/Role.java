@@ -28,4 +28,8 @@ public class Role implements BaseEntity {
     this();
     this.roleName = roleName;
   }
+
+  public long getId() {
+    return id;
+  }
 }

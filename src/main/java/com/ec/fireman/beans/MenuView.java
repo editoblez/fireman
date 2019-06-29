@@ -10,6 +10,7 @@ import lombok.extern.log4j.Log4j2;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
+import java.awt.*;
 import java.io.Serializable;
 
 @Data
@@ -25,6 +26,7 @@ public class MenuView implements Serializable {
   private MenuItem user;
   private MenuItem local;
   private MenuItem inspector;
+  private MenuItem counter;
 
   @PostConstruct
   public void init() {
@@ -37,5 +39,6 @@ public class MenuView implements Serializable {
     user = new MenuItem("Usuario", PageNameConstants.USER_ADMIN_PAGE, roleType == RoleTypes.ADMIN);
     local = new MenuItem("Local", PageNameConstants.LOCAL_CLIENT_PAGE, roleType == RoleTypes.CLIENT);
     inspector = new MenuItem("Inspector", PageNameConstants.INSPECTOR_PAGE, roleType == RoleTypes.INSPECTOR);
+    counter = new MenuItem("Counter", PageNameConstants.COUNTER_PAGE, roleType == RoleTypes.ECONOMIC);
   }
 }

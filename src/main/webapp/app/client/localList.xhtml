@@ -1,13 +1,12 @@
 <!DOCTYPE html >
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:pe="http://primefaces.org/ui/extensions"
-	xmlns:f="http://java.sun.com/jsf/core">
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:p="http://primefaces.org/ui"
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:f="http://java.sun.com/jsf/core">
 <ui:composition template="../../template/template.xhtml">
 	<ui:define name="pageTitle">
-		Gestionar Locales		
+		Gestionar Locales
 	</ui:define>
 	<ui:define name="contenido">
 
@@ -25,15 +24,12 @@
 					<h:outputText value="#{item.local.service.name}" />
 				</p:column>
 				<p:column headerText="Estado">
-					<h:outputText rendered="#{item.permissionRequest == null}"
-						value="#{item.local.state}" />
-					<h:outputText rendered="#{item.permissionRequest != null}"
-						value="#{item.permissionRequest.permissionRequestStatus}" />
+					<h:outputText value="#{item.permissionRequest.permissionRequestStatus.value}"/>
 				</p:column>
 				<p:column style="text-align: center; width: 200px"
 					headerText="Acciones">
 					<p:commandButton update=":formEdit:opEdit growl"
-						rendered="#{item.permissionRequest == null and item.local.state == 'ACTIVE'}"
+							rendered="#{item.local.state == 'ACTIVE'}"
 						icon="ui-icon-pencil" oncomplete="PF('dlgEdit').show()"
 						title="Editar">
 						<f:setPropertyActionListener value="#{item.local}"
@@ -41,23 +37,26 @@
 					</p:commandButton>
 
 					<p:commandButton update=":formDelete:opDelete growl"
-						disabled="#{item.local.state == 'INACTIVE'}"
-						rendered="#{item.permissionRequest == null}" icon="ui-icon-trash"
+							rendered="#{item.permissionRequest.permissionRequestStatus == 'TO_REQUEST'
+						or item.permissionRequest.permissionRequestStatus == 'REJECTED'}"
+							icon="ui-icon-trash"
 						oncomplete="PF('dlgEliminar').show()" title="Inactivar Local">
 						<f:setPropertyActionListener value="#{item.local}"
 							target="#{clientLocalBean.selectedLocal}" />
 					</p:commandButton>
 
 					<p:commandButton update=":formRequest:opRequest growl"
-						rendered="#{item.permissionRequest == null and item.local.state == 'ACTIVE'}"
+							rendered="#{item.permissionRequest.permissionRequestStatus == 'TO_REQUEST'
+						or item.permissionRequest.permissionRequestStatus == 'REJECTED'}"
 						icon="ui-icon-clipboard" oncomplete="PF('dlgRequest').show()"
 						title="Solicitar permiso">
-						<f:setPropertyActionListener value="#{item.local}"
-							target="#{clientLocalBean.selectedLocal}" />
+						<f:setPropertyActionListener value="#{item.permissionRequest}"
+								target="#{clientLocalBean.selectedRequest}"/>
 					</p:commandButton>
 
 					<p:commandButton update=":formFiles:opFiles growl"
-						rendered="#{item.permissionRequest.permissionRequestStatus == 'SUBMITTED'}"
+							rendered="#{item.permissionRequest.permissionRequestStatus == 'TO_REQUEST'
+						or item.permissionRequest.permissionRequestStatus == 'REJECTED'}"
 						icon="ui-icon-folder-open" oncomplete="PF('dlgFiles').show()"
 						title="Cargar documentos">
 						<f:setPropertyActionListener value="#{item.local}"
@@ -65,8 +64,8 @@
 					</p:commandButton>
 
 					<p:commandButton update=":formCancel:opCancel growl"
-						rendered="#{item.permissionRequest.permissionRequestStatus == 'SUBMITTED' or item.permissionRequest.permissionRequestStatus == 'IN_PROGRESS' or item.permissionRequest.permissionRequestStatus == 'CLOSED'}"
-						disabled="#{item.permissionRequest.permissionRequestStatus == 'CLOSED'}"
+							rendered="#{item.permissionRequest.permissionRequestStatus != 'TO_REQUEST'
+						and item.permissionRequest.permissionRequestStatus != 'REJECTED'}"
 						icon="ui-icon-circle-close" oncomplete="PF('dlgCancel').show()"
 						title="Cancelar solicitud">
 						<f:setPropertyActionListener value="#{item.permissionRequest}"

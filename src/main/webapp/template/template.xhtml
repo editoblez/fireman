@@ -71,7 +71,7 @@
                                     value="#{loginBean.loggedUser()}"/>
                             </td>
                             <td>
-                                <p:commandButton ajax="true" title="Cerrar Sessión"
+                                <p:commandButton title="Cerrar Sessión" update="navBar" ajax="false"
                                     action="#{logoutBean.logout}" icon="mdi-action-account-circle"/>
                             </td>
                         </tr>

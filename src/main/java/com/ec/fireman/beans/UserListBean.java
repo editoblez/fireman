@@ -1,27 +1,25 @@
 package com.ec.fireman.beans;
 
-import java.io.Serializable;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.transaction.Transactional;
-
 import com.ec.fireman.data.dao.RoleDao;
 import com.ec.fireman.data.dao.UserAccountDao;
 import com.ec.fireman.data.entities.Role;
 import com.ec.fireman.data.entities.UserAccount;
 import com.ec.fireman.util.PasswordUtil;
-
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
+
+import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.transaction.Transactional;
+import java.io.Serializable;
+import java.util.List;
 
 @Data
 @Log4j2
 @Named
-@SessionScoped
+@ViewScoped
 public class UserListBean implements Serializable {
 
   private static final long serialVersionUID = -5468228478359216158L;
@@ -51,7 +49,7 @@ public class UserListBean implements Serializable {
   }
 
   @Transactional
-  public void createUser() {	  
+  public void createUser() {
     selectedUser.setRole(roleDao.findById(role.getId()));
     selectedUser.setPassword(PasswordUtil.encrypt(selectedUser.getPassword()));
     userAccountDao.save(selectedUser);

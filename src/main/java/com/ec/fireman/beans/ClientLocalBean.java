@@ -60,7 +60,7 @@ public class ClientLocalBean implements Serializable {
 
   public void refreshLocals() {
     List<Local> localList = localDao.findLocalByUser(SessionUtils.retrieveLoggedUser().getUserId());
-    locals = new ArrayList<LocalRequest>();
+    locals = new ArrayList<>();
     for (Local local : localList) {
       PermissionRequest pr = permissionRequestDao.findPermissionRequestByLocal(local.getId());
       locals.add(new LocalRequest(local, pr));

@@ -1,11 +1,13 @@
 package com.ec.fireman.data.entities;
 
 import lombok.Data;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 
 @NamedQueries({@NamedQuery(name = "findRoleByName", query = "from Role e where e.roleName = :roleName")})
 
+@Audited
 @Data
 @Entity
 public class Role implements BaseEntity {

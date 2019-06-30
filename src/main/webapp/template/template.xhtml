@@ -1,97 +1,105 @@
 <!DOCTYPE html >
 <html xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:h="http://java.sun.com/jsf/html"
-        xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:f="http://java.sun.com/jsf/core"
-        xmlns:mp="http://primefaces.org/ui/material"
-        xmlns:b="http://bootsfaces.net/ui"
-        xmlns:p="http://primefaces.org/ui">
-    <h:head>
-        <title><ui:insert name="title" /></title>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="description" content="A front-end template that helps you build fast, modern mobile web apps." />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <!-- Add to homescreen for Chrome on Android -->
-        <meta name="mobile-web-app-capable" content="yes" />
-<!--        <link rel="icon" sizes="192x192" href="images/touch/chrome-touch-icon-192x192.png" />-->
-        <!-- Add to homescreen for Safari on iOS -->
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-        <meta name="apple-mobile-web-app-title" content="Material Design Lite" />
-<!--        <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-precomposed.png" />-->
-        <!-- Tile icon for Win8 (144x144 + tile color) -->
-        <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png" />
-        <meta name="msapplication-TileColor" content="#3372DF" />
-        <!-- SEO: If your mobile URL is different from the desktop URL, add a canonical link to the desktop page https://developers.google.com/webmasters/smartphone-sites/feature-phones -->
-        <!--
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:mp="http://primefaces.org/ui/material"
+	xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title><ui:insert name="title" /></title>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="description"
+		content="A front-end template that helps you build fast, modern mobile web apps." />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<!-- Add to homescreen for Chrome on Android -->
+	<meta name="mobile-web-app-capable" content="yes" />
+	<!--        <link rel="icon" sizes="192x192" href="images/touch/chrome-touch-icon-192x192.png" />-->
+	<!-- Add to homescreen for Safari on iOS -->
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="apple-mobile-web-app-title" content="Material Design Lite" />
+	<!--        <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-precomposed.png" />-->
+	<!-- Tile icon for Win8 (144x144 + tile color) -->
+	<meta name="msapplication-TileImage"
+		content="images/touch/ms-touch-icon-144x144-precomposed.png" />
+	<meta name="msapplication-TileColor" content="#3372DF" />
+	<!-- SEO: If your mobile URL is different from the desktop URL, add a canonical link to the desktop page https://developers.google.com/webmasters/smartphone-sites/feature-phones -->
+	<!--
           <link rel="canonical" href="http://www.example.com/">
           -->
-        <link href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en"
-              rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-        <title>Fireman</title>
-        <h:outputStylesheet library="css" name="bootstrap.min.css"/>
-    </h:head>
+	<link
+		href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en"
+		rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+		rel="stylesheet" />
+	<title>Fireman</title>
+	<h:outputStylesheet library="css" name="bootstrap.min.css" />
+	<h:outputStylesheet library="css" name="fireman.style.css" />
+	<h:outputScript library="js" name="fireman.js"/>
+</h:head>
+<h:body>
+	<f:facet name="last">
+		<h:outputStylesheet library="css" name="fireman.style.css" />
+	</f:facet>
+	<p:growl id="growl" sticky="true" showDetail="true" life="300" />
 
-    <script type="text/javascript">
-      function handleDialogSubmit(xhr, status, args, dialog) {
-        if (args.validationFailed) {
-          dialog.show();
-        } else {
-          dialog.hide();
-        }
-      }
-    </script>
+	<div align="center"
+		style="padding-top: 5px; padding-bottom: 5px; width: 100%">
+		<p:graphicImage library="images" name="logo.jpg" width="120" />
+	</div>
 
-    <h:body>
-        <f:facet name="last">
-            <h:outputStylesheet library="css" name="fireman.style.css"/>
-        </f:facet>
-        <p:growl id="growl" sticky="true" showDetail="true" life="300"/>
+	<b:container fluid="true">
+		<b:row>
+			<b:column col-md="10" col-sm="9">
+				<div class="container-fluid">
+					<h:form id="navBar">
+						<p:menubar>
+							<p:menuitem value="#{menuView.home.name}"
+								outcome="#{menuView.home.uri}"
+								rendered="#{menuView.home.rendered}" />
+							<p:menuitem value="#{menuView.service.name}"
+								outcome="#{menuView.service.uri}"
+								rendered="#{menuView.service.rendered}" />
+							<p:menuitem value="#{menuView.requirement.name}"
+								outcome="#{menuView.requirement.uri}"
+								rendered="#{menuView.requirement.rendered}" />
+							<p:menuitem value="#{menuView.user.name}"
+								outcome="#{menuView.user.uri}"
+								rendered="#{menuView.user.rendered}" />
+							<p:menuitem value="#{menuView.local.name}"
+								outcome="#{menuView.local.uri}"
+								rendered="#{menuView.local.rendered}" />
+							<p:menuitem value="#{menuView.inspector.name}"
+								outcome="#{menuView.inspector.uri}"
+								rendered="#{menuView.inspector.rendered}" />
+							<p:menuitem value="#{menuView.counter.name}"
+								outcome="#{menuView.counter.uri}"
+								rendered="#{menuView.counter.rendered}" />
+							<f:facet name="options">
+								<table cellpadding="0" cellspacing="0">
+									<tr>
+										<td style="padding-right: 10px"><p:outputLabel
+												value="#{loginBean.loggedUser()}" /></td>
+										<td><p:commandButton title="Cerrar Sessión"
+												update="navBar" ajax="false" action="#{logoutBean.logout}"
+												icon="mdi-action-account-circle" /></td>
+									</tr>
+								</table>
 
-        <div align="center"
-                style="padding-top: 5px; padding-bottom: 5px; width: 100%">
-            <p:graphicImage library="images" name="logo.jpg" width="120"/>
-        </div>
-
-        <h:form id="navBar">
-            <p:menubar>
-                <p:menuitem value="#{menuView.home.name}" outcome="#{menuView.home.uri}" rendered="#{menuView.home.rendered}"/>
-                <p:menuitem value="#{menuView.service.name}" outcome="#{menuView.service.uri}" rendered="#{menuView.service.rendered}"/>
-                <p:menuitem value="#{menuView.requirement.name}" outcome="#{menuView.requirement.uri}" rendered="#{menuView.requirement.rendered}"/>
-                <p:menuitem value="#{menuView.user.name}" outcome="#{menuView.user.uri}" rendered="#{menuView.user.rendered}"/>
-                <p:menuitem value="#{menuView.local.name}" outcome="#{menuView.local.uri}" rendered="#{menuView.local.rendered}"/>
-                <p:menuitem value="#{menuView.inspector.name}" outcome="#{menuView.inspector.uri}" rendered="#{menuView.inspector.rendered}"/>
-                <p:menuitem value="#{menuView.counter.name}" outcome="#{menuView.counter.uri}" rendered="#{menuView.counter.rendered}"/>
-                <f:facet name="options">
-                    <table cellpadding="0" cellspacing="0">
-                        <tr>
-                            <td style="padding-right: 10px"><p:outputLabel
-                                    value="#{loginBean.loggedUser()}"/>
-                            </td>
-                            <td>
-                                <p:commandButton title="Cerrar Sessión" update="navBar" ajax="false"
-                                    action="#{logoutBean.logout}" icon="mdi-action-account-circle"/>
-                            </td>
-                        </tr>
-                    </table>
-
-                </f:facet>
-            </p:menubar>
-        </h:form>
-        <b:container fluid="true">
-            <b:row>
-                <b:column col-md="10" col-sm="9" styleClass="conteiner">
-                    <div class="title_page">
-                        <br/> <label><ui:insert name="pageTitle"/> </label> <br/>
-                    </div>
-                    <div class="content">
-                        <ui:insert name="contenido"/>
-                    </div>
-                </b:column>
-            </b:row>
-        </b:container>
-    </h:body>
+							</f:facet>
+						</p:menubar>
+					</h:form>
+					<div class="titleGradient">
+						<h5><ui:insert name="pageTitle" /></h5>
+					</div>
+					<div style="padding-top: 10px">
+						<ui:insert name="contenido" />
+					</div>
+				</div>
+			</b:column>
+		</b:row>
+	</b:container>
+</h:body>
 </html>
 

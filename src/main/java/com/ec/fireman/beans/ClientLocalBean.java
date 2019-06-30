@@ -18,7 +18,6 @@ import javax.transaction.Transactional;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,8 +41,6 @@ public class ClientLocalBean implements Serializable {
   private PermissionRequestDao permissionRequestDao;
   @Inject
   private PermissionRequestFilesDao permissionRequestFilesDao;
-  @Inject
-  private PermissionRequestStatusLogDao permissionRequestStatusLogDao;
 
   private List<LocalRequest> locals;
   private Local selectedLocal;
@@ -117,8 +114,6 @@ public class ClientLocalBean implements Serializable {
   @Transactional
   public void cancelRequest() {
     PermissionRequestStatus newStatus = PermissionRequestStatus.TO_REQUEST;
-    permissionRequestStatusLogDao.save(new PermissionRequestStatusLog(new Date(), selectedRequest,
-        selectedRequest.getPermissionRequestStatus(), newStatus));
     selectedRequest.setPermissionRequestStatus(PermissionRequestStatus.TO_REQUEST);
     permissionRequestDao.update(selectedRequest);
     MessageUtil.infoFacesMessage("Cancelaci�n", "Permiso de funcionamiento cancelado correctaente");

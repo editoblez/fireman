@@ -107,7 +107,7 @@ public class CounterBean implements Serializable {
   public List<RequirementFileUpload> listRequirements() {
     // TODO: LIST ACTIVE REQUIREMENTS BY ROLE (DAO)
     List<Requirement> requirements = requirementDao.findAll();
-    files = new ArrayList<RequirementFileUpload>();
+    files = new ArrayList<>();
     if (requirements != null && !requirements.isEmpty()) {
       for (Requirement req : requirements) {
         files.add(new RequirementFileUpload(req.getId(), req.getName()));

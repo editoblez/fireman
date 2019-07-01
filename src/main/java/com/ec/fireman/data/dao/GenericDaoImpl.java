@@ -3,6 +3,8 @@ package com.ec.fireman.data.dao;
 import com.ec.fireman.data.entities.BaseEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.envers.AuditReader;
+import org.hibernate.envers.AuditReaderFactory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -14,6 +16,8 @@ public abstract class GenericDaoImpl<T extends BaseEntity> implements DaoFacade<
   @PersistenceContext(unitName = "FiremanPersistenceUnit")
   EntityManager entityManager;
   private Class<T> clazz;
+
+  protected AuditReader auditReader;
 
   public void setClazz(Class<T> clazz) {
     this.clazz = clazz;
@@ -48,6 +52,11 @@ public abstract class GenericDaoImpl<T extends BaseEntity> implements DaoFacade<
   @Override
   public void save(T entity) {
     entityManager.persist(entity);
+  }
+
+  @Override
+  public AuditReader getReader() {
+    return AuditReaderFactory.get(entityManager);
   }
 
 }

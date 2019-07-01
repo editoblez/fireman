@@ -9,6 +9,6 @@ import javax.persistence.Entity;
 @Data
 @Entity
 @RevisionEntity(UserRevisionListener.class)
-class UserRevEntity extends DefaultRevisionEntity {
+public class UserRevEntity extends DefaultRevisionEntity {
   private String username;
 }

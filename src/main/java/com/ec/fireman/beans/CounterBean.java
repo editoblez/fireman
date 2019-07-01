@@ -14,7 +14,7 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
@@ -28,7 +28,7 @@ import java.util.List;
 @Data
 @Log4j2
 @Named
-@SessionScoped
+@ViewScoped
 public class CounterBean implements Serializable {
 
   private static final long serialVersionUID = 8632563163040959753L;
@@ -53,7 +53,7 @@ public class CounterBean implements Serializable {
   }
 
   public void refreshRequests() {
-    requests = permissionRequestDao.findPermissionRequestByPermissionRequestStatus(PermissionRequestStatus.INSPECTED);
+    requests = permissionRequestDao.findPermissionRequestByPermissionRequestStatus(PermissionRequestStatus.TO_PAIED);
     log.info("Permissions length: " + (requests != null ? requests.size() : 0));
   }
 
@@ -97,7 +97,7 @@ public class CounterBean implements Serializable {
 
   @Transactional
   public void cancelRequest() {
-    selectedRequest.setPermissionRequestStatus(PermissionRequestStatus.CLOSED);
+    selectedRequest.setPermissionRequestStatus(PermissionRequestStatus.REJECTED);
     permissionRequestDao.update(selectedRequest);
     MessageUtil.infoFacesMessage("Cancelaci�n", "Permiso de funcionamiento cancelado correctaente");
     this.refreshRequests();
@@ -107,7 +107,7 @@ public class CounterBean implements Serializable {
   public List<RequirementFileUpload> listRequirements() {
     // TODO: LIST ACTIVE REQUIREMENTS BY ROLE (DAO)
     List<Requirement> requirements = requirementDao.findAll();
-    files = new ArrayList<RequirementFileUpload>();
+    files = new ArrayList<>();
     if (requirements != null && !requirements.isEmpty()) {
       for (Requirement req : requirements) {
         files.add(new RequirementFileUpload(req.getId(), req.getName()));

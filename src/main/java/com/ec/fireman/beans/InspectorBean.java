@@ -1,19 +1,5 @@
 package com.ec.fireman.beans;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.Serializable;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.transaction.Transactional;
-
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
-
 import com.ec.fireman.data.dao.LocalDao;
 import com.ec.fireman.data.dao.PermissionRequestDao;
 import com.ec.fireman.data.dao.PermissionRequestFilesDao;
@@ -24,14 +10,25 @@ import com.ec.fireman.data.entities.PermissionRequestFiles;
 import com.ec.fireman.data.entities.PermissionRequestStatus;
 import com.ec.fireman.data.representation.RequirementFileUpload;
 import com.ec.fireman.util.MessageUtil;
-
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
+
+import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.util.List;
 
 @Data
 @Log4j2
 @Named
-@SessionScoped
+@ViewScoped
 public class InspectorBean implements Serializable {
 
   private static final long serialVersionUID = 8632563163040959753L;
@@ -57,7 +54,7 @@ public class InspectorBean implements Serializable {
   }
 
   public void refreshRequests() {
-    requests = permissionRequestDao.findPermissionRequestByPermissionRequestStatus(PermissionRequestStatus.SUBMITTED);
+    requests = permissionRequestDao.findPermissionRequestByPermissionRequestStatus(PermissionRequestStatus.REQUESTED);
     log.info("Requests length: " + (requests != null ? requests.size() : 0));
   }
 
@@ -67,7 +64,7 @@ public class InspectorBean implements Serializable {
 
   @Transactional
   public void editRequest() {
-    selectedRequest.setPermissionRequestStatus(PermissionRequestStatus.IN_PROGRESS);
+    selectedRequest.setPermissionRequestStatus(PermissionRequestStatus.TO_PAIED);
     permissionRequestDao.update(selectedRequest);
     log.info(selectedRequest.toString());
     MessageUtil.infoFacesMessage("Solicitud", "Permiso validado correctaente");

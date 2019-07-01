@@ -1,44 +1,30 @@
 package com.ec.fireman.beans;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.transaction.Transactional;
-
-import org.apache.commons.io.IOUtils;
-
-import com.ec.fireman.data.dao.LocalDao;
-import com.ec.fireman.data.dao.PermissionRequestDao;
-import com.ec.fireman.data.dao.PermissionRequestFilesDao;
-import com.ec.fireman.data.dao.RequirementDao;
-import com.ec.fireman.data.dao.ServiceDao;
-import com.ec.fireman.data.dao.UserAccountDao;
-import com.ec.fireman.data.entities.Local;
-import com.ec.fireman.data.entities.MimeTypes;
-import com.ec.fireman.data.entities.PermissionRequest;
-import com.ec.fireman.data.entities.PermissionRequestFiles;
-import com.ec.fireman.data.entities.PermissionRequestStatus;
-import com.ec.fireman.data.entities.Requirement;
-import com.ec.fireman.data.entities.Service;
-import com.ec.fireman.data.entities.State;
+import com.ec.fireman.data.dao.*;
+import com.ec.fireman.data.entities.*;
 import com.ec.fireman.data.representation.LocalRequest;
 import com.ec.fireman.data.representation.RequirementFileUpload;
 import com.ec.fireman.util.MessageUtil;
 import com.ec.fireman.util.SessionUtils;
-
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.io.IOUtils;
+
+import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.transaction.Transactional;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Log4j2
 @Named
-@SessionScoped
+@ViewScoped
 public class ClientLocalBean implements Serializable {
 
   private static final long serialVersionUID = -5093549162702207471L;
@@ -71,7 +57,7 @@ public class ClientLocalBean implements Serializable {
 
   public void refreshLocals() {
     List<Local> localList = localDao.findLocalByUser(SessionUtils.retrieveLoggedUser().getUserId());
-    locals = new ArrayList<LocalRequest>();
+    locals = new ArrayList<>();
     for (Local local : localList) {
       PermissionRequest pr = permissionRequestDao.findPermissionRequestByLocal(local.getId());
       locals.add(new LocalRequest(local, pr));
@@ -90,7 +76,8 @@ public class ClientLocalBean implements Serializable {
     selectedLocal.setState(State.ACTIVE);
     selectedLocal.setService(service);
     log.info(selectedLocal.toString());
-    localDao.save(selectedLocal);
+    PermissionRequest permissionRequest = new PermissionRequest(PermissionRequestStatus.TO_REQUEST, selectedLocal);
+    permissionRequestDao.save(permissionRequest);
     this.refreshLocals();
     this.clearData();
   }
@@ -115,12 +102,10 @@ public class ClientLocalBean implements Serializable {
 
   @Transactional
   public void localRequest() {
-    PermissionRequest request = new PermissionRequest();
-    request.setLocal(localDao.findById(selectedLocal.getId()));
-    request.setPermissionRequestStatus(PermissionRequestStatus.SUBMITTED);
-    request.setState(State.ACTIVE);
-    permissionRequestDao.save(request);
-    log.info(request.toString());
+    selectedRequest.setPermissionRequestStatus(PermissionRequestStatus.REQUESTED);
+    selectedRequest.setState(State.ACTIVE);
+    permissionRequestDao.update(selectedRequest);
+    log.info(selectedRequest.toString());
     MessageUtil.infoFacesMessage("Solicitud", "Permiso de funcionamiento solicitado correctaente");
     this.refreshLocals();
     this.clearData();
@@ -128,7 +113,7 @@ public class ClientLocalBean implements Serializable {
 
   @Transactional
   public void cancelRequest() {
-    selectedRequest.setPermissionRequestStatus(PermissionRequestStatus.CLOSED);
+    selectedRequest.setPermissionRequestStatus(PermissionRequestStatus.TO_REQUEST);
     permissionRequestDao.update(selectedRequest);
     MessageUtil.infoFacesMessage("Cancelaci�n", "Permiso de funcionamiento cancelado correctaente");
     this.refreshLocals();
@@ -176,7 +161,7 @@ public class ClientLocalBean implements Serializable {
 
   public List<RequirementFileUpload> listRequirements() {
     // TODO: LIST ACTIVE REQUIREMENTS BY ROLE (DAO)
-    List<Requirement> requirements = requirementDao.findAll();
+    List<Requirement> requirements = requirementDao.findAll().stream().filter(it -> it.getRole().getRoleName() == RoleTypes.ECONOMIC).collect(Collectors.toList());
     files = new ArrayList<RequirementFileUpload>();
     if (requirements != null && !requirements.isEmpty()) {
       for (Requirement req : requirements) {

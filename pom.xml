@@ -58,29 +58,6 @@
           <target>8</target>
         </configuration>
       </plugin>
-      <!--<plugin>-->
-      <!--<groupId>org.codehaus.mojo</groupId>-->
-      <!--<artifactId>jasperreports-maven-plugin</artifactId>-->
-      <!--<configuration>-->
-      <!--<sourceDirectory>C:\\workspace\\fireman\\src\\main\\resources\\reports</sourceDirectory>-->
-      <!--<outputDirectory>C:\\workspace\\fireman\\src\\main\\resources\\reportsCompiled</outputDirectory>-->
-      <!--</configuration>-->
-      <!--<executions>-->
-      <!--<execution>-->
-      <!--<goals>-->
-      <!--<goal>compile-reports</goal>-->
-      <!--</goals>-->
-      <!--<phase>compile</phase>-->
-      <!--</execution>-->
-      <!--</executions>-->
-      <!--<dependencies>-->
-      <!--<dependency>-->
-      <!--<groupId>jasperreports</groupId>-->
-      <!--<artifactId>jasperreports</artifactId>-->
-      <!--<scope>provided</scope>-->
-      <!--</dependency>-->
-      <!--</dependencies>-->
-      <!--</plugin>-->
     </plugins>
   </build>
 
@@ -157,6 +134,12 @@
       <groupId>jasperreports</groupId>
       <artifactId>jasperreports</artifactId>
       <version>3.0.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-envers</artifactId>
+      <version>5.2.17.Final</version>
     </dependency>
 
   </dependencies>

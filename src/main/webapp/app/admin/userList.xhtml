@@ -1,10 +1,9 @@
 <!DOCTYPE html >
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:pe="http://primefaces.org/ui/extensions"
-	xmlns:f="http://java.sun.com/jsf/core">
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:p="http://primefaces.org/ui"
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:f="http://java.sun.com/jsf/core">
 <ui:composition template="../../template/template.xhtml">
 	<ui:define name="pageTitle">
 		Listar usuario		
@@ -119,6 +118,16 @@
 						</h:panelGroup>
 
 						<h:panelGroup style="padding-top: 8px;">
+							<p:outputLabel for="txtPhoneNumber" value="Teléfono"/>
+							<div>
+								<p:inputText id="txtPhoneNumber"
+										value="#{userListBean.selectedUser.phoneNumber}" required="true"
+										requiredMessage="Teléfono requerido"/>
+								<p:message for="txtPhoneNumber"/>
+							</div>
+						</h:panelGroup>
+
+						<h:panelGroup style="padding-top: 8px;">
 							<p:outputLabel for="txtPassw" value="Contraseña" />
 							<div>
 								<p:password id="txtPassw"
@@ -219,6 +228,16 @@
 									value="#{userListBean.selectedUser.email}" required="true"
 									requiredMessage="Correo requerido" />
 								<p:message for="txtEmail2" />
+							</div>
+						</h:panelGroup>
+
+						<h:panelGroup style="padding-top: 8px;">
+							<p:outputLabel for="txtPhoneNumber" value="Teléfono"/>
+							<div>
+								<p:inputText id="txtPhoneNumber"
+										value="#{userListBean.selectedUser.phoneNumber}" required="true"
+										requiredMessage="Correo requerido"/>
+								<p:message for="txtPhoneNumber"/>
 							</div>
 						</h:panelGroup>
 

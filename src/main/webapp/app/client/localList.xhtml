@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html xmlns="http://www.w3.org/1999/xhtml"
-		xmlns:h="http://java.sun.com/jsf/html"
-		xmlns:p="http://primefaces.org/ui"
-		xmlns:ui="http://java.sun.com/jsf/facelets"
-		xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core">
 <ui:composition template="../../template/template.xhtml">
 	<ui:define name="pageTitle">
 		Gestionar Locales
@@ -14,7 +14,7 @@
 
 			<p:commandButton ajax="true" update=":formList:dtList growl"
 				oncomplete="PF('dlgCreate').show()" value="Nuevo"
-				styleClass="btn btn-default" />
+				style="margin: 0px 0px 5px 0px;" />
 
 			<p:dataTable id="dtList" var="item" value="#{clientLocalBean.locals}">
 				<p:column headerText="Dirección">
@@ -24,53 +24,57 @@
 					<h:outputText value="#{item.local.service.name}" />
 				</p:column>
 				<p:column headerText="Estado">
-					<h:outputText value="#{item.permissionRequest.permissionRequestStatus.value}"/>
+					<h:outputText
+						value="#{item.permissionRequest.permissionRequestStatus.value}" />
 				</p:column>
-				<p:column style="text-align: center; width: 200px"
-					headerText="Acciones">
+				<p:column style="text-align: center;" headerText="Acciones">
 					<p:commandButton update=":formEdit:opEdit growl"
-							rendered="#{item.local.state == 'ACTIVE'}"
-						icon="ui-icon-pencil" oncomplete="PF('dlgEdit').show()"
-						title="Editar">
+						rendered="#{item.local.state == 'ACTIVE'}" icon="ui-icon-pencil"
+						oncomplete="PF('dlgEdit').show()" title="Editar"
+						style="margin: 0px 0px 1px 10px;">
 						<f:setPropertyActionListener value="#{item.local}"
 							target="#{clientLocalBean.selectedLocal}" />
 					</p:commandButton>
 
 					<p:commandButton update=":formDelete:opDelete growl"
-							rendered="#{item.permissionRequest.permissionRequestStatus == 'TO_REQUEST'
-						or item.permissionRequest.permissionRequestStatus == 'REJECTED'}"
-							icon="ui-icon-trash"
-						oncomplete="PF('dlgEliminar').show()" title="Inactivar Local">
+						rendered="#{(item.permissionRequest.permissionRequestStatus == 'TO_REQUEST'
+						or item.permissionRequest.permissionRequestStatus == 'REJECTED') and item.local.state == 'ACTIVE'}"
+						icon="ui-icon-trash" oncomplete="PF('dlgEliminar').show()"
+						title="Inactivar Local" style="margin: 0px 0px 1px 10px;">
 						<f:setPropertyActionListener value="#{item.local}"
 							target="#{clientLocalBean.selectedLocal}" />
-					</p:commandButton>
-
-                    <p:commandButton update=":formRequest:opRequest :formList:dtList growl"
-							rendered="#{item.permissionRequest.permissionRequestStatus == 'TO_REQUEST'
-						or item.permissionRequest.permissionRequestStatus == 'REJECTED'}"
-						icon="ui-icon-clipboard" oncomplete="PF('dlgRequest').show()"
-						title="Solicitar permiso">
-						<f:setPropertyActionListener value="#{item.permissionRequest}"
-								target="#{clientLocalBean.selectedRequest}"/>
 					</p:commandButton>
 
 					<p:commandButton update=":formFiles:opFiles growl"
-							rendered="#{item.permissionRequest.permissionRequestStatus == 'TO_REQUEST'
-						or item.permissionRequest.permissionRequestStatus == 'REJECTED'}"
+						rendered="#{(item.permissionRequest.permissionRequestStatus == 'TO_REQUEST'
+						or item.permissionRequest.permissionRequestStatus == 'REJECTED') and item.local.state == 'ACTIVE'}"
 						icon="ui-icon-folder-open" oncomplete="PF('dlgFiles').show()"
-						title="Cargar documentos">
+						title="Cargar documentos" style="margin: 0px 0px 1px 10px;">
 						<f:setPropertyActionListener value="#{item.local}"
 							target="#{clientLocalBean.selectedLocal}" />
 					</p:commandButton>
 
-					<p:commandButton update=":formCancel:opCancel growl"
-							rendered="#{item.permissionRequest.permissionRequestStatus != 'TO_REQUEST'
-						and item.permissionRequest.permissionRequestStatus != 'REJECTED'}"
-						icon="ui-icon-circle-close" oncomplete="PF('dlgCancel').show()"
-						title="Cancelar solicitud">
+					<p:commandButton
+						update=":formRequest:opRequest :formList:dtList growl"
+						rendered="#{(item.permissionRequest.permissionRequestStatus == 'TO_REQUEST'
+						or item.permissionRequest.permissionRequestStatus == 'REJECTED') and item.local.state == 'ACTIVE'}"
+						icon="ui-icon-clipboard" oncomplete="PF('dlgRequest').show()"
+						title="Solicitar permiso" style="margin: 0px 0px 1px 10px;">
 						<f:setPropertyActionListener value="#{item.permissionRequest}"
 							target="#{clientLocalBean.selectedRequest}" />
 					</p:commandButton>
+
+					<p:commandButton update=":formCancel:opCancel growl"
+						rendered="#{item.permissionRequest.permissionRequestStatus != 'TO_REQUEST'
+						and item.permissionRequest.permissionRequestStatus != 'REJECTED'}"
+						icon="ui-icon-circle-close" oncomplete="PF('dlgCancel').show()"
+						title="Cancelar solicitud" style="margin: 0px 0px 1px 10px;">
+						<f:setPropertyActionListener value="#{item.permissionRequest}"
+							target="#{clientLocalBean.selectedRequest}" />
+					</p:commandButton>
+
+					<h:outputText value="Sin acciones / Eliminado"
+						rendered="#{item.local.state == 'INACTIVE'}" />
 
 				</p:column>
 			</p:dataTable>
@@ -108,7 +112,7 @@
 								<p:selectOneMenu id="cmbService"
 									value="#{clientLocalBean.service}"
 									converter="selectOneMenuConverter" panelStyle="width:180px"
-									effect="fade" var="s" style="width:160px" filter="true"
+									effect="fade" var="s" style="width:230px" filter="true"
 									filterMatchMode="startsWith">
 									<f:selectItems value="#{clientLocalBean.listServices()}"
 										var="serv" itemLabel="#{serv.name}" itemValue="#{serv}" />
@@ -162,9 +166,9 @@
 							<p:outputLabel for="cmbService2" value="Servicio" />
 							<div>
 								<p:selectOneMenu id="cmbService2"
-									value="#{clientLocalBean.service}"
+									value="#{clientLocalBean.selectedLocal.service}"
 									converter="selectOneMenuConverter" panelStyle="width:180px"
-									effect="fade" var="s" style="width:160px" filter="true"
+									effect="fade" var="s" style="width:230px" filter="true"
 									filterMatchMode="startsWith">
 									<f:selectItems value="#{clientLocalBean.listServices()}"
 										var="serv" itemLabel="#{serv.name}" itemValue="#{serv}" />
@@ -189,7 +193,7 @@
 		</p:dialog>
 
 		<p:dialog header="Eliminar Local" widgetVar="dlgEliminar" width="255"
-			height="130" resizable="false" modal="true">
+			resizable="false" modal="true">
 			<h:form id="formDelete">
 				<p:outputPanel id="opDelete" style="text-align: center;">
 					<h:outputText
@@ -201,18 +205,18 @@
 						update="growl :formList:dtList"
 						oncomplete="PF('dlgEliminar').hide();"
 						actionListener="#{clientLocalBean.deleteLocal()}" value="SI"
-						styleClass="btn btn-default" />
+						style="margin: 0px 0px 1px 10px;" />
 
 					<p:commandButton ajax="true" action="faces-redirect=false"
-						update="growl" oncomplete="PF('dlgEliminar').hide();"
+						update="growl :formList:dtList" oncomplete="PF('dlgEliminar').hide();"
 						actionListener="#{clientLocalBean.clearData()}" value="NO"
-						styleClass="btn btn-default" />
+						style="margin: 0px 0px 1px 10px;" />
 				</div>
 			</h:form>
 		</p:dialog>
 
 		<p:dialog header="Solicitar Permiso" widgetVar="dlgRequest"
-			width="255" height="110" resizable="false" modal="true">
+			width="255" resizable="false" modal="true">
 			<h:form id="formRequest">
 				<p:outputPanel id="opRequest" style="text-align: center;">
 					<h:outputText
@@ -224,18 +228,18 @@
 						update="growl :formList:dtList"
 						oncomplete="PF('dlgRequest').hide();"
 						actionListener="#{clientLocalBean.localRequest()}" value="SI"
-						styleClass="btn btn-default" />
+						style="margin: 0px 0px 1px 10px;" />
 
 					<p:commandButton ajax="true" action="faces-redirect=false"
-						update="growl" oncomplete="PF('dlgRequest').hide();"
+						update="growl :formList:dtList" oncomplete="PF('dlgRequest').hide();"
 						actionListener="#{clientLocalBean.clearData()}" value="NO"
-						styleClass="btn btn-default" />
+						style="margin: 0px 0px 1px 10px;" />
 				</div>
 			</h:form>
 		</p:dialog>
 
 		<p:dialog header="Cancelar Solicitud" widgetVar="dlgCancel"
-			width="255" height="110" resizable="false" modal="true">
+			width="255" resizable="false" modal="true">
 			<h:form id="formCancel">
 				<p:outputPanel id="opCancel" style="text-align: center;">
 					<h:outputText
@@ -247,12 +251,12 @@
 						update="growl :formList:dtList"
 						oncomplete="PF('dlgCancel').hide();"
 						actionListener="#{clientLocalBean.cancelRequest()}" value="SI"
-						styleClass="btn btn-default" />
+						style="margin: 0px 0px 1px 10px;" />
 
 					<p:commandButton ajax="true" action="faces-redirect=false"
-						update="growl" oncomplete="PF('dlgCancel').hide();"
+						update="growl :formList:dtList" oncomplete="PF('dlgCancel').hide();"
 						actionListener="#{clientLocalBean.clearData()}" value="NO"
-						styleClass="btn btn-default" />
+						style="margin: 0px 0px 1px 10px;" />
 				</div>
 			</h:form>
 		</p:dialog>
@@ -274,9 +278,9 @@
 
 				<div align="center" style="padding-top: 15px;">
 					<p:commandButton ajax="false" action="faces-redirect=false"
-						update="growl" oncomplete="PF('dlgFiles').hide();"
+						update="growl :formList:dtList" oncomplete="PF('dlgFiles').hide();"
 						actionListener="#{clientLocalBean.upload()}"
-						value="Guardar Documentos" styleClass="btn btn-default" />
+						value="Guardar Documentos" style="margin: 0px 0px 1px 10px;" />
 				</div>
 			</h:form>
 		</p:dialog>

@@ -2,6 +2,8 @@ package com.ec.fireman.beans;
 
 import com.ec.fireman.data.dao.ServiceDao;
 import com.ec.fireman.data.entities.Service;
+import com.ec.fireman.data.entities.State;
+
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 
@@ -36,20 +38,20 @@ public class ServiceListBean implements Serializable {
   public void refreshServices() {
     services = serviceDao.findAll();
     log.info("Services length: " + services != null ? services.size() : 0);
+    selectedService = new Service();
   }
 
   @Transactional
   public void createService() {
+    selectedService.setState(State.ACTIVE);
     serviceDao.save(selectedService);
     this.refreshServices();
-    setSelectedService(new Service());
   }
 
   @Transactional
   public void editService() {
     serviceDao.update(selectedService);
     this.refreshServices();
-    setSelectedService(new Service());
   }
 
 }

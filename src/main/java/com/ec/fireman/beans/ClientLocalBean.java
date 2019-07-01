@@ -113,7 +113,6 @@ public class ClientLocalBean implements Serializable {
 
   @Transactional
   public void cancelRequest() {
-    PermissionRequestStatus newStatus = PermissionRequestStatus.TO_REQUEST;
     selectedRequest.setPermissionRequestStatus(PermissionRequestStatus.TO_REQUEST);
     permissionRequestDao.update(selectedRequest);
     MessageUtil.infoFacesMessage("Cancelaci�n", "Permiso de funcionamiento cancelado correctaente");

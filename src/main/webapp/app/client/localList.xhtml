@@ -45,7 +45,7 @@
 							target="#{clientLocalBean.selectedLocal}" />
 					</p:commandButton>
 
-					<p:commandButton update=":formRequest:opRequest growl"
+                    <p:commandButton update=":formRequest:opRequest :formList:dtList growl"
 							rendered="#{item.permissionRequest.permissionRequestStatus == 'TO_REQUEST'
 						or item.permissionRequest.permissionRequestStatus == 'REJECTED'}"
 						icon="ui-icon-clipboard" oncomplete="PF('dlgRequest').show()"

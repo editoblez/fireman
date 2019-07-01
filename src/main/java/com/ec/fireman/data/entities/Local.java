@@ -32,8 +32,4 @@ public class Local implements BaseEntity {
 
   @Enumerated(EnumType.STRING)
   private State state;
-
-  @OneToOne(mappedBy = "local")
-  private PermissionRequest permissionRequest;
-
 }

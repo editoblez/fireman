@@ -39,22 +39,19 @@ public class RegisterClientBean implements Serializable {
   private String secondLastName;
   private String ci;
   private String email;
+  private String phoneNumber;
 
   @Transactional
-  public String register() {
+  public void register() throws IOException {
     Role role = roleDao.findRolByName(RoleTypes.CLIENT);
     if (role == null) {
       log.error("Error to execute findRoleByName, the role don't exists in db");
-      return PageNameConstants.REGISTER_CLIENT_PAGE;
+      return;
     }
     log.debug("Registering a user: " + toString());
     UserAccount client = new UserAccount(firstName, secondName, firstLastName, secondLastName, ci,
-        PasswordUtil.encrypt(ci), email, role);
+        PasswordUtil.encrypt(ci), email, phoneNumber, role);
     userAccountDao.save(client);
-    return LOGIN_PAGE;
-  }
-
-  public void goToLogin() throws IOException {
     Servlets.facesRedirect(SessionUtils.getRequest(), SessionUtils.getResponse(), UriUtil.removeStaringSlash(LOGIN_PAGE));
   }
 

@@ -8,6 +8,6 @@ public class UserUtil {
   public static final String DEFAULT_ADMIN_CI = "123";
 
   public static UserAccount createDefaultAdminUtil(Role rolByName) {
-    return new UserAccount("Admin", "Admin", "Admin", "Admin", DEFAULT_ADMIN_CI, "ICy5YqxZB1uWSwcVLSNLcA==", "", rolByName);
+    return new UserAccount("Admin", "Admin", "Admin", "Admin", DEFAULT_ADMIN_CI, "ICy5YqxZB1uWSwcVLSNLcA==", "", "098 098 8961", rolByName);
   }
 }

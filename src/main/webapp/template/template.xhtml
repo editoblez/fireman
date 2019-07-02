@@ -36,7 +36,7 @@
 	<title>Fireman</title>
 	<h:outputStylesheet library="css" name="bootstrap.min.css" />
 	<h:outputStylesheet library="css" name="fireman.style.css" />
-	<h:outputScript library="js" name="fireman.js"/>
+	<h:outputScript library="js" name="fireman.js" />
 </h:head>
 <h:body>
 	<f:facet name="last">
@@ -83,7 +83,7 @@
 												value="#{loginBean.loggedUser()}" /></td>
 										<td><p:commandButton title="Cerrar Sessión"
 												update="navBar" ajax="false" action="#{logoutBean.logout}"
-												icon="mdi-action-account-circle" /></td>
+												icon="ui-icon-arrowthickstop-1-e" /></td>
 									</tr>
 								</table>
 
@@ -91,7 +91,9 @@
 						</p:menubar>
 					</h:form>
 					<div class="titleGradient">
-						<h5><ui:insert name="pageTitle" /></h5>
+						<h5>
+							<ui:insert name="pageTitle" />
+						</h5>
 					</div>
 					<div style="padding-top: 10px">
 						<ui:insert name="contenido" />

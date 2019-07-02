@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html xmlns="http://www.w3.org/1999/xhtml"
-		xmlns:h="http://java.sun.com/jsf/html"
-		xmlns:p="http://primefaces.org/ui"
-		xmlns:ui="http://java.sun.com/jsf/facelets"
-		xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core">
 <ui:composition template="../../template/template.xhtml">
 	<ui:define name="pageTitle">
 		Gestionar Solicitudes		
@@ -11,10 +11,6 @@
 	<ui:define name="contenido">
 
 		<h:form id="formList">
-
-			<p:commandButton ajax="true" update=":formList:dtList growl"
-				oncomplete="PF('dlgCreate').show()" value="Nuevo"
-				styleClass="btn btn-default" />
 
 			<p:dataTable id="dtList" var="item" value="#{inspectorBean.requests}">
 				<p:column headerText="Dirección">
@@ -24,21 +20,37 @@
 					<h:outputText value="#{item.local.service.name}" />
 				</p:column>
 				<p:column headerText="Estado">
-					<h:outputText value="#{item.permissionRequestStatus.value}"/>
+					<h:outputText value="#{item.permissionRequestStatus.value}" />
 				</p:column>
-				<p:column style="text-align: center; width: 200px"
-					headerText="Acciones">
+				<p:column style="text-align: center;" headerText="Acciones">
+
+					<p:commandButton update=":formFilesRev:opFilesRev growl"
+						icon="ui-icon-folder-collapsed" oncomplete="PF('dlgFilesRev').show()"
+						title="Cargar documentos" style="margin: 0px 0px 1px 10px;">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{inspectorBean.selectedRequest}" />
+					</p:commandButton>
+
+					<p:commandButton update=":formSelect:opSelect growl"
+						icon="ui-icon-transferthick-e-w"
+						oncomplete="PF('dlgSelect').show()" title="Atender Solicitud"
+						style="margin: 0px 0px 1px 10px;">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{inspectorBean.selectedRequest}" />
+					</p:commandButton>
 
 					<p:commandButton update=":formFiles:opFiles growl"
-						icon="ui-icon-folder-collapsed" oncomplete="PF('dlgFiles').show()"
-						title="Cargar documentos">
+						rendered="#{item.permissionRequestStatus == 'IN_PROGRESS'}"
+						icon="ui-icon-folder-open" oncomplete="PF('dlgFiles').show()"
+						title="Cargar documentos" style="margin: 0px 0px 1px 10px;">
 						<f:setPropertyActionListener value="#{item}"
 							target="#{inspectorBean.selectedRequest}" />
 					</p:commandButton>
 
 					<p:commandButton update=":formRequest:opRequest growl"
+						rendered="#{item.permissionRequestStatus == 'IN_PROGRESS'}"
 						icon="ui-icon-clipboard" oncomplete="PF('dlgRequest').show()"
-							title="Aprobar">
+						title="Aprobar" style="margin: 0px 0px 1px 10px;">
 						<f:setPropertyActionListener value="#{item}"
 							target="#{inspectorBean.selectedRequest}" />
 					</p:commandButton>
@@ -48,7 +60,7 @@
 		</h:form>
 
 		<p:dialog header="Aprobar Permiso" widgetVar="dlgRequest" width="255"
-			height="110" resizable="false" modal="true">
+			resizable="false" modal="true">
 			<h:form id="formRequest">
 				<p:outputPanel id="opRequest" style="text-align: center;">
 					<h:outputText
@@ -60,41 +72,123 @@
 						update="growl :formList:dtList"
 						oncomplete="PF('dlgRequest').hide();"
 						actionListener="#{inspectorBean.editRequest()}" value="SI"
-						styleClass="btn btn-default" />
+						style="margin: 0px 0px 1px 10px;" />
 
 					<p:commandButton ajax="true" action="faces-redirect=false"
 						update="growl" oncomplete="PF('dlgRequest').hide();"
 						actionListener="#{inspectorBean.clearData()}" value="NO"
-						styleClass="btn btn-default" />
+						style="margin: 0px 0px 1px 10px;" />
 				</div>
 			</h:form>
 		</p:dialog>
 
-		<p:dialog header="Revisar Documentos" widgetVar="dlgFiles" width="500"
+		<p:dialog header="Revisar Documentos" widgetVar="dlgFilesRev" width="500"
 			modal="true">
-			<h:form id="formFiles" enctype="multipart/form-data">
-				<p:outputPanel id="opFiles">
-
+			<h:form id="formFilesRev" enctype="multipart/form-data">
+				<p:outputPanel id="opFilesRev">
 					<p:repeat value="#{inspectorBean.listFiles()}" var="item">
 						<p:panelGrid columns="2" cellpadding="5" layout="grid">
-
 							<h:outputText value="#{item.fileName}" />
-
 							<p:commandButton value="Descargar" ajax="false"
 								icon="ui-icon-newwin">
 								<p:fileDownload value="#{inspectorBean.download(item)}" />
 							</p:commandButton>
+						</p:panelGrid>
+					</p:repeat>
+				</p:outputPanel>
+				<div align="center" style="padding-top: 15px;">
+					<p:commandButton ajax="true" action="faces-redirect=false"
+						update="growl" oncomplete="PF('dlgFilesRev').hide();"
+						actionListener="#{inspectorBean.clearData()}" value="Cerrar"
+						style="margin: 0px 0px 1px 10px;" />
+				</div>
+			</h:form>
+		</p:dialog>
 
+		<p:dialog header="Validar Requisitos" widgetVar="dlgItems"
+			resizable="false" modal="true">
+			<h:form id="formValidate">
+				<p:outputPanel id="opItems" style="text-align: center;">
+					<p:dataTable id="checkboxDT" var="item"
+						value="#{inspectorBean.items}"
+						selection="#{inspectorBean.itemsSelected}" rowKey="#{item.id}"
+						style="margin-bottom:0">
+						<f:facet name="header">
+				            Checkbox
+				        </f:facet>
+						<p:column selectionMode="multiple"
+							style="width:16px;text-align:center" />
+						<p:column headerText="Nombre">
+							<h:outputText value="#{item.name}" />
+						</p:column>
+					</p:dataTable>
+				</p:outputPanel>
+
+				<div align="right" style="padding-top: 15px;">
+					<p:commandButton ajax="true" action="faces-redirect=false"
+						oncomplete="handleDialogSubmit(xhr, status, args, PF('dlgItems'))"
+						update=":formList:dtList growl opItems"
+						actionListener="#{inspectorBean.saveItems()}" value="Guardar"
+						style="margin: 0px 0px 1px 10px;" />
+				</div>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog header="Atender Solicitud" widgetVar="dlgSelect" width="330"
+			resizable="false" modal="true">
+			<h:form id="formSelect">
+				<p:outputPanel id="opSelect" style="text-align: center;">
+
+					<h:panelGroup>
+						<p:outputLabel for="txtUrl2"
+							value="Para atender esta
+							solicitud, necesita especificar la url del mapa." />
+						<div>
+							<p:inputTextarea rows="3" cols="28" id="txtUrl2"
+								value="#{inspectorBean.selectedRequest.local.mapUrl}"
+								required="true" requiredMessage="URL del mapa requerido" />
+							<p:message for="txtUrl2" />
+						</div>
+					</h:panelGroup>
+				</p:outputPanel>
+
+				<div align="center" style="padding-top: 15px;">
+					<p:commandButton ajax="true" action="faces-redirect=false"
+						update="growl :formList:dtList"
+						oncomplete="handleDialogSubmit(xhr, status, args, PF('dlgSelect'))"
+						actionListener="#{inspectorBean.startInspection()}"
+						value="Atender" style="margin: 0px 0px 1px 10px;" />
+
+					<p:commandButton ajax="true" action="faces-redirect=false"
+						update="growl :formList:dtList"
+						oncomplete="PF('dlgSelect').hide();"
+						actionListener="#{inspectorBean.clearData()}" value="Cancelar"
+						style="margin: 0px 0px 1px 10px;" />
+				</div>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog header="Cargar Documentos" widgetVar="dlgFiles" width="600"
+			modal="true">
+			<h:form id="formFiles" enctype="multipart/form-data">
+				<p:outputPanel id="opFiles">
+
+					<p:repeat value="#{inspectorBean.listRequirements()}" var="item">
+						<p:panelGrid columns="2" cellpadding="5" layout="grid">
+							<h:outputText value="#{item.requirementName}" />
+							<p:fileUpload value="#{item.file}" mode="simple"
+								skinSimple="true" label="Seleccionar" />
 						</p:panelGrid>
 					</p:repeat>
 
 				</p:outputPanel>
 
 				<div align="center" style="padding-top: 15px;">
-					<p:commandButton ajax="true" action="faces-redirect=false"
-						update="growl" oncomplete="PF('dlgFiles').hide();"
-						actionListener="#{inspectorBean.clearData()}" value="Cerrar"
-						styleClass="btn btn-default" />
+					<p:commandButton ajax="false" action="faces-redirect=false"
+						update="growl :formList:dtList"
+						oncomplete="PF('dlgFiles').hide();"
+						actionListener="#{inspectorBean.upload()}"
+						value="Guardar Documentos" style="margin: 0px 0px 1px 10px;" />
 				</div>
 			</h:form>
 		</p:dialog>

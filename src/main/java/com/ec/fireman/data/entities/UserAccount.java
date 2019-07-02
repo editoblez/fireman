@@ -1,13 +1,15 @@
 package com.ec.fireman.data.entities;
 
 import lombok.Data;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 
 import static com.ec.fireman.data.entities.EntityConstants.GENERIC_COLUMN_SIZE;
 
-@NamedQueries({ @NamedQuery(name = "findUserByCi", query = "from UserAccount e where e.ci = :ci") })
+@NamedQueries({@NamedQuery(name = "findUserByCi", query = "from UserAccount e where e.ci = :ci")})
 
+@Audited
 @Data
 @Entity
 public class UserAccount implements BaseEntity {
@@ -36,6 +38,9 @@ public class UserAccount implements BaseEntity {
   @Column(length = GENERIC_COLUMN_SIZE)
   private String email;
 
+  @Column(length = 32)
+  private String phoneNumber;
+
   @ManyToOne(cascade = CascadeType.ALL)
   private Role role;
 
@@ -46,7 +51,7 @@ public class UserAccount implements BaseEntity {
   }
 
   public UserAccount(String firstName, String secondName, String firstLastName, String secondLastName, String ci,
-      String password, String email, Role role) {
+                     String password, String email, String phoneNumber, Role role) {
     this.firstName = firstName;
     this.secondName = secondName;
     this.firstLastName = firstLastName;
@@ -55,6 +60,7 @@ public class UserAccount implements BaseEntity {
     this.password = password;
     this.email = email;
     this.role = role;
+    this.phoneNumber = phoneNumber;
     state = State.ACTIVE;
   }
 

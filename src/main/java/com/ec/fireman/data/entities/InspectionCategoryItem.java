@@ -5,12 +5,10 @@ import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 
-@NamedQueries({ @NamedQuery(name = "findServiceByName", query = "from Service e where e.name = :name") })
-
 @Audited
 @Data
 @Entity
-public class Service implements BaseEntity {
+public class InspectionCategoryItem implements BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
@@ -18,7 +16,19 @@ public class Service implements BaseEntity {
   @Column
   private String name;
 
+  @Column
+  private int section;
+
+  @Column
+  private boolean variableCant;
+
   @Enumerated(EnumType.STRING)
   private State state;
+
+  @Enumerated(EnumType.STRING)
+  private InspectionCategoryItemType type;
+
+  @ManyToOne
+  private InspectionCategory inspectionCategory;
 
 }

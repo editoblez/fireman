@@ -3,19 +3,18 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:f="http://java.sun.com/jsf/core">
 <ui:composition template="../../template/template.xhtml">
 	<ui:define name="pageTitle">
-		Listar usuario		
+		Gestionar usuarios		
 	</ui:define>
 	<ui:define name="contenido">
 
 		<h:form id="formUserList">
 
-			<p:commandButton ajax="true" update=":formUserList:dtUser growl"
-				oncomplete="PF('dlgUserCreate').show()" value="Nuevo"
-				styleClass="btn btn-default" />
+			<p:commandButton ajax="true" style="margin: 0px 0px 5px 0px;"
+				update=":formUserList:dtUser growl"
+				oncomplete="PF('dlgUserCreate').show()" value="Nuevo" />
 
 			<p:dataTable id="dtUser" var="user" value="#{userListBean.users}">
 				<p:column headerText="CI">
@@ -33,18 +32,18 @@
 				<p:column headerText="Rol">
 					<h:outputText value="#{user.role.roleName}" />
 				</p:column>
-				<p:column style="text-align: center" headerText="Editar">
+				<p:column width="140" style="text-align: center"
+					headerText="Acciones">
 					<p:commandButton update=":formUserEdit:opEdit growl"
 						icon="ui-icon-pencil" oncomplete="PF('dlgUserEdit').show()"
-						title="Editar">
+						title="Editar" style="margin: 0px 0px 1px 10px;">
 						<f:setPropertyActionListener value="#{user}"
 							target="#{userListBean.selectedUser}" />
 					</p:commandButton>
-				</p:column>
-				<p:column style="text-align: center" headerText="Contraseña">
+
 					<p:commandButton update=":formPassReset:opPassReset growl"
 						icon="ui-icon-key" oncomplete="PF('dlgPassReset').show()"
-						title="Resetear Contraseña">
+						title="Resetear Contraseña" style="margin: 0px 0px 1px 10px;">
 						<f:setPropertyActionListener value="#{user}"
 							target="#{userListBean.selectedUser}" />
 					</p:commandButton>
@@ -115,6 +114,16 @@
 									value="#{userListBean.selectedUser.email}" required="true"
 									requiredMessage="Correo requerido" />
 								<p:message for="txtEmail" />
+							</div>
+						</h:panelGroup>
+
+						<h:panelGroup style="padding-top: 8px;">
+							<p:outputLabel for="txtPhoneNumber" value="Teléfono" />
+							<div>
+								<p:inputText id="txtPhoneNumber"
+									value="#{userListBean.selectedUser.phoneNumber}"
+									required="true" requiredMessage="Teléfono requerido" />
+								<p:message for="txtPhoneNumber" />
 							</div>
 						</h:panelGroup>
 
@@ -223,9 +232,20 @@
 						</h:panelGroup>
 
 						<h:panelGroup style="padding-top: 8px;">
+							<p:outputLabel for="txtPhoneNumber" value="Teléfono" />
+							<div>
+								<p:inputText id="txtPhoneNumber"
+									value="#{userListBean.selectedUser.phoneNumber}"
+									required="true" requiredMessage="Correo requerido" />
+								<p:message for="txtPhoneNumber" />
+							</div>
+						</h:panelGroup>
+
+						<h:panelGroup style="padding-top: 8px;">
 							<p:outputLabel for="cmbRol2" value="Rol" />
 							<div>
-								<p:selectOneMenu id="cmbRol2" value="#{userListBean.selectedUser.role}"
+								<p:selectOneMenu id="cmbRol2"
+									value="#{userListBean.selectedUser.role}"
 									converter="selectOneMenuConverter" panelStyle="width:180px"
 									effect="fade" var="r" style="width:160px" filter="true"
 									filterMatchMode="startsWith">
@@ -288,7 +308,7 @@
 								<p:message for="txtLastN13" />
 							</div>
 						</h:panelGroup>
-						
+
 						<h:panelGroup style="padding-top: 8px;">
 							<p:outputLabel for="txtEmail3" value="Correo" />
 							<div>

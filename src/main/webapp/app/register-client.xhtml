@@ -34,9 +34,15 @@
                     <h:outputLabel for="email" value="Correo"/>
                     <p:inputText id="email" value="#{registerClientBean.email}"/>
                     <p:message for="email"/>
+
+                    <h:outputLabel for="phoneNumber" value="Teléfono"/>
+                    <p:inputText id="phoneNumber" value="#{registerClientBean.phoneNumber}"/>
+                    <p:message for="phoneNumber"/>
+
                 </h:panelGrid>
-                <p:commandButton value="Registrar" action="#{registerClientBean.register}" update="panel-register-client"/>
-                <p:commandButton value="Cancelar" outcome="login"/>
+                <p:commandButton value="Registrar" actionListener="#{registerClientBean.register()}" ajax="false"/>
+                <p:separator/>
+                <p:link outcome="login" value="Volver"/>
             </h:form>
         </p:panel>
     </h:body>

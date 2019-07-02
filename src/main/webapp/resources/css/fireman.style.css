@@ -1,18 +1,5 @@
-.sideL {
-	background-color: #fff;
-	width: 10%;
-	float: left;
-	position: relative;
-	height: 100%;
-	display: block;
-}
-
-.sideR {
-	background-color: #fff;
-	width: 10%;
-	float: left;
-	height: 100%;
-	display: block;
+.buttonSpace {
+	margin-right: 10px;
 }
 
 .center {
@@ -21,6 +8,7 @@
 
 .titleGradient {
 	text-indent: 10px;
+	padding-top: 10px;
 	padding-bottom: 10px;
 	border-radius: 6px 6px 10px 10px; -moz-border-radius : 6px 6px 10px 10px;
 	-webkit-border-radius : 6px 6px 10px 10px; border : 0px solid #000000;

@@ -18,7 +18,6 @@ import javax.transaction.Transactional;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,8 +41,6 @@ public class ClientLocalBean implements Serializable {
   private PermissionRequestDao permissionRequestDao;
   @Inject
   private PermissionRequestFilesDao permissionRequestFilesDao;
-  @Inject
-  private PermissionRequestStatusLogDao permissionRequestStatusLogDao;
 
   private List<LocalRequest> locals;
   private Local selectedLocal;
@@ -60,7 +57,7 @@ public class ClientLocalBean implements Serializable {
 
   public void refreshLocals() {
     List<Local> localList = localDao.findLocalByUser(SessionUtils.retrieveLoggedUser().getUserId());
-    locals = new ArrayList<LocalRequest>();
+    locals = new ArrayList<>();
     for (Local local : localList) {
       PermissionRequest pr = permissionRequestDao.findPermissionRequestByLocal(local.getId());
       locals.add(new LocalRequest(local, pr));
@@ -87,7 +84,7 @@ public class ClientLocalBean implements Serializable {
 
   @Transactional
   public void editLocal() {
-    selectedLocal.setService(service);
+    selectedLocal.setService(selectedLocal.getService());
     log.info(selectedLocal.toString());
     localDao.update(selectedLocal);
     this.refreshLocals();
@@ -116,9 +113,6 @@ public class ClientLocalBean implements Serializable {
 
   @Transactional
   public void cancelRequest() {
-    PermissionRequestStatus newStatus = PermissionRequestStatus.TO_REQUEST;
-    permissionRequestStatusLogDao.save(new PermissionRequestStatusLog(new Date(), selectedRequest,
-        selectedRequest.getPermissionRequestStatus(), newStatus));
     selectedRequest.setPermissionRequestStatus(PermissionRequestStatus.TO_REQUEST);
     permissionRequestDao.update(selectedRequest);
     MessageUtil.infoFacesMessage("Cancelaci�n", "Permiso de funcionamiento cancelado correctaente");
@@ -159,6 +153,8 @@ public class ClientLocalBean implements Serializable {
             requirementFileUpload.getFile().getFileName() + " subido correctamente.");
       }
     }
+    this.refreshLocals();
+    this.clearData();
   }
 
   public List<Service> listServices() {
@@ -167,7 +163,7 @@ public class ClientLocalBean implements Serializable {
 
   public List<RequirementFileUpload> listRequirements() {
     // TODO: LIST ACTIVE REQUIREMENTS BY ROLE (DAO)
-    List<Requirement> requirements = requirementDao.findAll().stream().filter(it -> it.getRole().getRoleName() == RoleTypes.ECONOMIC).collect(Collectors.toList());
+    List<Requirement> requirements = requirementDao.findAll().stream().filter(it -> it.getRole().getRoleName() == RoleTypes.CLIENT).collect(Collectors.toList());
     files = new ArrayList<RequirementFileUpload>();
     if (requirements != null && !requirements.isEmpty()) {
       for (Requirement req : requirements) {

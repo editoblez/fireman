@@ -1,0 +1,58 @@
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core">
+<ui:composition template="../../template/template.xhtml">
+	<ui:define name="pageTitle">
+		Gestionar usuarios		
+	</ui:define>
+	<ui:define name="contenido">
+
+		<h:form id="formUserList">
+
+			<p:commandButton ajax="true" style="margin: 0px 0px 5px 0px;"
+				update=":formUserList:dtUser growl"
+				oncomplete="PF('dlgUserCreate').show()" value="Nuevo" />
+
+			<p:dataTable id="dtUser" var="user" value="#{userListBean.users}">
+				<p:column headerText="CI">
+					<h:outputText value="#{user.ci}" />
+				</p:column>
+				<p:column headerText="Primer Nombre">
+					<h:outputText value="#{user.firstName}" />
+				</p:column>
+				<p:column headerText="Primer Apellido">
+					<h:outputText value="#{user.firstLastName}" />
+				</p:column>
+				<p:column headerText="Correo">
+					<h:outputText value="#{user.email}" />
+				</p:column>
+				<p:column headerText="Rol">
+					<h:outputText value="#{user.role.roleName}" />
+				</p:column>
+				<p:column width="140" style="text-align: center"
+					headerText="Acciones">
+					<p:commandButton update=":formUserEdit:opEdit growl"
+						icon="ui-icon-pencil" oncomplete="PF('dlgUserEdit').show()"
+						title="Editar" style="margin: 0px 0px 1px 10px;">
+						<f:setPropertyActionListener value="#{user}"
+							target="#{userListBean.selectedUser}" />
+					</p:commandButton>
+
+					<p:commandButton update=":formPassReset:opPassReset growl"
+						icon="ui-icon-key" oncomplete="PF('dlgPassReset').show()"
+						title="Resetear Contraseña" style="margin: 0px 0px 1px 10px;">
+						<f:setPropertyActionListener value="#{user}"
+							target="#{userListBean.selectedUser}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+
+		<ui:include src="dialog/userDialogs.xhtml" />
+
+	</ui:define>
+</ui:composition>
+</html>

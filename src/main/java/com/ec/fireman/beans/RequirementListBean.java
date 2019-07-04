@@ -4,6 +4,8 @@ import com.ec.fireman.data.dao.RequirementDao;
 import com.ec.fireman.data.dao.RoleDao;
 import com.ec.fireman.data.entities.Requirement;
 import com.ec.fireman.data.entities.Role;
+import com.ec.fireman.data.entities.State;
+
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 
@@ -46,6 +48,7 @@ public class RequirementListBean implements Serializable {
   @Transactional
   public void createRequirement() {
     selectedRequirement.setRole(role);
+    selectedRequirement.setState(State.ACTIVE);
     requirementDao.save(selectedRequirement);
     this.refreshRequirement();
     selectedRequirement = new Requirement();
@@ -53,7 +56,7 @@ public class RequirementListBean implements Serializable {
 
   @Transactional
   public void editRequirement() {
-    selectedRequirement.setRole(role);
+    selectedRequirement.setRole(selectedRequirement.getRole());
     requirementDao.update(selectedRequirement);
     this.refreshRequirement();
     selectedRequirement = new Requirement();

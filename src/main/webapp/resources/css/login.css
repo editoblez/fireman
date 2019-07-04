@@ -1,0 +1,8 @@
+.centered {
+	margin: auto;
+	width: 500px;
+	margin-top: 10%;
+	position: relative;
+	height: 100%;
+	box-sizing: border-box;
+}

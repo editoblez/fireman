@@ -21,6 +21,9 @@ public class Local implements BaseEntity {
 
   @Column
   private String mapUrl;
+  
+  @Column
+  private String name;
 
   @ManyToOne
   @JoinColumn

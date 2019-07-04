@@ -1,0 +1,45 @@
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core">
+<ui:composition template="../../template/template.xhtml">
+	<ui:define name="pageTitle">
+		Gestionar servicios
+	</ui:define>
+	<ui:define name="contenido">
+
+		<h:form id="formServiceList">
+
+			<p:commandButton ajax="true" style="margin: 0px 0px 5px 0px;"
+				update=":formServiceList:dtService growl"
+				oncomplete="PF('dlgServiceCreate').show()" value="Nuevo" />
+
+			<p:dataTable id="dtService" var="service"
+				value="#{serviceListBean.services}">
+				<p:column headerText="Nombre">
+					<h:outputText value="#{service.name}" />
+				</p:column>
+				<p:column headerText="Estado" rendered="false">
+					<h:outputText value="#{service.state}" />
+				</p:column>
+				<p:column style="text-align: center;" width="100"
+					headerText="Acciones">
+					<p:commandButton update=":formServiceEdit:opEdit growl"
+						rendered="#{service.state == 'ACTIVE'}" icon="ui-icon-pencil"
+						oncomplete="PF('dlgServiceEdit').show()" title="Editar"
+						style="margin: 0px 0px 1px 10px;">
+						<f:setPropertyActionListener value="#{service}"
+							target="#{serviceListBean.selectedService}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+
+		<ui:include src="dialog/serviceDialogs.xhtml" />
+
+	</ui:define>
+</ui:composition>
+</html>

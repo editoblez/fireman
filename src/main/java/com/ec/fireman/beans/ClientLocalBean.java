@@ -84,7 +84,7 @@ public class ClientLocalBean implements Serializable {
 
   @Transactional
   public void editLocal() {
-    selectedLocal.setService(service);
+    selectedLocal.setService(selectedLocal.getService());
     log.info(selectedLocal.toString());
     localDao.update(selectedLocal);
     this.refreshLocals();
@@ -153,6 +153,8 @@ public class ClientLocalBean implements Serializable {
             requirementFileUpload.getFile().getFileName() + " subido correctamente.");
       }
     }
+    this.refreshLocals();
+    this.clearData();
   }
 
   public List<Service> listServices() {
@@ -161,7 +163,7 @@ public class ClientLocalBean implements Serializable {
 
   public List<RequirementFileUpload> listRequirements() {
     // TODO: LIST ACTIVE REQUIREMENTS BY ROLE (DAO)
-    List<Requirement> requirements = requirementDao.findAll().stream().filter(it -> it.getRole().getRoleName() == RoleTypes.ECONOMIC).collect(Collectors.toList());
+    List<Requirement> requirements = requirementDao.findAll().stream().filter(it -> it.getRole().getRoleName() == RoleTypes.CLIENT).collect(Collectors.toList());
     files = new ArrayList<RequirementFileUpload>();
     if (requirements != null && !requirements.isEmpty()) {
       for (Requirement req : requirements) {

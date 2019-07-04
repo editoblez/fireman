@@ -1,49 +1,57 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html
-        xmlns:h="http://java.sun.com/jsf/html"
-        xmlns:p="http://primefaces.org/ui">
-    <h:head>
-        <title>Registro de Clientes</title>
-    </h:head>
-    <h:body>
-        <p:panel id="panel-register-client" header="Registrar Nuevo Cliente" style="margin-bottom:10px;">
-            <h:form>
-                <p:messages id="messages" showDetail="true" closable="true"/>
-                <h:panelGrid columns="3" cellpadding="5">
-                    <h:outputLabel for="firstName" value="Primer Nombre"/>
-                    <p:inputText id="firstName" required="true" value="#{registerClientBean.firstName}"/>
-                    <p:message for="firstName"/>
+<html xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<h:outputStylesheet library="css" name="login.css" />
+	<title>Registro de Clientes</title>
+</h:head>
+<h:body>
+	<p:panel id="panel-register-client" header="Registrar Nuevo Cliente"
+		style="margin-bottom:10px;" styleClass="centered">
+		<h:form>
+			<p:messages id="messages" showDetail="true" closable="true" />
+			<h:panelGrid columns="3" cellpadding="5">
+				<h:outputLabel for="firstName" value="Primer Nombre" />
+				<p:inputText id="firstName" required="true"
+					value="#{registerClientBean.firstName}" />
+				<p:message for="firstName" />
 
-                    <h:outputLabel for="secondName" value="Segundo Nombre"/>
-                    <p:inputText id="secondName" value="#{registerClientBean.secondName}"/>
-                    <p:message for="secondName"/>
+				<h:outputLabel for="secondName" value="Segundo Nombre" />
+				<p:inputText id="secondName"
+					value="#{registerClientBean.secondName}" />
+				<p:message for="secondName" />
 
-                    <h:outputLabel for="firstLastName" value="Primer Apellido"/>
-                    <p:inputText id="firstLastName" required="true" value="#{registerClientBean.firstLastName}"/>
-                    <p:message for="firstLastName"/>
+				<h:outputLabel for="firstLastName" value="Primer Apellido" />
+				<p:inputText id="firstLastName" required="true"
+					value="#{registerClientBean.firstLastName}" />
+				<p:message for="firstLastName" />
 
-                    <h:outputLabel for="secondLastName" value="Segundo Apellido"/>
-                    <p:inputText id="secondLastName" required="true" value="#{registerClientBean.secondLastName}"/>
-                    <p:message for="secondLastName"/>
+				<h:outputLabel for="secondLastName" value="Segundo Apellido" />
+				<p:inputText id="secondLastName" required="true"
+					value="#{registerClientBean.secondLastName}" />
+				<p:message for="secondLastName" />
 
-                    <h:outputLabel for="ci" value="Número de Cédula"/>
-                    <p:inputText id="ci" required="true" value="#{registerClientBean.ci}"/>
-                    <p:message for="ci"/>
+				<h:outputLabel for="ci" value="Número de Cédula" />
+				<p:inputText id="ci" required="true"
+					value="#{registerClientBean.ci}" />
+				<p:message for="ci" />
 
-                    <h:outputLabel for="email" value="Correo"/>
-                    <p:inputText id="email" value="#{registerClientBean.email}"/>
-                    <p:message for="email"/>
+				<h:outputLabel for="email" value="Correo" />
+				<p:inputText id="email" value="#{registerClientBean.email}" />
+				<p:message for="email" />
 
-                    <h:outputLabel for="phoneNumber" value="Teléfono"/>
-                    <p:inputText id="phoneNumber" value="#{registerClientBean.phoneNumber}"/>
-                    <p:message for="phoneNumber"/>
+				<h:outputLabel for="phoneNumber" value="Teléfono" />
+				<p:inputText id="phoneNumber"
+					value="#{registerClientBean.phoneNumber}" />
+				<p:message for="phoneNumber" />
 
-                </h:panelGrid>
-                <p:commandButton value="Registrar" actionListener="#{registerClientBean.register()}" ajax="false"/>
-                <p:separator/>
-                <p:link outcome="login" value="Volver"/>
-            </h:form>
-        </p:panel>
-    </h:body>
+			</h:panelGrid>
+			<p:commandButton value="Registrar"
+				actionListener="#{registerClientBean.register()}" ajax="false" />
+			<p:separator />
+			<p:link outcome="login" value="Volver" />
+		</h:form>
+	</p:panel>
+</h:body>
 </html>

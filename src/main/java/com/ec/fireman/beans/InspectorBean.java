@@ -1,10 +1,27 @@
 package com.ec.fireman.beans;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.transaction.Transactional;
+
+import org.apache.commons.io.IOUtils;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
+
 import com.ec.fireman.data.dao.LocalDao;
 import com.ec.fireman.data.dao.PermissionRequestDao;
 import com.ec.fireman.data.dao.PermissionRequestFilesDao;
 import com.ec.fireman.data.dao.RequirementDao;
-import com.ec.fireman.data.entities.InspectionCategoryItem;
 import com.ec.fireman.data.entities.MimeTypes;
 import com.ec.fireman.data.entities.PermissionRequest;
 import com.ec.fireman.data.entities.PermissionRequestFiles;
@@ -14,25 +31,9 @@ import com.ec.fireman.data.entities.RoleTypes;
 import com.ec.fireman.data.entities.State;
 import com.ec.fireman.data.representation.RequirementFileUpload;
 import com.ec.fireman.util.MessageUtil;
+
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
-
-import org.apache.commons.io.IOUtils;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
-
-import javax.annotation.PostConstruct;
-import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.transaction.Transactional;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 @Log4j2
@@ -55,15 +56,11 @@ public class InspectorBean implements Serializable {
   private List<RequirementFileUpload> files;
   private PermissionRequest selectedRequest;
   private PermissionRequestFiles selectedPRF;
-  private List<InspectionCategoryItem> items;
-  private List<InspectionCategoryItem> itemsSelected;
 
   @PostConstruct
   public void init() {
     this.refreshRequests();
     selectedRequest = new PermissionRequest();
-    items = new ArrayList<InspectionCategoryItem>();
-    itemsSelected = new ArrayList<InspectionCategoryItem>();
   }
 
   public void refreshRequests() {
@@ -98,6 +95,7 @@ public class InspectorBean implements Serializable {
     return list;
   }
 
+  @Transactional
   public void saveItems() {
     // TODO: SAVE ITEMS
   }

@@ -56,6 +56,13 @@
 							target="#{inspectorBean.selectedRequest}" />
 					</p:commandButton>
 
+					<p:commandButton update=":formInspect:opInspect growl"
+						icon="ui-icon-document" oncomplete="PF('dlgInspect').show()"
+						title="Datos Inspección" style="margin: 0px 0px 1px 10px;">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{inspectorBean.selectedRequest}" />
+					</p:commandButton>
+
 				</p:column>
 			</p:dataTable>
 		</h:form>

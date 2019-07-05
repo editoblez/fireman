@@ -18,10 +18,12 @@ import org.apache.commons.io.IOUtils;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
+import com.ec.fireman.data.dao.InspectionHeaderDao;
 import com.ec.fireman.data.dao.LocalDao;
 import com.ec.fireman.data.dao.PermissionRequestDao;
 import com.ec.fireman.data.dao.PermissionRequestFilesDao;
 import com.ec.fireman.data.dao.RequirementDao;
+import com.ec.fireman.data.entities.InspectionHeader;
 import com.ec.fireman.data.entities.MimeTypes;
 import com.ec.fireman.data.entities.PermissionRequest;
 import com.ec.fireman.data.entities.PermissionRequestFiles;
@@ -51,11 +53,14 @@ public class InspectorBean implements Serializable {
   private PermissionRequestDao permissionRequestDao;
   @Inject
   private PermissionRequestFilesDao permissionRequestFilesDao;
+  @Inject
+  private InspectionHeaderDao inspectionHeaderDao;
 
   private List<PermissionRequest> requests;
   private List<RequirementFileUpload> files;
   private PermissionRequest selectedRequest;
   private PermissionRequestFiles selectedPRF;
+  private InspectionHeader inspectionHeader;
 
   @PostConstruct
   public void init() {
@@ -106,8 +111,20 @@ public class InspectorBean implements Serializable {
     selectedRequest.setPermissionRequestStatus(PermissionRequestStatus.IN_PROGRESS);
     permissionRequestDao.update(selectedRequest);
     MessageUtil.infoFacesMessage("Solicitud", "Inspección asignada correctaente");
+    inspectionHeader = new InspectionHeader();
     this.refreshRequests();
     this.clearData();
+  }
+
+  @Transactional
+  public void saveInspection() {
+    if (inspectionHeader.getId() > 0) {
+      inspectionHeaderDao.update(inspectionHeader);
+    } else {
+      inspectionHeader.setPermissionRequest(selectedRequest);
+      inspectionHeader.setState(State.ACTIVE);
+      inspectionHeaderDao.save(inspectionHeader);
+    }
   }
 
   public List<RequirementFileUpload> listRequirements() {

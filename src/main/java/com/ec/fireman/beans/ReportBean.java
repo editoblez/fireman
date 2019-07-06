@@ -61,6 +61,22 @@ public class ReportBean implements Serializable {
 
     // if (inspection != null) {
     String nombreArchivo = "INSPECCION";
+    
+    InspectionFireExtinguisher item = new InspectionFireExtinguisher();
+    item.setCapacity("Capacidad 1");
+    item.setLocation("Sala de estar");
+    item.setQuantity(1);
+    item.setStatus("Lleno");
+    item.setType("Rojo");
+    extinguishers.add(item);
+    
+    InspectionFireExtinguisher item1 = new InspectionFireExtinguisher();
+    item1.setCapacity("Capacidad 3");
+    item1.setLocation("Comedor");
+    item1.setQuantity(3);
+    item1.setStatus("Lleno");
+    item1.setType("Verde");
+    extinguishers.add(item1);
 
     Map<String, Object> params = new HashMap<String, Object>();
     params.put("concrete", true);
@@ -73,6 +89,18 @@ public class ReportBean implements Serializable {
     params.put("installationsBad", false);
     params.put("installationsInternal", false);
     params.put("installationsExternal", true);
+    params.put("ventilationNatural", true);
+    params.put("ventilationMechanic", false);
+    params.put("ventilationAdequate", true);
+    params.put("ventilationScarce", false);
+    params.put("knowledgeExtinction", true);
+    params.put("alarms", true);
+    params.put("fireDetectors", false);
+    params.put("smokeDetectors", false);
+    params.put("emergencyLights", true);
+    params.put("riskFire", "El cliente tiene conocimientos sobre incendios.");
+    params.put("recommendations", "Se recomienda seguir estudiando sobre luces de emergencia.");
+    params.put("observations", "Se aprueba la inspección.");
 
     // params.put("concrete", inspection.isConcrete());
     // params.put("metallicStructure", inspection.isMetallicStructure());
@@ -116,6 +144,8 @@ public class ReportBean implements Serializable {
       Map<String, Object> params) throws JRException, IOException {
     try {
       FacesContext context = FacesContext.getCurrentInstance();
+      params.put("logo", context.getExternalContext().getRealPath(File.separator) + File.separator + "resources"
+          + File.separator + "images" + File.separator + "fireman-logo.png");
       String path = context.getExternalContext().getRealPath(File.separator) + File.separator + "resources"
           + File.separator + "reports" + File.separator + templateName;
       HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();

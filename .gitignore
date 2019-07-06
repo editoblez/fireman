@@ -8,6 +8,9 @@
 # Java class files
 *.class
 
+# Jasper
+*.jasper
+
 # generated files
 bin/
 gen/

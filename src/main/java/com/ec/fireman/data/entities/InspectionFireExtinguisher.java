@@ -20,7 +20,7 @@ public class InspectionFireExtinguisher implements BaseEntity {
   private long id;
 
   @Column
-  private String quantity;
+  private Integer quantity;
 
   @Column
   private String type;

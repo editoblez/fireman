@@ -18,11 +18,13 @@ import org.apache.commons.io.IOUtils;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
+import com.ec.fireman.data.dao.InspectionFireExtinguisherDao;
 import com.ec.fireman.data.dao.InspectionHeaderDao;
 import com.ec.fireman.data.dao.LocalDao;
 import com.ec.fireman.data.dao.PermissionRequestDao;
 import com.ec.fireman.data.dao.PermissionRequestFilesDao;
 import com.ec.fireman.data.dao.RequirementDao;
+import com.ec.fireman.data.entities.InspectionFireExtinguisher;
 import com.ec.fireman.data.entities.InspectionHeader;
 import com.ec.fireman.data.entities.MimeTypes;
 import com.ec.fireman.data.entities.PermissionRequest;
@@ -55,17 +57,23 @@ public class InspectorBean implements Serializable {
   private PermissionRequestFilesDao permissionRequestFilesDao;
   @Inject
   private InspectionHeaderDao inspectionHeaderDao;
+  @Inject
+  private InspectionFireExtinguisherDao inspectionFireExtinguisherDao;
 
   private List<PermissionRequest> requests;
   private List<RequirementFileUpload> files;
   private PermissionRequest selectedRequest;
   private PermissionRequestFiles selectedPRF;
   private InspectionHeader inspectionHeader;
-
+  private List<InspectionFireExtinguisher> extinguishers;
+ 
   @PostConstruct
   public void init() {
     this.refreshRequests();
     selectedRequest = new PermissionRequest();
+    extinguishers = new ArrayList<InspectionFireExtinguisher>();
+    extinguishers.add(new InspectionFireExtinguisher());
+    inspectionHeader = new InspectionHeader();
   }
 
   public void refreshRequests() {
@@ -101,11 +109,6 @@ public class InspectorBean implements Serializable {
   }
 
   @Transactional
-  public void saveItems() {
-    // TODO: SAVE ITEMS
-  }
-
-  @Transactional
   public void startInspection() {
     localDao.update(selectedRequest.getLocal());
     selectedRequest.setPermissionRequestStatus(PermissionRequestStatus.IN_PROGRESS);
@@ -114,6 +117,10 @@ public class InspectorBean implements Serializable {
     inspectionHeader = new InspectionHeader();
     this.refreshRequests();
     this.clearData();
+  }
+  
+  public void addExtinguisher() {
+    extinguishers.add(new InspectionFireExtinguisher());
   }
 
   @Transactional
@@ -124,6 +131,10 @@ public class InspectorBean implements Serializable {
       inspectionHeader.setPermissionRequest(selectedRequest);
       inspectionHeader.setState(State.ACTIVE);
       inspectionHeaderDao.save(inspectionHeader);
+      
+      for (InspectionFireExtinguisher item : extinguishers) {
+        inspectionFireExtinguisherDao.save(item);
+      }
     }
   }
 

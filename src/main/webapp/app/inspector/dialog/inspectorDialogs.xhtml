@@ -166,6 +166,35 @@
 					</h:panelGrid>
 				</p:tab>
 
+				<p:tab title="Extintores">
+					<p:commandButton id="btnAddExt" ajax="true"
+						action="faces-redirect=false" update="dtListFireExt btnAddExt"
+						disabled="#{inspectorBean.extinguishers.size() >= 3}"
+						actionListener="#{inspectorBean.addExtinguisher()}"
+						value="Agreagr Extintor" style="margin: 0px 0px 10px 0px;" />
+
+					<p:dataTable id="dtListFireExt" var="item"
+						value="#{inspectorBean.extinguishers}">
+						<p:column headerText="Cantidad">
+							<p:inputText value="#{item.quantity}" style="width: 100px">
+								<p:keyFilter mask="pint" />
+							</p:inputText>
+						</p:column>
+						<p:column headerText="Tipo">
+							<p:inputText value="#{item.type}" style="width: 100px"/>
+						</p:column>
+						<p:column headerText="Capacidad">
+							<p:inputText value="#{item.capacity}" style="width: 100px"/>
+						</p:column>
+						<p:column headerText="Estado">
+							<p:inputText value="#{item.status}" style="width: 100px"/>
+						</p:column>
+						<p:column headerText="Ubicación">
+							<p:inputText value="#{item.location}" style="width: 100px"/>
+						</p:column>
+					</p:dataTable>
+				</p:tab>
+
 				<p:tab title="Otros">
 					<h:panelGrid columns="2" cellpadding="5">
 						<p:selectBooleanCheckbox
@@ -191,27 +220,30 @@
 						<h:panelGroup>
 							<p:outputLabel for="area1" value="Riesgos de incendio" />
 							<div>
-								<p:inputTextarea rows="3" cols="18" id="area1" autoResize="false"
+								<p:inputTextarea rows="3" cols="18" id="area1"
+									autoResize="false"
 									value="#{inspectorBean.inspectionHeader.riskFire}"
-									required="true" requiredMessage="Riesgos requerido" />
+									required="false" requiredMessage="Riesgos requerido" />
 								<p:message for="area1" />
 							</div>
 						</h:panelGroup>
 						<h:panelGroup>
 							<p:outputLabel for="area2" value="Recomendaciones" />
 							<div>
-								<p:inputTextarea rows="3" cols="18" id="area2" autoResize="false"
+								<p:inputTextarea rows="3" cols="18" id="area2"
+									autoResize="false"
 									value="#{inspectorBean.inspectionHeader.recommendations}"
-									required="true" requiredMessage="Recomendaciones requerida" />
+									required="false" requiredMessage="Recomendaciones requerida" />
 								<p:message for="area2" />
 							</div>
 						</h:panelGroup>
 						<h:panelGroup>
 							<p:outputLabel for="area3" value="Observaciones" />
 							<div>
-								<p:inputTextarea rows="3" cols="18" id="area3" autoResize="false"
+								<p:inputTextarea rows="3" cols="18" id="area3"
+									autoResize="false"
 									value="#{inspectorBean.inspectionHeader.observations}"
-									required="true" requiredMessage="Observaciones requerido" />
+									required="false" requiredMessage="Observaciones requerido" />
 								<p:message for="area3" />
 							</div>
 						</h:panelGroup>

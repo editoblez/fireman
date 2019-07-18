@@ -1,38 +1,28 @@
 package com.ec.fireman.beans;
 
+import com.ec.fireman.data.dao.InspectionFireExtinguisherDao;
+import com.ec.fireman.data.dao.InspectionHeaderDao;
+import com.ec.fireman.data.entities.InspectionFireExtinguisher;
+import com.ec.fireman.data.entities.InspectionHeader;
+import com.ec.fireman.util.MessageUtil;
+import lombok.Data;
+import lombok.extern.log4j.Log4j2;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+
+import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.annotation.PostConstruct;
-import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
-import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
-
-import com.ec.fireman.data.dao.InspectionFireExtinguisherDao;
-import com.ec.fireman.data.dao.InspectionHeaderDao;
-import com.ec.fireman.data.entities.InspectionFireExtinguisher;
-import com.ec.fireman.data.entities.InspectionHeader;
-import com.ec.fireman.util.MessageUtil;
-
-import lombok.Data;
-import lombok.extern.log4j.Log4j2;
-import net.sf.jasperreports.engine.JREmptyDataSource;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.JasperRunManager;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @Data
 @Log4j2
@@ -61,7 +51,7 @@ public class ReportBean implements Serializable {
 
     // if (inspection != null) {
     String nombreArchivo = "INSPECCION";
-    
+
     InspectionFireExtinguisher item = new InspectionFireExtinguisher();
     item.setCapacity("Capacidad 1");
     item.setLocation("Sala de estar");
@@ -69,7 +59,7 @@ public class ReportBean implements Serializable {
     item.setStatus("Lleno");
     item.setType("Rojo");
     extinguishers.add(item);
-    
+
     InspectionFireExtinguisher item1 = new InspectionFireExtinguisher();
     item1.setCapacity("Capacidad 3");
     item1.setLocation("Comedor");
@@ -100,7 +90,7 @@ public class ReportBean implements Serializable {
     params.put("emergencyLights", true);
     params.put("riskFire", "El cliente tiene conocimientos sobre incendios.");
     params.put("recommendations", "Se recomienda seguir estudiando sobre luces de emergencia.");
-    params.put("observations", "Se aprueba la inspección.");
+    params.put("observations", "Se aprueba la inspecciï¿½n.");
 
     // params.put("concrete", inspection.isConcrete());
     // params.put("metallicStructure", inspection.isMetallicStructure());
@@ -141,7 +131,7 @@ public class ReportBean implements Serializable {
   }
 
   public void generatePDF(String fileName, String templateName, JRBeanCollectionDataSource data,
-      Map<String, Object> params) throws JRException, IOException {
+                          Map<String, Object> params) throws JRException, IOException {
     try {
       FacesContext context = FacesContext.getCurrentInstance();
       params.put("logo", context.getExternalContext().getRealPath(File.separator) + File.separator + "resources"

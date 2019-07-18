@@ -20,6 +20,9 @@ public class PermissionIssue implements BaseEntity {
   @Enumerated(EnumType.STRING)
   private State state;
 
+  @Column
+  private long time;
+
   @ManyToOne
   private InspectionHeader inspectionHeader;
 

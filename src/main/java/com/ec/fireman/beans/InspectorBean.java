@@ -121,9 +121,9 @@ public class InspectorBean implements Serializable {
       inspectionHeader.setState(State.ACTIVE);
       inspectionHeaderDao.save(inspectionHeader);
 
-      for (InspectionFireExtinguisher item : extinguishers) {
-        inspectionFireExtinguisherDao.save(item);
-      }
+    }
+    for (InspectionFireExtinguisher item : extinguishers) {
+      inspectionFireExtinguisherDao.save(item);
     }
   }
 

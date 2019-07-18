@@ -1,9 +1,6 @@
 package com.ec.fireman.beans;
 
-import com.ec.fireman.data.dao.LocalDao;
-import com.ec.fireman.data.dao.PermissionRequestDao;
-import com.ec.fireman.data.dao.PermissionRequestFilesDao;
-import com.ec.fireman.data.dao.RequirementDao;
+import com.ec.fireman.data.dao.*;
 import com.ec.fireman.data.entities.*;
 import com.ec.fireman.data.representation.RequirementFileUpload;
 import com.ec.fireman.util.MessageUtil;
@@ -41,6 +38,8 @@ public class CounterBean implements Serializable {
   private PermissionRequestDao permissionRequestDao;
   @Inject
   private PermissionRequestFilesDao permissionRequestFilesDao;
+  @Inject
+  private PermissionIssueDao permissionIssueDao;
 
   private List<PermissionRequest> requests;
   private List<RequirementFileUpload> files;
@@ -65,6 +64,7 @@ public class CounterBean implements Serializable {
   public void editRequest() {
     selectedRequest.setPermissionRequestStatus(PermissionRequestStatus.PERMISSION_ISSUED);
     permissionRequestDao.update(selectedRequest);
+
     log.info(selectedRequest.toString());
     MessageUtil.infoFacesMessage("Solicitud", "Permiso de funcionamiento emitido");
     this.refreshRequests();

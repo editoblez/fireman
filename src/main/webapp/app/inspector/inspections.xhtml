@@ -10,14 +10,14 @@
 	</ui:define>
 	<ui:define name="contenido">
 
-		<h:form id="formList">
+		<h:form id="formList" target="_blank">
 
 			<p:commandButton id="btnExportar" value="Exportar"
 				actionListener="#{reportBean.buildReport()}" icon="ui-icon-bookmark"
 				validateClient="true" update="growl" process=":formList"
 				ajax="false">
 			</p:commandButton>
-			
+
 			<p:dataTable id="dtList" var="item" value="#{inspectorBean.requests}">
 				<p:column headerText="Dirección">
 					<h:outputText value="#{item.local.address}" />
@@ -68,6 +68,11 @@
 						<f:setPropertyActionListener value="#{item}"
 							target="#{inspectorBean.selectedRequest}" />
 					</p:commandButton>
+
+					<p:button icon="ui-icon-search"
+						onclick="window.open('#{inspectorBean.mapUrl(item)}'); return false;"
+						title="Ver en el mapa" style="margin: 0px 0px 1px 10px;">
+					</p:button>
 
 				</p:column>
 			</p:dataTable>

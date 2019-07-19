@@ -177,5 +177,11 @@ public class InspectorBean implements Serializable {
     this.refreshRequests();
     this.clearData();
   }
+  
+  public String mapUrl(PermissionRequest pr) {
+    String url = pr != null && pr.getLocal() != null ? pr.getLocal().getMapUrl() : "";
+    log.info("Map URL: " + url);
+    return url;
+  }
 
 }

@@ -10,13 +10,7 @@
 	</ui:define>
 	<ui:define name="contenido">
 
-		<h:form id="formList" target="_blank">
-
-			<p:commandButton id="btnExportar" value="Exportar"
-				actionListener="#{reportBean.buildReport()}" icon="ui-icon-bookmark"
-				validateClient="true" update="growl" process=":formList"
-				ajax="false">
-			</p:commandButton>
+		<h:form id="formList">
 
 			<p:dataTable id="dtList" var="item" value="#{inspectorBean.requests}">
 				<p:column headerText="Dirección">
@@ -32,13 +26,15 @@
 
 					<p:commandButton update=":formFilesRev:opFilesRev growl"
 						icon="ui-icon-folder-collapsed"
-						oncomplete="PF('dlgFilesRev').show()" title="Cargar documentos"
+						oncomplete="PF('dlgFilesRev').show()"
+						title="Revisar documentos del local"
 						style="margin: 0px 0px 1px 10px;">
 						<f:setPropertyActionListener value="#{item}"
 							target="#{inspectorBean.selectedRequest}" />
 					</p:commandButton>
 
 					<p:commandButton update=":formSelect:opSelect growl"
+						rendered="#{item.permissionRequestStatus != 'IN_PROGRESS'}"
 						icon="ui-icon-transferthick-e-w"
 						oncomplete="PF('dlgSelect').show()" title="Atender Solicitud"
 						style="margin: 0px 0px 1px 10px;">
@@ -54,6 +50,19 @@
 							target="#{inspectorBean.selectedRequest}" />
 					</p:commandButton>
 
+					<p:commandButton update=":formInspect:opInspect growl"
+						rendered="#{item.permissionRequestStatus == 'IN_PROGRESS'}"
+						actionListener="#{inspectorBean.fillInspectionData(item)}"
+						icon="ui-icon-document" oncomplete="PF('dlgInspect').show()"
+						title="Datos Inspección" style="margin: 0px 0px 1px 10px;">
+					</p:commandButton>
+
+					<p:button icon="ui-icon-search" target="_blank"
+						rendered="#{item.permissionRequestStatus == 'IN_PROGRESS'}"
+						onclick="window.open('#{inspectorBean.mapUrl(item)}'); return false;"
+						title="Ver en el mapa" style="margin: 0px 0px 1px 10px;">
+					</p:button>
+					
 					<p:commandButton update=":formRequest:opRequest growl"
 						rendered="#{item.permissionRequestStatus == 'IN_PROGRESS'}"
 						icon="ui-icon-clipboard" oncomplete="PF('dlgRequest').show()"
@@ -62,17 +71,11 @@
 							target="#{inspectorBean.selectedRequest}" />
 					</p:commandButton>
 
-					<p:commandButton update=":formInspect:opInspect growl"
-						icon="ui-icon-document" oncomplete="PF('dlgInspect').show()"
-						title="Datos Inspección" style="margin: 0px 0px 1px 10px;">
-						<f:setPropertyActionListener value="#{item}"
-							target="#{inspectorBean.selectedRequest}" />
+					<p:commandButton actionListener="#{reportBean.buildReport(item)}"
+						rendered="#{item.permissionRequestStatus == 'IN_PROGRESS'}"
+						icon="ui-icon-bookmark" update="growl" process=":formList"
+						ajax="false" style="margin: 0px 0px 1px 10px;">
 					</p:commandButton>
-
-					<p:button icon="ui-icon-search"
-						onclick="window.open('#{inspectorBean.mapUrl(item)}'); return false;"
-						title="Ver en el mapa" style="margin: 0px 0px 1px 10px;">
-					</p:button>
 
 				</p:column>
 			</p:dataTable>

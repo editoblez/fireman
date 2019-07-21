@@ -59,7 +59,6 @@ public class InspectorBean implements Serializable {
     this.refreshRequests();
     selectedRequest = new PermissionRequest();
     extinguishers = new ArrayList<>();
-    extinguishers.add(new InspectionFireExtinguisher());
     inspectionHeader = new InspectionHeader();
   }
 
@@ -71,6 +70,8 @@ public class InspectorBean implements Serializable {
 
   public void clearData() {
     selectedRequest = new PermissionRequest();
+    extinguishers = new ArrayList<>();
+    inspectionHeader = new InspectionHeader();
   }
 
   @Transactional
@@ -112,6 +113,13 @@ public class InspectorBean implements Serializable {
     extinguishers.add(new InspectionFireExtinguisher());
   }
 
+  public void fillInspectionData(PermissionRequest pr) {
+    log.info(pr.toString());
+    inspectionHeader = inspectionHeaderDao.findInspectionHeaderByRequest(pr.getId());
+    log.info(inspectionHeader.toString());
+    extinguishers = inspectionFireExtinguisherDao.findInspectionFireExtinguisherByHeader(inspectionHeader.getId());
+  }
+
   @Transactional
   public void saveInspection() {
     if (inspectionHeader.getId() > 0) {
@@ -122,9 +130,12 @@ public class InspectorBean implements Serializable {
       inspectionHeaderDao.save(inspectionHeader);
 
     }
+    inspectionFireExtinguisherDao.removeInspectionFireExtinguisherByHeader(inspectionHeader.getId());
     for (InspectionFireExtinguisher item : extinguishers) {
+      item.setInspectionHeader(inspectionHeader);
       inspectionFireExtinguisherDao.save(item);
     }
+    this.clearData();
   }
 
   public List<RequirementFileUpload> listRequirements() {
@@ -177,7 +188,7 @@ public class InspectorBean implements Serializable {
     this.refreshRequests();
     this.clearData();
   }
-  
+
   public String mapUrl(PermissionRequest pr) {
     String url = pr != null && pr.getLocal() != null ? pr.getLocal().getMapUrl() : "";
     log.info("Map URL: " + url);

@@ -4,6 +4,7 @@ import com.ec.fireman.data.dao.InspectionFireExtinguisherDao;
 import com.ec.fireman.data.dao.InspectionHeaderDao;
 import com.ec.fireman.data.entities.InspectionFireExtinguisher;
 import com.ec.fireman.data.entities.InspectionHeader;
+import com.ec.fireman.data.entities.PermissionRequest;
 import com.ec.fireman.util.MessageUtil;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
@@ -43,77 +44,50 @@ public class ReportBean implements Serializable {
   public void init() {
   }
 
-  public void buildReport() {
-    // buscar info de la inspeccion
-    InspectionHeader inspection = inspectionHeaderDao.findById(1);
-    // buscar data de extintores por inspeccion
-    List<InspectionFireExtinguisher> extinguishers = inspectionFireExtinguisherDao.findAll();
+  public void buildReport(PermissionRequest pr) {
+    InspectionHeader inspection = null;
+    List<InspectionFireExtinguisher> extinguishers = null;
+    try {
+      log.info(pr.toString());
+      inspection = inspectionHeaderDao.findInspectionHeaderByRequest(pr.getId());
+      log.info(inspection.toString());
+      extinguishers = inspectionFireExtinguisherDao.findInspectionFireExtinguisherByHeader(inspection.getId());
+    } catch (Exception e1) {
+      log.info(e1.getMessage());
+    }
 
-    // if (inspection != null) {
+    if (inspection == null) {
+      MessageUtil.warningFacesMessage("Reporte", "No existe información");
+      return;
+    }
+
     String nombreArchivo = "INSPECCION";
 
-    InspectionFireExtinguisher item = new InspectionFireExtinguisher();
-    item.setCapacity("Capacidad 1");
-    item.setLocation("Sala de estar");
-    item.setQuantity(1);
-    item.setStatus("Lleno");
-    item.setType("Rojo");
-    extinguishers.add(item);
-
-    InspectionFireExtinguisher item1 = new InspectionFireExtinguisher();
-    item1.setCapacity("Capacidad 3");
-    item1.setLocation("Comedor");
-    item1.setQuantity(3);
-    item1.setStatus("Lleno");
-    item1.setType("Verde");
-    extinguishers.add(item1);
-
     Map<String, Object> params = new HashMap<String, Object>();
-    params.put("concrete", true);
-    params.put("metallicStructure", true);
-    params.put("mixed", false);
-    params.put("block", false);
-    params.put("brick", true);
-    params.put("adobe", false);
-    params.put("installationsGood", true);
-    params.put("installationsBad", false);
-    params.put("installationsInternal", false);
-    params.put("installationsExternal", true);
-    params.put("ventilationNatural", true);
-    params.put("ventilationMechanic", false);
-    params.put("ventilationAdequate", true);
-    params.put("ventilationScarce", false);
-    params.put("knowledgeExtinction", true);
-    params.put("alarms", true);
-    params.put("fireDetectors", false);
-    params.put("smokeDetectors", false);
-    params.put("emergencyLights", true);
-    params.put("riskFire", "El cliente tiene conocimientos sobre incendios.");
-    params.put("recommendations", "Se recomienda seguir estudiando sobre luces de emergencia.");
-    params.put("observations", "Se aprueba la inspecci�n.");
-
-    // params.put("concrete", inspection.isConcrete());
-    // params.put("metallicStructure", inspection.isMetallicStructure());
-    // params.put("mixed", inspection.isMixed());
-    // params.put("block", inspection.isBlock());
-    // params.put("brick", inspection.isBrick());
-    // params.put("adobe", inspection.isAdobe());
-    // params.put("installationsGood", inspection.isInstallationsGood());
-    // params.put("installationsBad", inspection.isInstallationsBad());
-    // params.put("installationsInternal", inspection.isInstallationsInternal());
-    // params.put("installationsExternal", inspection.isInstallationsExternal());
-    // params.put("ventilationNatural", inspection.isVentilationNatural());
-    // params.put("ventilationMechanic", inspection.isVentilationMechanic());
-    // params.put("ventilationAdequate", inspection.isVentilationAdequate());
-    // params.put("ventilationScarce", inspection.isVentilationScarce());
-    // params.put("knowledgeExtinction", inspection.isKnowledgeExtinction());
-    // params.put("alarms", inspection.isAlarms());
-    // params.put("fireDetectors", inspection.isFireDetectors());
-    // params.put("smokeDetectors", inspection.isSmokeDetectors());
-    // params.put("emergencyLights", inspection.isEmergencyLights());
-    // params.put("riskFire", inspection.getRiskFire());
-    // params.put("recommendations", inspection.getRecommendations());
-    // params.put("observations", inspection.getObservations());
+    params.put("concrete", inspection.isConcrete());
+    params.put("metallicStructure", inspection.isMetallicStructure());
+    params.put("mixed", inspection.isMixed());
+    params.put("block", inspection.isBlock());
+    params.put("brick", inspection.isBrick());
+    params.put("adobe", inspection.isAdobe());
+    params.put("installationsGood", inspection.isInstallationsGood());
+    params.put("installationsBad", inspection.isInstallationsBad());
+    params.put("installationsInternal", inspection.isInstallationsInternal());
+    params.put("installationsExternal", inspection.isInstallationsExternal());
+    params.put("ventilationNatural", inspection.isVentilationNatural());
+    params.put("ventilationMechanic", inspection.isVentilationMechanic());
+    params.put("ventilationAdequate", inspection.isVentilationAdequate());
+    params.put("ventilationScarce", inspection.isVentilationScarce());
+    params.put("knowledgeExtinction", inspection.isKnowledgeExtinction());
+    params.put("alarms", inspection.isAlarms());
+    params.put("fireDetectors", inspection.isFireDetectors());
+    params.put("smokeDetectors", inspection.isSmokeDetectors());
+    params.put("emergencyLights", inspection.isEmergencyLights());
+    params.put("riskFire", inspection.getRiskFire());
+    params.put("recommendations", inspection.getRecommendations());
+    params.put("observations", inspection.getObservations());
+    
+    //TODO: LLENAR OTROS params DEL REPORTE COMO LOCAL, NUM INSPECC, NOMBRE DEL INSPECTOR, ETC
 
     JRBeanCollectionDataSource data = extinguishers != null && !extinguishers.isEmpty()
         ? new JRBeanCollectionDataSource(extinguishers)
@@ -125,13 +99,11 @@ public class ReportBean implements Serializable {
       log.error(e.getMessage());
       MessageUtil.errorFacesMessage("Reporte", "Error al generar el reporte.");
     }
-    // } else {
-    // MessageUtil.warningFacesMessage("Reporte", "No existe información");
-    // }
+
   }
 
   public void generatePDF(String fileName, String templateName, JRBeanCollectionDataSource data,
-                          Map<String, Object> params) throws JRException, IOException {
+      Map<String, Object> params) throws JRException, IOException {
     try {
       FacesContext context = FacesContext.getCurrentInstance();
       params.put("logo", context.getExternalContext().getRealPath(File.separator) + File.separator + "resources"

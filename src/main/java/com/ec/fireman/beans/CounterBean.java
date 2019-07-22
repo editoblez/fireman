@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @Data
@@ -46,8 +47,10 @@ public class CounterBean implements Serializable {
   private InspectionHeaderDao inspectionHeaderDao;
   @Inject
   private UserAccountDao userAccountDao;
+  @Inject
+  private ParameterDao parameterDao;
 
-  private List<PermissionRequest> requests;
+  private List requests;
   private List<RequirementFileUpload> files;
   private PermissionRequest selectedRequest;
   private BigDecimal price;
@@ -82,8 +85,16 @@ public class CounterBean implements Serializable {
   }
 
   private void createNewPermissionIssue() {
+    Calendar timeCalendar = Calendar.getInstance();
+    Calendar closeToExpireCalendar = Calendar.getInstance();
+    Calendar expiredCalendar = Calendar.getInstance();
     permissionIssueDao.inactivePreviousPermissionIssued(selectedRequest);
-    permissionIssueDao.save(new PermissionIssue(price, inspectionHeaderDao.findByPermissionRequest(selectedRequest)));
+    long time = timeCalendar.getTimeInMillis();
+    closeToExpireCalendar.add(Calendar.MONTH, parameterDao.findMonthQuantityCloseToAddToExpire());
+    long closeToExpire = closeToExpireCalendar.getTimeInMillis();
+    expiredCalendar.add(Calendar.MONTH, parameterDao.findMonthQuantityToAddToExpire());
+    long expire = expiredCalendar.getTimeInMillis();
+    permissionIssueDao.save(new PermissionIssue(price, inspectionHeaderDao.findByPermissionRequest(selectedRequest), time, closeToExpire, expire));
   }
 
   public void upload() {
@@ -96,9 +107,7 @@ public class CounterBean implements Serializable {
         } catch (IOException e) {
           log.error(e.getMessage());
         }
-//        PermissionRequest permissionRequest = permissionRequestDao.findPermissionRequestByLocal(selectedLocal.getId());
         PermissionRequestFiles prf = new PermissionRequestFiles();
-//        prf.setPermissionRequest(permissionRequest);
         prf.setRequirement(requirementDao.findById(requirementFileUpload.getRequirementId()));
         prf.setState(State.ACTIVE);
         prf.setData(bytes);

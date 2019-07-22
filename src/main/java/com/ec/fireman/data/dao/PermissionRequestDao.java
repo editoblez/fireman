@@ -56,4 +56,11 @@ public class PermissionRequestDao extends GenericDaoImpl<PermissionRequest> {
     return findAllByStatusAndUser(PermissionRequestStatus.IN_PROGRESS, SessionUtils.retrieveLoggedUser().getUserId());
   }
 
+  public List<PermissionRequest> findAllPermissionRequestToExpire() {
+    return findPermissionRequestByPermissionRequestStatus(PermissionRequestStatus.TO_EXPIRE);
+  }
+
+  public List<PermissionRequest> findAllPermissionRequestExpired() {
+    return findPermissionRequestByPermissionRequestStatus(PermissionRequestStatus.EXPIRED);
+  }
 }

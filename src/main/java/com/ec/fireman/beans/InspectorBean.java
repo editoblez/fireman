@@ -64,6 +64,8 @@ public class InspectorBean implements Serializable {
   public void refreshRequests() {
     requests = permissionRequestDao.findPermissionRequestByPermissionRequestStatus(PermissionRequestStatus.REQUESTED);
     requests.addAll(permissionRequestDao.findAllInProgressByLoggedUser());
+    requests.addAll(permissionRequestDao.findAllPermissionRequestToExpire());
+    requests.addAll(permissionRequestDao.findAllPermissionRequestExpired());
     log.info("Requests length: " + (requests != null ? requests.size() : 0));
   }
 

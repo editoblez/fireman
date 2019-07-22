@@ -9,6 +9,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
+import java.util.Calendar;
 import java.util.List;
 
 @Log4j2
@@ -32,5 +33,20 @@ public class PermissionIssueDao extends GenericDaoImpl<PermissionIssue> {
     PermissionIssue permissionIssue = (PermissionIssue) permissionIssues.get(0);
     permissionIssue.setState(State.INACTIVE);
     entityManager.merge(permissionIssues);
+  }
+
+  public List<PermissionIssue> findAllCloseToExpire() {
+    Query query = entityManager.createQuery("select pi from PermissionIssue pi where pi.state=:active and :currentDate > pi.closeToExpire " +
+        "and :currentDate <= pi.expire", PermissionIssue.class);
+    query.setParameter("active", State.ACTIVE);
+    query.setParameter("currentDate", Calendar.getInstance().getTimeInMillis());
+    return query.getResultList();
+  }
+
+  public List<PermissionIssue> findAllExpired() {
+    Query query = entityManager.createQuery("select pi from PermissionIssue pi where pi.state=:active and :currentDate > pi.expire", PermissionIssue.class);
+    query.setParameter("active", State.ACTIVE);
+    query.setParameter("currentDate", Calendar.getInstance().getTimeInMillis());
+    return query.getResultList();
   }
 }

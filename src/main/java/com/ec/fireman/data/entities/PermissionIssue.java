@@ -5,7 +5,6 @@ import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Calendar;
 
 @Audited
 @Data
@@ -24,13 +23,24 @@ public class PermissionIssue implements BaseEntity {
   @Column
   private long time;
 
+  @Column
+  private long closeToExpire;
+
+  @Column
+  private long expire;
+
   @ManyToOne
   private InspectionHeader inspectionHeader;
 
-  public PermissionIssue(BigDecimal price, InspectionHeader inspectionHeader) {
+  public PermissionIssue(BigDecimal price, InspectionHeader inspectionHeader, long time, long closeToExpire, long expire) {
     this.price = price;
     this.inspectionHeader = inspectionHeader;
-    this.time = Calendar.getInstance().getTimeInMillis();
+    this.time = time;
+    this.closeToExpire = closeToExpire;
+    this.expire = expire;
     this.state = State.ACTIVE;
+  }
+
+  public PermissionIssue() {
   }
 }

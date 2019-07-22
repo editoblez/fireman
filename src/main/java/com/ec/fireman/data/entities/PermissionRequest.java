@@ -41,4 +41,8 @@ public class PermissionRequest implements BaseEntity {
 
   public PermissionRequest() {
   }
+
+  public boolean isToExpireOrExpired() {
+    return permissionRequestStatus == PermissionRequestStatus.TO_EXPIRE || permissionRequestStatus == PermissionRequestStatus.EXPIRED;
+  }
 }

@@ -196,5 +196,4 @@ public class InspectorBean implements Serializable {
     log.info("Map URL: " + url);
     return url;
   }
-
 }

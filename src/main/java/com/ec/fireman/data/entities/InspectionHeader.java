@@ -4,9 +4,10 @@ import lombok.Data;
 import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
+import java.util.Calendar;
 
 @NamedQueries({
-    @NamedQuery(name = "findInspectionHeaderByRequest", query = "from InspectionHeader i where i.permissionRequest.id = :permissionRequestId") })
+    @NamedQuery(name = "findInspectionHeaderByRequest", query = "from InspectionHeader i where i.permissionRequest.id = :permissionRequestId")})
 
 @Audited
 @Data
@@ -64,13 +65,18 @@ public class InspectionHeader implements BaseEntity {
   @Enumerated(EnumType.STRING)
   private State state;
 
+  @Column
+  private long lastUpdate;
+
   @ManyToOne
   private PermissionRequest permissionRequest;
 
   public InspectionHeader(PermissionRequest permissionRequest) {
+    this();
     this.permissionRequest = permissionRequest;
   }
 
   public InspectionHeader() {
+    this.lastUpdate = Calendar.getInstance().getTimeInMillis();
   }
 }

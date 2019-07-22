@@ -5,6 +5,7 @@ import com.ec.fireman.data.dao.InspectionHeaderDao;
 import com.ec.fireman.data.entities.InspectionFireExtinguisher;
 import com.ec.fireman.data.entities.InspectionHeader;
 import com.ec.fireman.data.entities.PermissionRequest;
+import com.ec.fireman.util.DateUtil;
 import com.ec.fireman.util.MessageUtil;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
@@ -64,6 +65,13 @@ public class ReportBean implements Serializable {
     String nombreArchivo = "INSPECCION";
 
     Map<String, Object> params = new HashMap<>();
+    params.put("local", inspection.getPermissionRequest().getLocal().getName());
+    params.put("category", inspection.getPermissionRequest().getLocal().getService().getName());
+    params.put("client", inspection.getPermissionRequest().getLocal().getUserAccount().getFullName().toUpperCase());
+    params.put("phone", inspection.getPermissionRequest().getLocal().getUserAccount().getPhoneNumber());
+    params.put("address", inspection.getPermissionRequest().getLocal().getAddress());
+    params.put("date", DateUtil.formatDateToString(inspection.getLastUpdate()));
+
     params.put("concrete", inspection.isConcrete());
     params.put("metallicStructure", inspection.isMetallicStructure());
     params.put("mixed", inspection.isMixed());

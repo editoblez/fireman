@@ -1,6 +1,7 @@
 package com.ec.fireman.data.entities;
 
 import lombok.Data;
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
@@ -62,6 +63,20 @@ public class UserAccount implements BaseEntity {
     this.role = role;
     this.phoneNumber = phoneNumber;
     state = State.ACTIVE;
+  }
+
+  public String getFullName() {
+    StringBuilder sb = new StringBuilder(firstName);
+    if (StringUtils.isNotEmpty(secondName)) {
+      sb.append(" ").append(secondName);
+    }
+    if (StringUtils.isNotEmpty(firstLastName)) {
+      sb.append(" ").append(firstLastName);
+    }
+    if (StringUtils.isNotEmpty(secondLastName)) {
+      sb.append(" ").append(secondLastName);
+    }
+    return sb.toString();
   }
 
 }

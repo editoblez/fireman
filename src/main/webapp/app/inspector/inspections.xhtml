@@ -35,7 +35,7 @@
 					</p:commandButton>
 
 					<p:commandButton update=":formSelect:opSelect growl"
-							rendered="#{item.permissionRequestStatus != 'IN_PROGRESS' and !item.isToExpireOrExpired()}"
+							rendered="#{item.permissionRequestStatus == 'REQUESTED'}"
 						icon="ui-icon-transferthick-e-w"
 						oncomplete="PF('dlgSelect').show()" title="Atender Solicitud"
 						style="margin: 0px 0px 1px 10px;">

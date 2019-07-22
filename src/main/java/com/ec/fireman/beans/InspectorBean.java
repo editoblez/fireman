@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -117,21 +118,20 @@ public class InspectorBean implements Serializable {
 
   public void fillInspectionData(PermissionRequest pr) {
     log.info(pr.toString());
-    inspectionHeader = inspectionHeaderDao.findInspectionHeaderByRequest(pr.getId());
+    inspectionHeader = inspectionHeaderDao.findByPermissionRequest(pr);
     log.info(inspectionHeader.toString());
     extinguishers = inspectionFireExtinguisherDao.findInspectionFireExtinguisherByHeader(inspectionHeader.getId());
   }
 
   @Transactional
   public void saveInspection() {
-    if (inspectionHeader.getId() > 0) {
-      inspectionHeaderDao.update(inspectionHeader);
-    } else {
+    if (inspectionHeader.getId() <= 0) {
       inspectionHeader.setPermissionRequest(selectedRequest);
       inspectionHeader.setState(State.ACTIVE);
-      inspectionHeaderDao.save(inspectionHeader);
-
     }
+    inspectionHeader.setLastUpdate(Calendar.getInstance().getTimeInMillis());
+    inspectionHeaderDao.update(inspectionHeader);
+
     inspectionFireExtinguisherDao.removeInspectionFireExtinguisherByHeader(inspectionHeader.getId());
     for (InspectionFireExtinguisher item : extinguishers) {
       item.setInspectionHeader(inspectionHeader);

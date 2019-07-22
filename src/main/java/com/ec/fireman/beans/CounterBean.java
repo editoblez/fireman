@@ -19,6 +19,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +45,7 @@ public class CounterBean implements Serializable {
   private List<PermissionRequest> requests;
   private List<RequirementFileUpload> files;
   private PermissionRequest selectedRequest;
+  private BigDecimal price;
 
   @PostConstruct
   public void init() {

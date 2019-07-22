@@ -1,77 +1,77 @@
 <!DOCTYPE html >
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:f="http://java.sun.com/jsf/core">
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:p="http://primefaces.org/ui"
+>
 
-<p:dialog header="Aprobar Permiso" widgetVar="dlgRequest" width="255"
-	height="110" resizable="false" modal="true">
-	<h:form id="formRequest">
-		<p:outputPanel id="opRequest" style="text-align: center;">
-			<h:outputText
-				value="Está seguro que desea emitir el permiso de funcionamiento?." />
-		</p:outputPanel>
+    <p:dialog header="Aprobar Permiso" widgetVar="dlgRequest" width="255"
+            height="150" resizable="false" modal="true">
+        <h:form id="formRequest">
+            <p:outputPanel id="opRequest" style="text-align: center;">
+                <h:outputText
+                        value="Ingrese el valor del permiso de funcionamiento?."/>
+                <p:inputNumber id="priceInputNumber" value="#{counterBean.price}" minValue="0" maxValue="1000" decimalPlaces="2" symbol="$" required="true"/>
+            </p:outputPanel>
 
-		<div align="center" style="padding-top: 15px;">
-			<p:commandButton ajax="true" action="faces-redirect=false"
-				update="growl :formList:dtList"
-				oncomplete="PF('dlgRequest').hide();"
-				actionListener="#{counterBean.editRequest()}" value="SI"
-				styleClass="btn btn-default" />
+            <div align="center" style="padding-top: 15px;">
+                <p:commandButton ajax="true" action="faces-redirect=false"
+                        update="growl :formList:dtList"
+                        oncomplete="PF('dlgRequest').hide();"
+                        actionListener="#{counterBean.editRequest()}" value="SI"
+                        styleClass="btn btn-default"/>
 
-			<p:commandButton ajax="true" action="faces-redirect=false"
-				update="growl" oncomplete="PF('dlgRequest').hide();"
-				actionListener="#{counterBean.clearData()}" value="NO"
-				styleClass="btn btn-default" />
-		</div>
-	</h:form>
-</p:dialog>
+                <p:commandButton ajax="true" action="faces-redirect=false"
+                        update="growl" oncomplete="PF('dlgRequest').hide();"
+                        actionListener="#{counterBean.clearData()}" value="NO"
+                        styleClass="btn btn-default"/>
+            </div>
+        </h:form>
+    </p:dialog>
 
-<p:dialog header="Cargar Documentos" widgetVar="dlgFiles" width="600"
-	modal="true">
-	<h:form id="formFiles" enctype="multipart/form-data">
-		<p:outputPanel id="opFiles">
+    <p:dialog header="Cargar Documentos" widgetVar="dlgFiles" width="600"
+            modal="true">
+        <h:form id="formFiles" enctype="multipart/form-data">
+            <p:outputPanel id="opFiles">
 
-			<p:repeat value="#{clientLocalBean.listRequirements()}" var="item">
-				<p:panelGrid columns="2" cellpadding="5" layout="grid">
-					<h:outputText value="#{item.requirementName}" />
-					<p:fileUpload value="#{item.file}" mode="simple" skinSimple="true"
-						label="Seleccionar" />
-				</p:panelGrid>
-			</p:repeat>
+                <p:repeat value="#{clientLocalBean.listRequirements()}" var="item">
+                    <p:panelGrid columns="2" cellpadding="5" layout="grid">
+                        <h:outputText value="#{item.requirementName}"/>
+                        <p:fileUpload value="#{item.file}" mode="simple" skinSimple="true"
+                                label="Seleccionar"/>
+                    </p:panelGrid>
+                </p:repeat>
 
-		</p:outputPanel>
+            </p:outputPanel>
 
-		<div align="center" style="padding-top: 15px;">
-			<p:commandButton ajax="false" action="faces-redirect=false"
-				update="growl" oncomplete="PF('dlgFiles').hide();"
-				actionListener="#{clientLocalBean.upload()}"
-				value="Guardar Documentos" styleClass="btn btn-default" />
-		</div>
-	</h:form>
-</p:dialog>
+            <div align="center" style="padding-top: 15px;">
+                <p:commandButton ajax="false" action="faces-redirect=false"
+                        update="growl" oncomplete="PF('dlgFiles').hide();"
+                        actionListener="#{clientLocalBean.upload()}"
+                        value="Guardar Documentos" styleClass="btn btn-default"/>
+            </div>
+        </h:form>
+    </p:dialog>
 
-<p:dialog header="Cancelar Solicitud" widgetVar="dlgCancel" width="255"
-	height="110" resizable="false" modal="true">
-	<h:form id="formCancel">
-		<p:outputPanel id="opCancel" style="text-align: center;">
-			<h:outputText
-				value="Está seguro que desea cancelar la solicitud del permiso de funcionamiento?." />
-		</p:outputPanel>
+    <p:dialog header="Cancelar Solicitud" widgetVar="dlgCancel" width="255"
+            height="110" resizable="false" modal="true">
+        <h:form id="formCancel">
+            <p:outputPanel id="opCancel" style="text-align: center;">
+                <h:outputText
+                        value="Está seguro que desea cancelar la solicitud del permiso de funcionamiento?."/>
+            </p:outputPanel>
 
-		<div align="center" style="padding-top: 15px;">
-			<p:commandButton ajax="true" action="faces-redirect=false"
-				update="growl :formList:dtList" oncomplete="PF('dlgCancel').hide();"
-				actionListener="#{counterBean.cancelRequest()}" value="SI"
-				styleClass="btn btn-default" />
+            <div align="center" style="padding-top: 15px;">
+                <p:commandButton ajax="true" action="faces-redirect=false"
+                        update="growl :formList:dtList" oncomplete="PF('dlgCancel').hide();"
+                        actionListener="#{counterBean.cancelRequest()}" value="SI"
+                        styleClass="btn btn-default"/>
 
-			<p:commandButton ajax="true" action="faces-redirect=false"
-				update="growl" oncomplete="PF('dlgCancel').hide();"
-				actionListener="#{counterBean.clearData()}" value="NO"
-				styleClass="btn btn-default" />
-		</div>
-	</h:form>
-</p:dialog>
+                <p:commandButton ajax="true" action="faces-redirect=false"
+                        update="growl" oncomplete="PF('dlgCancel').hide();"
+                        actionListener="#{counterBean.clearData()}" value="NO"
+                        styleClass="btn btn-default"/>
+            </div>
+        </h:form>
+    </p:dialog>
 
 </html>

@@ -41,7 +41,7 @@
 
 					<p:commandButton update=":formDelete:opDelete growl"
 						rendered="#{(item.permissionRequest.permissionRequestStatus == 'TO_REQUEST'
-						or item.permissionRequest.permissionRequestStatus == 'REJECTED') and item.local.state == 'ACTIVE'}"
+						or item.permissionRequest.permissionRequestStatus == 'REJECTED' or item.permissionRequest.isToExpireOrExpired()) and item.local.state == 'ACTIVE'}"
 						icon="ui-icon-trash" oncomplete="PF('dlgEliminar').show()"
 						title="Inactivar Local" style="margin: 0px 0px 1px 10px;">
 						<f:setPropertyActionListener value="#{item.local}"
@@ -50,7 +50,8 @@
 
 					<p:commandButton update=":formFiles:opFiles growl"
 						rendered="#{(item.permissionRequest.permissionRequestStatus == 'TO_REQUEST'
-						or item.permissionRequest.permissionRequestStatus == 'REJECTED') and item.local.state == 'ACTIVE'}"
+						or item.permissionRequest.permissionRequestStatus == 'REJECTED' or item.permissionRequest.isToExpireOrExpired() )
+						and item.local.state == 'ACTIVE'}"
 						icon="ui-icon-folder-open" oncomplete="PF('dlgFiles').show()"
 						title="Cargar documentos" style="margin: 0px 0px 1px 10px;">
 						<f:setPropertyActionListener value="#{item.local}"
@@ -60,7 +61,8 @@
 					<p:commandButton
 						update=":formRequest:opRequest :formList:dtList growl"
 						rendered="#{(item.permissionRequest.permissionRequestStatus == 'TO_REQUEST'
-						or item.permissionRequest.permissionRequestStatus == 'REJECTED') and item.local.state == 'ACTIVE'}"
+						or item.permissionRequest.permissionRequestStatus == 'REJECTED' or item.permissionRequest.isToExpireOrExpired())
+						and item.local.state == 'ACTIVE'}"
 						icon="ui-icon-clipboard" oncomplete="PF('dlgRequest').show()"
 						title="Solicitar permiso" style="margin: 0px 0px 1px 10px;">
 						<f:setPropertyActionListener value="#{item.permissionRequest}"
@@ -69,7 +71,7 @@
 
 					<p:commandButton update=":formCancel:opCancel growl"
 						rendered="#{item.permissionRequest.permissionRequestStatus != 'TO_REQUEST'
-						and item.permissionRequest.permissionRequestStatus != 'REJECTED'}"
+						and item.permissionRequest.permissionRequestStatus != 'REJECTED' and !item.permissionRequest.isToExpireOrExpired()}"
 						icon="ui-icon-circle-close" oncomplete="PF('dlgCancel').show()"
 						title="Cancelar solicitud" style="margin: 0px 0px 1px 10px;">
 						<f:setPropertyActionListener value="#{item.permissionRequest}"

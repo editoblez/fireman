@@ -1,9 +1,22 @@
 package com.ec.fireman.data.entities;
 
-import lombok.Data;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+
 import org.hibernate.envers.Audited;
 
-import javax.persistence.*;
+import lombok.Data;
+
+@NamedQueries({
+    @NamedQuery(name = "findInspectionHeaderByRequest", query = "from InspectionHeader i where i.permissionRequest.id = :permissionRequestId") })
 
 @Audited
 @Data

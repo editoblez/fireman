@@ -17,6 +17,9 @@
 				style="margin: 0px 0px 5px 0px;" />
 
 			<p:dataTable id="dtList" var="item" value="#{clientLocalBean.locals}">
+				<p:column headerText="Nombre del Local">
+					<h:outputText value="#{item.local.name}"/>
+				</p:column>
 				<p:column headerText="Dirección">
 					<h:outputText value="#{item.local.address}" />
 				</p:column>

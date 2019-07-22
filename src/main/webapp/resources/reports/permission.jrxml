@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="inspection" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="891eeccb-6430-4edd-9ffd-a5294f35454f">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<parameter name="PERMISSION_NUMBER" class="java.lang.String"/>
+	<parameter name="VALIDITY" class="java.lang.String"/>
+	<parameter name="WATTERMARK" class="java.lang.String"/>
+	<parameter name="price" class="java.lang.Float"/>
+	<parameter name="textPrice" class="java.lang.String"/>
+	<parameter name="years" class="java.lang.String"/>
+	<parameter name="socialReason" class="java.lang.String"/>
+	<parameter name="activity" class="java.lang.String"/>
+	<parameter name="owner" class="java.lang.String"/>
+	<parameter name="address" class="java.lang.String"/>
+	<parameter name="date" class="java.util.Date"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<title>
+		<band height="440" splitType="Stretch">
+			<image>
+				<reportElement x="147" y="150" width="260" height="260" uuid="9deacd0b-54cd-4990-b0f3-63e3da9d28e2"/>
+				<imageExpression><![CDATA[$P{WATTERMARK}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="20" forecolor="#F50400" uuid="191ffcaf-6bfe-498d-917f-49b23161aa9f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CUERPO DE BOMBEROS DE TISALEO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="20" width="555" height="20" forecolor="#F50400" uuid="a7dbd026-da52-4d0f-bbb3-993085c9cba4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TISALEO - TUNGURAHUA - ECUADOR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="40" width="555" height="20" uuid="0169ddce-9dfb-4b1e-9d04-b11106680d56"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[R.U.C 1768162870001 RESOLUCION N.- SNGR-122-2011]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="70" width="555" height="1" uuid="1ea9e2e0-60c5-4e2f-a56d-5e9afd40499a"/>
+				<graphicElement>
+					<pen lineWidth="2.0" lineStyle="Solid" lineColor="#F8BD4A"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="0" y="116" width="555" height="1" uuid="efed736c-4111-4d54-8963-589f644a7f14"/>
+				<graphicElement>
+					<pen lineWidth="2.0" lineStyle="Solid" lineColor="#F8BD4A"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="0" y="72" width="555" height="20" uuid="cc7038be-93c9-4c74-a936-46b2f4c6a53f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DEPARTAMENTO DE PREVENCION DE INCENDIOS]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="94" width="555" height="20" uuid="c8559b0f-0fc8-4446-9853-3bc7a09f053d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["PERMISO DE FUNCIONAMIENTO N.- " + $P{PERMISSION_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="121" width="555" height="20" forecolor="#F50400" uuid="8470abb9-6aab-4553-b4e4-8c38388882b6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["VALIDO HASTA EL 31 DE DICIEMBRE DEL " + $P{VALIDITY}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="418" width="555" height="20" uuid="5aeda81e-7714-41b5-b675-ca4d81fe1d59"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ABNEGACION Y DISCIPLINA]]></text>
+			</staticText>
+			<frame>
+				<reportElement x="127" y="192" width="420" height="155" uuid="7f3b9dcd-fd37-4eae-af39-1b55784db5a8"/>
+				<staticText>
+					<reportElement x="0" y="0" width="80" height="15" uuid="b424a730-8d7e-4228-b45f-808d1da33a7d"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[VALOR:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="20" width="80" height="15" uuid="92119e02-532d-4b12-994f-1ba99f1e16e5"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[SON:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="40" width="80" height="15" uuid="82db82cd-6946-4dc4-ab62-671e195391f3"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[AÑOS CANC:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="60" width="80" height="15" uuid="473c8ee9-b276-4f40-9a61-b11f1fa0e5fc"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[RAZON SOCIAL:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="80" width="80" height="15" uuid="033435b0-bc00-45ce-82ad-949e67f7d3bc"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[ACTIVIDAD:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="100" width="80" height="15" uuid="4c1dcb53-3900-4656-a302-798b3ae6b3ad"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[PROPIETARIO:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="120" width="80" height="15" uuid="3b1440d7-be8d-45cf-b317-27a2af73d877"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[DIRECCION:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="140" width="80" height="15" uuid="1d5c9569-5d90-465b-a777-3cffaeea6aeb"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[FECHA:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement x="92" y="0" width="328" height="15" uuid="02f60455-de66-439c-b9aa-afc5dccbc1ad"/>
+					<textFieldExpression><![CDATA[$P{price}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement x="92" y="20" width="328" height="15" uuid="1d1fb819-e17c-4eec-8125-ef6571c07583"/>
+					<textFieldExpression><![CDATA[$P{textPrice}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement x="92" y="40" width="328" height="15" uuid="416d0f34-57c2-496c-9f41-369227f69277"/>
+					<textFieldExpression><![CDATA[$P{years}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement x="92" y="60" width="328" height="15" uuid="47071d4d-8881-42ee-bea9-58d3605f22e6"/>
+					<textFieldExpression><![CDATA[$P{socialReason}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement x="92" y="80" width="328" height="15" uuid="15700b7d-727a-461c-ac38-74c916aed622"/>
+					<textFieldExpression><![CDATA[$P{activity}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement x="92" y="100" width="328" height="15" uuid="0d715fdb-6ecd-46cb-83bf-f8e01462ab31"/>
+					<textFieldExpression><![CDATA[$P{owner}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement x="92" y="120" width="328" height="15" uuid="846c0eef-d453-4b69-8a13-89a616add4c8"/>
+					<textFieldExpression><![CDATA[$P{address}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+					<reportElement x="92" y="140" width="328" height="15" uuid="463120c8-28a5-435c-a88e-e0894a00c7e7"/>
+					<textFieldExpression><![CDATA[$P{date}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</title>
+</jasperReport>

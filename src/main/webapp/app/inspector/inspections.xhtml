@@ -25,7 +25,7 @@
 				<p:column style="text-align: center;" headerText="Acciones">
 
 					<p:commandButton update=":formFilesRev:opFilesRev growl"
-							rendered="#{!item.isToExpireOrExpired()}"
+						rendered="#{!item.isToExpireOrExpired()}"
 						icon="ui-icon-folder-collapsed"
 						oncomplete="PF('dlgFilesRev').show()"
 						title="Revisar documentos del local"
@@ -35,7 +35,7 @@
 					</p:commandButton>
 
 					<p:commandButton update=":formSelect:opSelect growl"
-							rendered="#{item.permissionRequestStatus == 'REQUESTED'}"
+						rendered="#{item.permissionRequestStatus == 'REQUESTED'}"
 						icon="ui-icon-transferthick-e-w"
 						oncomplete="PF('dlgSelect').show()" title="Atender Solicitud"
 						style="margin: 0px 0px 1px 10px;">
@@ -63,7 +63,7 @@
 						onclick="window.open('#{inspectorBean.mapUrl(item)}'); return false;"
 						title="Ver en el mapa" style="margin: 0px 0px 1px 10px;">
 					</p:button>
-					
+
 					<p:commandButton update=":formRequest:opRequest growl"
 						rendered="#{item.permissionRequestStatus == 'IN_PROGRESS'}"
 						icon="ui-icon-clipboard" oncomplete="PF('dlgRequest').show()"
@@ -72,9 +72,19 @@
 							target="#{inspectorBean.selectedRequest}" />
 					</p:commandButton>
 
-					<p:commandButton actionListener="#{reportBean.buildReport(item)}"
+					<p:commandButton
+						actionListener="#{reportBean.buildInspecctionReport(item)}"
 						rendered="#{item.permissionRequestStatus == 'IN_PROGRESS'}"
-						icon="ui-icon-bookmark" update="growl" process=":formList"
+						title="Reporte de inspección" icon="ui-icon-bookmark"
+						update="growl" process=":formList" ajax="false"
+						style="margin: 0px 0px 1px 10px;">
+					</p:commandButton>
+
+					<p:commandButton
+						actionListener="#{reportBean.buildPermissionReport(item)}"
+						rendered="#{item.permissionRequestStatus == 'IN_PROGRESS'}"
+						title="Reporte de permiso de funcionamiento"
+						icon="ui-icon-contact" update="growl" process=":formList"
 						ajax="false" style="margin: 0px 0px 1px 10px;">
 					</p:commandButton>
 

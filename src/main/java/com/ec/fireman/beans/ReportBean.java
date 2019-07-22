@@ -7,6 +7,8 @@ import com.ec.fireman.data.entities.InspectionHeader;
 import com.ec.fireman.data.entities.PermissionRequest;
 import com.ec.fireman.util.DateUtil;
 import com.ec.fireman.util.MessageUtil;
+import com.ec.fireman.util.TextNumberUtil;
+
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import net.sf.jasperreports.engine.*;
@@ -45,7 +47,7 @@ public class ReportBean implements Serializable {
   public void init() {
   }
 
-  public void buildReport(PermissionRequest pr) {
+  public void buildInspecctionReport(PermissionRequest pr) {
     InspectionHeader inspection = null;
     List<InspectionFireExtinguisher> extinguishers = null;
     try {
@@ -63,7 +65,7 @@ public class ReportBean implements Serializable {
     }
 
     String nombreArchivo = "INSPECCION";
-
+    FacesContext context = FacesContext.getCurrentInstance();
     Map<String, Object> params = new HashMap<>();
     params.put("local", inspection.getPermissionRequest().getLocal().getName());
     params.put("category", inspection.getPermissionRequest().getLocal().getService().getName());
@@ -94,14 +96,60 @@ public class ReportBean implements Serializable {
     params.put("riskFire", inspection.getRiskFire());
     params.put("recommendations", inspection.getRecommendations());
     params.put("observations", inspection.getObservations());
+    params.put("logo", context.getExternalContext().getRealPath(File.separator) + File.separator + "resources"
+        + File.separator + "images" + File.separator + "fireman-logo.png");
 
-    //TODO: LLENAR OTROS params DEL REPORTE COMO LOCAL, NUM INSPECC, NOMBRE DEL INSPECTOR, ETC
-
-    JRBeanCollectionDataSource data = CollectionUtils.isEmpty(extinguishers)
-        ? null : new JRBeanCollectionDataSource(extinguishers);
+    JRBeanCollectionDataSource data = CollectionUtils.isEmpty(extinguishers) ? null
+        : new JRBeanCollectionDataSource(extinguishers);
 
     try {
-      this.generatePDF(nombreArchivo, "inspection.jrxml", data, params);
+      this.generatePDF(nombreArchivo, "inspection.jrxml", data, params, context);
+    } catch (Exception e) {
+      log.error(e.getMessage());
+      MessageUtil.errorFacesMessage("Reporte", "Error al generar el reporte de inspección.");
+    }
+
+  }
+  
+  public void buildPermissionReport(PermissionRequest pr) {
+    InspectionHeader inspection = null;
+    List<InspectionFireExtinguisher> extinguishers = null;
+    try {
+      log.info(pr.toString());
+      inspection = inspectionHeaderDao.findInspectionHeaderByRequest(pr.getId());
+      log.info(inspection.toString());
+      extinguishers = inspectionFireExtinguisherDao.findInspectionFireExtinguisherByHeader(inspection.getId());
+    } catch (Exception e1) {
+      log.info(e1.getMessage());
+    }
+
+    if (inspection == null) {
+      MessageUtil.warningFacesMessage("Reporte", "No existe información");
+      return;
+    }
+
+    String nombreArchivo = "PERMISO";
+    FacesContext context = FacesContext.getCurrentInstance();
+    Map<String, Object> params = new HashMap<>();
+    params.put("PERMISSION_NUMBER", "0012"); //TODO BUSCAR ESTE DATO (número de permiso)
+    params.put("VALIDITY", "2020"); //TODO BUSCAR ESTE DATO (AÑO DE VALIDEZ)
+    params.put("WATTERMARK", context.getExternalContext().getRealPath(File.separator) + File.separator + "resources"
+        + File.separator + "images" + File.separator + "wattermark.png");
+    Float price = Float.valueOf("23.4"); //TODO BUSCAR ESTE DATO (precio)
+    params.put("price", price);
+    params.put("textPrice", TextNumberUtil.convert(String.valueOf(price), true));
+    params.put("years", DateUtil.getYearFromDate(inspection.getLastUpdate()));
+    params.put("socialReason", inspection.getPermissionRequest().getLocal().getUserAccount().getFullName().toUpperCase());
+    params.put("activity", "ACTIVIDAD ECONOMICA ASOCIADA AL RUC"); //TODO BUSCAR ESTE DATO (ACTIVIDAD)
+    params.put("owner", inspection.getPermissionRequest().getLocal().getUserAccount().getFullName().toUpperCase());
+    params.put("address", inspection.getPermissionRequest().getLocal().getAddress());
+    params.put("date", DateUtil.formatDateToString(inspection.getLastUpdate()));
+
+    JRBeanCollectionDataSource data = CollectionUtils.isEmpty(extinguishers) ? null
+        : new JRBeanCollectionDataSource(extinguishers);
+
+    try {
+      this.generatePDF(nombreArchivo, "permission.jrxml", data, params, context);
     } catch (Exception e) {
       log.error(e.getMessage());
       MessageUtil.errorFacesMessage("Reporte", "Error al generar el reporte.");
@@ -110,11 +158,8 @@ public class ReportBean implements Serializable {
   }
 
   public void generatePDF(String fileName, String templateName, JRBeanCollectionDataSource data,
-                          Map<String, Object> params) {
-    try {
-      FacesContext context = FacesContext.getCurrentInstance();
-      params.put("logo", context.getExternalContext().getRealPath(File.separator) + File.separator + "resources"
-          + File.separator + "images" + File.separator + "fireman-logo.png");
+      Map<String, Object> params, FacesContext context) {
+    try {      
       String path = context.getExternalContext().getRealPath(File.separator) + File.separator + "resources"
           + File.separator + "reports" + File.separator + templateName;
       HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();

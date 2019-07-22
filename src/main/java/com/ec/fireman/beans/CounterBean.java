@@ -4,6 +4,7 @@ import com.ec.fireman.data.dao.*;
 import com.ec.fireman.data.entities.*;
 import com.ec.fireman.data.representation.RequirementFileUpload;
 import com.ec.fireman.util.MessageUtil;
+import com.ec.fireman.util.SessionUtils;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.IOUtils;
@@ -41,6 +42,10 @@ public class CounterBean implements Serializable {
   private PermissionRequestFilesDao permissionRequestFilesDao;
   @Inject
   private PermissionIssueDao permissionIssueDao;
+  @Inject
+  private InspectionHeaderDao inspectionHeaderDao;
+  @Inject
+  private UserAccountDao userAccountDao;
 
   private List<PermissionRequest> requests;
   private List<RequirementFileUpload> files;
@@ -65,12 +70,20 @@ public class CounterBean implements Serializable {
   @Transactional
   public void editRequest() {
     selectedRequest.setPermissionRequestStatus(PermissionRequestStatus.PERMISSION_ISSUED);
+    selectedRequest.setEconomic(userAccountDao.findUserByCi(SessionUtils.retrieveLoggedUser().getUserId()));
     permissionRequestDao.update(selectedRequest);
+
+    createNewPermissionIssue();
 
     log.info(selectedRequest.toString());
     MessageUtil.infoFacesMessage("Solicitud", "Permiso de funcionamiento emitido");
     this.refreshRequests();
     this.clearData();
+  }
+
+  private void createNewPermissionIssue() {
+    permissionIssueDao.inactivePreviousPermissionIssued(selectedRequest);
+    permissionIssueDao.save(new PermissionIssue(price, inspectionHeaderDao.findByPermissionRequest(selectedRequest)));
   }
 
   public void upload() {

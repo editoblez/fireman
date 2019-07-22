@@ -1,9 +1,8 @@
 <!DOCTYPE html >
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:f="http://java.sun.com/jsf/core">
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:p="http://primefaces.org/ui"
+>
 
 <p:dialog header="Aprobar Permiso" widgetVar="dlgRequest" width="255"
 	resizable="false" modal="true">
@@ -171,7 +170,7 @@
 						action="faces-redirect=false" update="dtListFireExt btnAddExt"
 						disabled="#{inspectorBean.extinguishers.size() >= 3}"
 						actionListener="#{inspectorBean.addExtinguisher()}"
-						value="Agreagr Extintor" style="margin: 0px 0px 10px 0px;" />
+							value="Agregar Extintor" style="margin: 0px 0px 10px 0px;"/>
 
 					<p:dataTable id="dtListFireExt" var="item"
 						value="#{inspectorBean.extinguishers}">

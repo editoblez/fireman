@@ -1,13 +1,14 @@
 package com.ec.fireman.data.dao;
 
-import java.util.List;
+import com.ec.fireman.data.entities.InspectionHeader;
+import com.ec.fireman.data.entities.PermissionRequest;
+import lombok.extern.log4j.Log4j2;
+import org.apache.commons.collections4.CollectionUtils;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
-
-import com.ec.fireman.data.entities.InspectionHeader;
-
-import lombok.extern.log4j.Log4j2;
+import javax.persistence.Query;
+import java.util.List;
 
 @Log4j2
 @Stateless
@@ -21,13 +22,18 @@ public class InspectionHeaderDao extends GenericDaoImpl<InspectionHeader> {
 
   public InspectionHeader findInspectionHeaderByRequest(long permissionRequestId) {
     try {
-      List<InspectionHeader> list = entityManager.createNamedQuery("findInspectionHeaderByRequest")
+      List list = entityManager.createNamedQuery("findInspectionHeaderByRequest")
           .setParameter("permissionRequestId", permissionRequestId).getResultList();
-      return list != null && !list.isEmpty() ? list.get(0) : null;
+      return !CollectionUtils.isEmpty(list) ? (InspectionHeader) list.get(0) : null;
     } catch (Exception ex) {
       log.error("Error to execute findInspectionHeaderByRequest", ex);
     }
     return null;
   }
 
+  public InspectionHeader findByPermissionRequest(PermissionRequest selectedRequest) {
+    Query query = entityManager.createQuery("select h from InspectionHeader h where h.permissionRequest.id=:permissionRequestId order by id desc", InspectionHeader.class);
+    query.setParameter("permissionRequestId", selectedRequest.getId());
+    return (InspectionHeader) query.getResultList().get(0);
+  }
 }

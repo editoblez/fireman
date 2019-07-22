@@ -59,7 +59,6 @@ public class InspectorBean implements Serializable {
     this.refreshRequests();
     selectedRequest = new PermissionRequest();
     extinguishers = new ArrayList<>();
-    inspectionHeader = new InspectionHeader();
   }
 
   public void refreshRequests() {
@@ -71,7 +70,7 @@ public class InspectorBean implements Serializable {
   public void clearData() {
     selectedRequest = new PermissionRequest();
     extinguishers = new ArrayList<>();
-    inspectionHeader = new InspectionHeader();
+    inspectionHeader = null;
   }
 
   @Transactional
@@ -103,8 +102,9 @@ public class InspectorBean implements Serializable {
     selectedRequest.setPermissionRequestStatus(PermissionRequestStatus.IN_PROGRESS);
     selectedRequest.setInspector(userAccountDao.findUserByCi(SessionUtils.retrieveLoggedUser().getUserId()));
     permissionRequestDao.update(selectedRequest);
-    MessageUtil.infoFacesMessage("Solicitud", "Inspecci�n asignada correctaente");
-    inspectionHeader = new InspectionHeader();
+    MessageUtil.infoFacesMessage("Solicitud", "Inspección asignada correctamente");
+    inspectionHeader = new InspectionHeader(selectedRequest);
+    inspectionHeaderDao.save(inspectionHeader);
     this.refreshRequests();
     this.clearData();
   }
@@ -133,7 +133,7 @@ public class InspectorBean implements Serializable {
     inspectionFireExtinguisherDao.removeInspectionFireExtinguisherByHeader(inspectionHeader.getId());
     for (InspectionFireExtinguisher item : extinguishers) {
       item.setInspectionHeader(inspectionHeader);
-      inspectionFireExtinguisherDao.save(item);
+      inspectionFireExtinguisherDao.update(item);
     }
     this.clearData();
   }

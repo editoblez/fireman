@@ -35,13 +35,13 @@
 					</p:commandButton>
 
 					<p:commandButton update=":formSelect:opSelect growl"
-							rendered="#{item.permissionRequestStatus != 'IN_PROGRESS'} and #{!item.isToExpireOrExpired()}"
+							rendered="#{item.permissionRequestStatus != 'IN_PROGRESS' and !item.isToExpireOrExpired()}"
 						icon="ui-icon-transferthick-e-w"
 						oncomplete="PF('dlgSelect').show()" title="Atender Solicitud"
 						style="margin: 0px 0px 1px 10px;">
 						<f:setPropertyActionListener value="#{item}"
 							target="#{inspectorBean.selectedRequest}" />
-					</p:commandButton
+					</p:commandButton>
 
 					<p:commandButton update=":formFiles:opFiles growl"
 						rendered="#{item.permissionRequestStatus == 'IN_PROGRESS'}"

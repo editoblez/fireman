@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.apache.commons.collections4.CollectionUtils;
 
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
@@ -19,7 +20,6 @@ import javax.inject.Named;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
@@ -63,7 +63,7 @@ public class ReportBean implements Serializable {
 
     String nombreArchivo = "INSPECCION";
 
-    Map<String, Object> params = new HashMap<String, Object>();
+    Map<String, Object> params = new HashMap<>();
     params.put("concrete", inspection.isConcrete());
     params.put("metallicStructure", inspection.isMetallicStructure());
     params.put("mixed", inspection.isMixed());
@@ -86,12 +86,11 @@ public class ReportBean implements Serializable {
     params.put("riskFire", inspection.getRiskFire());
     params.put("recommendations", inspection.getRecommendations());
     params.put("observations", inspection.getObservations());
-    
+
     //TODO: LLENAR OTROS params DEL REPORTE COMO LOCAL, NUM INSPECC, NOMBRE DEL INSPECTOR, ETC
 
-    JRBeanCollectionDataSource data = extinguishers != null && !extinguishers.isEmpty()
-        ? new JRBeanCollectionDataSource(extinguishers)
-        : null;
+    JRBeanCollectionDataSource data = CollectionUtils.isEmpty(extinguishers)
+        ? null : new JRBeanCollectionDataSource(extinguishers);
 
     try {
       this.generatePDF(nombreArchivo, "inspection.jrxml", data, params);
@@ -103,7 +102,7 @@ public class ReportBean implements Serializable {
   }
 
   public void generatePDF(String fileName, String templateName, JRBeanCollectionDataSource data,
-      Map<String, Object> params) throws JRException, IOException {
+                          Map<String, Object> params) {
     try {
       FacesContext context = FacesContext.getCurrentInstance();
       params.put("logo", context.getExternalContext().getRealPath(File.separator) + File.separator + "resources"

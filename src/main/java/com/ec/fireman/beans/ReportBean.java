@@ -2,13 +2,13 @@ package com.ec.fireman.beans;
 
 import com.ec.fireman.data.dao.InspectionFireExtinguisherDao;
 import com.ec.fireman.data.dao.InspectionHeaderDao;
+import com.ec.fireman.data.dao.PermissionIssueDao;
 import com.ec.fireman.data.entities.InspectionFireExtinguisher;
 import com.ec.fireman.data.entities.InspectionHeader;
+import com.ec.fireman.data.entities.PermissionIssue;
 import com.ec.fireman.data.entities.PermissionRequest;
 import com.ec.fireman.util.DateUtil;
 import com.ec.fireman.util.MessageUtil;
-import com.ec.fireman.util.TextNumberUtil;
-
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import net.sf.jasperreports.engine.*;
@@ -40,6 +40,8 @@ public class ReportBean implements Serializable {
   private InspectionHeaderDao inspectionHeaderDao;
   @Inject
   private InspectionFireExtinguisherDao inspectionFireExtinguisherDao;
+  @Inject
+  private PermissionIssueDao permissionIssueDao;
 
   private List<InspectionHeader> inspectionList;
 
@@ -113,6 +115,7 @@ public class ReportBean implements Serializable {
 
   public void buildPermissionReport(PermissionRequest pr) {
     InspectionHeader inspection = null;
+    PermissionIssue permissionIssue = permissionIssueDao.findByPermissionRequest(pr);
     try {
       log.info(pr.toString());
       inspection = inspectionHeaderDao.findInspectionHeaderByRequest(pr.getId());
@@ -128,13 +131,12 @@ public class ReportBean implements Serializable {
     String nombreArchivo = "PERMISO";
     FacesContext context = FacesContext.getCurrentInstance();
     Map<String, Object> params = new HashMap<>();
-    params.put("PERMISSION_NUMBER", "0012"); // TODO BUSCAR ESTE DATO (número de permiso)
-    params.put("VALIDITY", "2020"); // TODO BUSCAR ESTE DATO (AÑO DE VALIDEZ)
+    params.put("PERMISSION_NUMBER", String.valueOf(permissionIssue.getId()));
+    params.put("VALIDITY", String.valueOf(DateUtil.extractYear(permissionIssue.getExpire())));
     params.put("WATTERMARK", context.getExternalContext().getRealPath(File.separator) + File.separator + "resources"
         + File.separator + "images" + File.separator + "wattermark.png");
-    Float price = Float.valueOf("23.4"); // TODO BUSCAR ESTE DATO (precio)
-    params.put("price", price);
-    params.put("textPrice", TextNumberUtil.convert(String.valueOf(price), true));
+    params.put("price", permissionIssue.getPrice().floatValue());
+    params.put("textPrice", permissionIssue.getPrice().toString());
     params.put("years", DateUtil.getYearFromDate(inspection.getLastUpdate()));
     params.put("socialReason",
         inspection.getPermissionRequest().getLocal().getUserAccount().getFullName().toUpperCase());
@@ -155,7 +157,7 @@ public class ReportBean implements Serializable {
   }
 
   public void generatePDF(String fileName, String templateName, JRBeanCollectionDataSource data,
-      Map<String, Object> params, FacesContext context) {
+                          Map<String, Object> params, FacesContext context) {
     try {
       String path = context.getExternalContext().getRealPath(File.separator) + File.separator + "resources"
           + File.separator + "reports" + File.separator + templateName;

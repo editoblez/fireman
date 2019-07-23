@@ -82,7 +82,7 @@
 
 					<p:commandButton
 						actionListener="#{reportBean.buildPermissionReport(item)}"
-						rendered="#{item.permissionRequestStatus == 'IN_PROGRESS'}"
+							rendered="#{item.permissionRequestStatus == 'PERMISSION_ISSUED'}"
 						title="Reporte de permiso de funcionamiento"
 						icon="ui-icon-contact" update="growl" process=":formList"
 						ajax="false" style="margin: 0px 0px 1px 10px;">

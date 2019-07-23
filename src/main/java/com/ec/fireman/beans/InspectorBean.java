@@ -48,6 +48,9 @@ public class InspectorBean implements Serializable {
   @Inject
   private UserAccountDao userAccountDao;
 
+  @Inject
+  private PermissionIssueDao permissionIssueDao;
+
   private List<PermissionRequest> requests;
   private List<RequirementFileUpload> files;
   private PermissionRequest selectedRequest;
@@ -67,6 +70,7 @@ public class InspectorBean implements Serializable {
     requests.addAll(permissionRequestDao.findAllInProgressByLoggedUser());
     requests.addAll(permissionRequestDao.findAllPermissionRequestToExpire());
     requests.addAll(permissionRequestDao.findAllPermissionRequestExpired());
+    requests.addAll(permissionIssueDao.findAll().stream().filter(it -> it.getState() == State.ACTIVE).map(it -> it.getInspectionHeader().getPermissionRequest()).collect(Collectors.toList()));
     log.info("Requests length: " + (requests != null ? requests.size() : 0));
   }
 

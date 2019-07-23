@@ -49,4 +49,11 @@ public class PermissionIssueDao extends GenericDaoImpl<PermissionIssue> {
     query.setParameter("currentDate", Calendar.getInstance().getTimeInMillis());
     return query.getResultList();
   }
+
+  public PermissionIssue findByPermissionRequest(PermissionRequest pr) {
+    Query query = entityManager.createQuery("select pi from PermissionIssue pi where state=:active and pi.inspectionHeader.permissionRequest.id=:id", PermissionIssue.class);
+    query.setParameter("active", State.ACTIVE);
+    query.setParameter("id", pr.getId());
+    return (PermissionIssue) query.getSingleResult();
+  }
 }

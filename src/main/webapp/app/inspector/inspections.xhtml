@@ -87,6 +87,14 @@
 						icon="ui-icon-contact" update="growl" process=":formList"
 						ajax="false" style="margin: 0px 0px 1px 10px;">
 					</p:commandButton>
+					
+					<p:commandButton
+						actionListener="#{reportBean.buildInvoiceReport(item)}"
+						rendered="#{item.permissionRequestStatus == 'IN_PROGRESS'}"
+						title="Reporte de detalle de factura"
+						icon="ui-icon-print" update="growl" process=":formList"
+						ajax="false" style="margin: 0px 0px 1px 10px;">
+					</p:commandButton>
 
 				</p:column>
 			</p:dataTable>

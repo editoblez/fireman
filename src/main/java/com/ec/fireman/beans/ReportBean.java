@@ -156,6 +156,39 @@ public class ReportBean implements Serializable {
     }
 
   }
+  
+  public void buildInvoiceReport(PermissionRequest pr) {
+    InspectionHeader inspection = null;
+    try {
+      log.info(pr.toString());
+      inspection = inspectionHeaderDao.findInspectionHeaderByRequest(pr.getId());
+    } catch (Exception e1) {
+      log.info(e1.getMessage());
+    }
+
+    if (inspection == null) {
+      MessageUtil.warningFacesMessage("Reporte", "No existe información");
+      return;
+    }
+
+    String nombreArchivo = "FACTURA";
+    FacesContext context = FacesContext.getCurrentInstance();
+    Map<String, Object> params = new HashMap<>();
+    params.put("logo", context.getExternalContext().getRealPath(File.separator) + File.separator + "resources"
+        + File.separator + "images" + File.separator + "fireman-logo.png");
+    params.put("permissionDate", DateUtil.formatDateToString(inspection.getLastUpdate())); //TODO LLENAR ESTE CAMPO CON EL DATO REAL
+    params.put("permissionPrice", Float.valueOf("23.4")); //TODO LLENAR ESTE CAMPO CON EL DATO REAL
+    params.put("nextExpirationDate", DateUtil.formatDateToString(inspection.getLastUpdate())); //TODO LLENAR ESTE CAMPO CON EL DATO REAL
+    params.put("expirationDate", DateUtil.formatDateToString(inspection.getLastUpdate())); //TODO LLENAR ESTE CAMPO CON EL DATO REAL
+
+    try {
+      this.generatePDF(nombreArchivo, "invoice.jrxml", null, params, context);
+    } catch (Exception e) {
+      log.error(e.getMessage());
+      MessageUtil.errorFacesMessage("Reporte", "Error al generar el reporte.");
+    }
+
+  }
 
   public void generatePDF(String fileName, String templateName, JRBeanCollectionDataSource data,
                           Map<String, Object> params, FacesContext context) {

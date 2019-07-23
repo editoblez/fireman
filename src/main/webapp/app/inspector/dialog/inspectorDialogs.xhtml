@@ -1,8 +1,7 @@
 <!DOCTYPE html >
 <html xmlns="http://www.w3.org/1999/xhtml"
-		xmlns:h="http://java.sun.com/jsf/html"
-		xmlns:p="http://primefaces.org/ui"
->
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
 
 <p:dialog header="Aprobar Permiso" widgetVar="dlgRequest" width="255"
 	resizable="false" modal="true">
@@ -21,6 +20,29 @@
 
 			<p:commandButton ajax="true" action="faces-redirect=false"
 				update="growl" oncomplete="PF('dlgRequest').hide();"
+				actionListener="#{inspectorBean.clearData()}" value="NO"
+				style="margin: 0px 0px 1px 10px;" />
+		</div>
+	</h:form>
+</p:dialog>
+
+<p:dialog header="Rechazar Permiso" widgetVar="dlgRequest1" width="255"
+	resizable="false" modal="true">
+	<h:form id="formRequest1">
+		<p:outputPanel id="opRequest1" style="text-align: center;">
+			<h:outputText
+				value="Está seguro que desea rechazar el permiso de funcionamiento?." />
+		</p:outputPanel>
+
+		<div align="center" style="padding-top: 15px;">
+			<p:commandButton ajax="true" action="faces-redirect=false"
+				update="growl :formList:dtList"
+				oncomplete="PF('dlgRequest1').hide();"
+				actionListener="#{inspectorBean.rejectRequest()}" value="SI"
+				style="margin: 0px 0px 1px 10px;" />
+
+			<p:commandButton ajax="true" action="faces-redirect=false"
+				update="growl" oncomplete="PF('dlgRequest1').hide();"
 				actionListener="#{inspectorBean.clearData()}" value="NO"
 				style="margin: 0px 0px 1px 10px;" />
 		</div>
@@ -170,7 +192,7 @@
 						action="faces-redirect=false" update="dtListFireExt btnAddExt"
 						disabled="#{inspectorBean.extinguishers.size() >= 3}"
 						actionListener="#{inspectorBean.addExtinguisher()}"
-							value="Agregar Extintor" style="margin: 0px 0px 10px 0px;"/>
+						value="Agregar Extintor" style="margin: 0px 0px 10px 0px;" />
 
 					<p:dataTable id="dtListFireExt" var="item"
 						value="#{inspectorBean.extinguishers}">
@@ -180,16 +202,16 @@
 							</p:inputText>
 						</p:column>
 						<p:column headerText="Tipo">
-							<p:inputText value="#{item.type}" style="width: 100px"/>
+							<p:inputText value="#{item.type}" style="width: 100px" />
 						</p:column>
 						<p:column headerText="Capacidad">
-							<p:inputText value="#{item.capacity}" style="width: 100px"/>
+							<p:inputText value="#{item.capacity}" style="width: 100px" />
 						</p:column>
 						<p:column headerText="Estado">
-							<p:inputText value="#{item.status}" style="width: 100px"/>
+							<p:inputText value="#{item.status}" style="width: 100px" />
 						</p:column>
 						<p:column headerText="Ubicación">
-							<p:inputText value="#{item.location}" style="width: 100px"/>
+							<p:inputText value="#{item.location}" style="width: 100px" />
 						</p:column>
 					</p:dataTable>
 				</p:tab>

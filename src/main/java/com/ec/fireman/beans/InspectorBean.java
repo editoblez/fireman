@@ -81,7 +81,17 @@ public class InspectorBean implements Serializable {
     selectedRequest.setPermissionRequestStatus(PermissionRequestStatus.TO_PAIED);
     permissionRequestDao.update(selectedRequest);
     log.info(selectedRequest.toString());
-    MessageUtil.infoFacesMessage("Solicitud", "Permiso validado correctaente");
+    MessageUtil.infoFacesMessage("Solicitud", "Permiso aprobado correctaente");
+    this.refreshRequests();
+    this.clearData();
+  }
+  
+  @Transactional
+  public void rejectRequest() {
+    selectedRequest.setPermissionRequestStatus(PermissionRequestStatus.REJECTED);
+    permissionRequestDao.update(selectedRequest);
+    log.info(selectedRequest.toString());
+    MessageUtil.infoFacesMessage("Solicitud", "Permiso rechazado correctaente");
     this.refreshRequests();
     this.clearData();
   }
@@ -154,9 +164,6 @@ public class InspectorBean implements Serializable {
   }
 
   public void upload() {
-    // TODO: verificar que el archivo del requerimiento que se va a subir
-    // no esté cargado, en caso de que ya lo esté, se debe eliminar y subirlo
-    // nuevamente
     for (RequirementFileUpload requirementFileUpload : files) {
       log.info(requirementFileUpload.toString());
       if (requirementFileUpload.getFile() != null) {

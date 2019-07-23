@@ -22,7 +22,7 @@
 				<p:column headerText="Estado">
 					<h:outputText value="#{item.permissionRequestStatus.value}" />
 				</p:column>
-				<p:column style="text-align: center;" headerText="Acciones">
+				<p:column style="text-align: center; width: 450px" headerText="Acciones">
 
 					<p:commandButton update=":formFilesRev:opFilesRev growl"
 						rendered="#{!item.isToExpireOrExpired()}"

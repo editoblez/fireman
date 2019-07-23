@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="inspection" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="891eeccb-6430-4edd-9ffd-a5294f35454f">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="inspection" pageWidth="555" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="891eeccb-6430-4edd-9ffd-a5294f35454f">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<parameter name="PERMISSION_NUMBER" class="java.lang.String"/>
 	<parameter name="VALIDITY" class="java.lang.String"/>
@@ -12,12 +12,12 @@
 	<parameter name="activity" class="java.lang.String"/>
 	<parameter name="owner" class="java.lang.String"/>
 	<parameter name="address" class="java.lang.String"/>
-	<parameter name="date" class="java.util.Date"/>
+	<parameter name="date" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
 	<title>
-		<band height="440" splitType="Stretch">
+		<band height="526" splitType="Stretch">
 			<image>
 				<reportElement x="147" y="150" width="260" height="260" uuid="9deacd0b-54cd-4990-b0f3-63e3da9d28e2"/>
 				<imageExpression><![CDATA[$P{WATTERMARK}]]></imageExpression>
@@ -158,6 +158,20 @@
 					<textFieldExpression><![CDATA[$P{date}]]></textFieldExpression>
 				</textField>
 			</frame>
+			<staticText>
+				<reportElement x="0" y="450" width="555" height="20" uuid="724fc222-002c-49ff-816f-de78596a2081"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[JEFE DEL CUERPO DE BOMBEROS DE TISALEO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="476" width="555" height="40" uuid="b3427213-d158-4443-8e04-d8c29e008788"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Dirección: Calle República y Antonio Clavijo Teléfonos: 2751792
+Correo Electrónico: bomberos_tisaleo@hotmail.com
+Emergencias: (03)2751793  -  911]]></text>
+			</staticText>
 		</band>
 	</title>
 </jasperReport>

@@ -110,15 +110,12 @@ public class ReportBean implements Serializable {
     }
 
   }
-  
+
   public void buildPermissionReport(PermissionRequest pr) {
     InspectionHeader inspection = null;
-    List<InspectionFireExtinguisher> extinguishers = null;
     try {
       log.info(pr.toString());
       inspection = inspectionHeaderDao.findInspectionHeaderByRequest(pr.getId());
-      log.info(inspection.toString());
-      extinguishers = inspectionFireExtinguisherDao.findInspectionFireExtinguisherByHeader(inspection.getId());
     } catch (Exception e1) {
       log.info(e1.getMessage());
     }
@@ -131,22 +128,22 @@ public class ReportBean implements Serializable {
     String nombreArchivo = "PERMISO";
     FacesContext context = FacesContext.getCurrentInstance();
     Map<String, Object> params = new HashMap<>();
-    params.put("PERMISSION_NUMBER", "0012"); //TODO BUSCAR ESTE DATO (número de permiso)
-    params.put("VALIDITY", "2020"); //TODO BUSCAR ESTE DATO (AÑO DE VALIDEZ)
+    params.put("PERMISSION_NUMBER", "0012"); // TODO BUSCAR ESTE DATO (número de permiso)
+    params.put("VALIDITY", "2020"); // TODO BUSCAR ESTE DATO (AÑO DE VALIDEZ)
     params.put("WATTERMARK", context.getExternalContext().getRealPath(File.separator) + File.separator + "resources"
         + File.separator + "images" + File.separator + "wattermark.png");
-    Float price = Float.valueOf("23.4"); //TODO BUSCAR ESTE DATO (precio)
+    Float price = Float.valueOf("23.4"); // TODO BUSCAR ESTE DATO (precio)
     params.put("price", price);
     params.put("textPrice", TextNumberUtil.convert(String.valueOf(price), true));
     params.put("years", DateUtil.getYearFromDate(inspection.getLastUpdate()));
-    params.put("socialReason", inspection.getPermissionRequest().getLocal().getUserAccount().getFullName().toUpperCase());
-    params.put("activity", "ACTIVIDAD ECONOMICA ASOCIADA AL RUC"); //TODO BUSCAR ESTE DATO (ACTIVIDAD)
+    params.put("socialReason",
+        inspection.getPermissionRequest().getLocal().getUserAccount().getFullName().toUpperCase());
+    params.put("activity", "ACTIVIDAD ECONOMICA ASOCIADA AL RUC"); // TODO BUSCAR ESTE DATO (ACTIVIDAD)
     params.put("owner", inspection.getPermissionRequest().getLocal().getUserAccount().getFullName().toUpperCase());
     params.put("address", inspection.getPermissionRequest().getLocal().getAddress());
     params.put("date", DateUtil.formatDateToString(inspection.getLastUpdate()));
 
-    JRBeanCollectionDataSource data = CollectionUtils.isEmpty(extinguishers) ? null
-        : new JRBeanCollectionDataSource(extinguishers);
+    JRBeanCollectionDataSource data = null;
 
     try {
       this.generatePDF(nombreArchivo, "permission.jrxml", data, params, context);
@@ -159,7 +156,7 @@ public class ReportBean implements Serializable {
 
   public void generatePDF(String fileName, String templateName, JRBeanCollectionDataSource data,
       Map<String, Object> params, FacesContext context) {
-    try {      
+    try {
       String path = context.getExternalContext().getRealPath(File.separator) + File.separator + "resources"
           + File.separator + "reports" + File.separator + templateName;
       HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();

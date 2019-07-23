@@ -24,7 +24,7 @@ public class TextNumberUtil {
     }
     if (Pattern.matches("\\d{1,9},\\d{1,2}", numero)) {
       String Num[] = numero.split(",");
-      parte_decimal = "y " + Num[1] + "/100 Soles.";
+      parte_decimal = "y " + Num[1] + "/100.";
       if (Integer.parseInt(Num[0]) == 0) {
         literal = "cero ";
       } else if (Integer.parseInt(Num[0]) > 999999) {

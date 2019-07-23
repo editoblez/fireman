@@ -9,6 +9,7 @@ import com.ec.fireman.data.entities.PermissionIssue;
 import com.ec.fireman.data.entities.PermissionRequest;
 import com.ec.fireman.util.DateUtil;
 import com.ec.fireman.util.MessageUtil;
+import com.ec.fireman.util.TextNumberUtil;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import net.sf.jasperreports.engine.*;
@@ -136,7 +137,7 @@ public class ReportBean implements Serializable {
     params.put("WATTERMARK", context.getExternalContext().getRealPath(File.separator) + File.separator + "resources"
         + File.separator + "images" + File.separator + "wattermark.png");
     params.put("price", permissionIssue.getPrice().floatValue());
-    params.put("textPrice", permissionIssue.getPrice().toString());
+    params.put("textPrice", TextNumberUtil.convert(permissionIssue.getPrice().toString(), true));
     params.put("years", DateUtil.getYearFromDate(inspection.getLastUpdate()));
     params.put("socialReason",
         inspection.getPermissionRequest().getLocal().getUserAccount().getFullName().toUpperCase());

@@ -3,9 +3,10 @@ package com.ec.fireman.beans;
 public class PageNameConstants {
   public static final String LOGIN_PAGE = "/app/login.xhtml";
   public static final String HOME_PAGE = "/app/common/home.xhtml";
-  static final String REGISTER_CLIENT_PAGE = "/app/register-client.xhtml";
+  public static final String SERVICE_ADMIN_PAGE = "/app/admin/services.xhtml";
+  public static final String REGISTER_CLIENT_PAGE = "/app/register-client.xhtml";
 
-  static final String SERVICE_ADMIN_PAGE = "/app/admin/services.xhtml";
+  public static final String SERVICE_ADMIN_FORM_PAGE = "/app/admin/form/service-form.xhtml";
   static final String REQUIREMENT_ADMIN_PAGE = "/app/admin/requirements.xhtml";
   static final String USER_ADMIN_PAGE = "/app/admin/users.xhtml";
   static final String LOCAL_CLIENT_PAGE = "/app/client/locals.xhtml";

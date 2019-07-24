@@ -28,26 +28,13 @@
 										 action="form/service-form.xhtml?faces-redirect=true"
 										 ajax="false"
 										 value="Nuevo" styleClass="btn-primary"/>
+						<p:spacer width="5"/>
 						<p:commandButton value="Ver seleccionado" update="@(.ui-dialog)" styleClass="btn-info"
-										 disabled="#{empty serviceListBean.selectedService or serviceListBean.selectedService.name == null or serviceListBean.services.size() == 0}"
-										 oncomplete="PF('selectedCars').show()" icon="fa fa-search"/>
+										 disabled="#{empty serviceListBean.selectedService or
+										  serviceListBean.selectedService.name == null or
+										   serviceListBean.services.size() == 0}"
+										 action="#{serviceListBean.redirectEditTo}" icon="fa fa-search"/>
 					</div>
-
-<!--					<p:splitButton value="New" action="/car-form?faces-redirect=true"-->
-<!--								   icon="fa fa-plus"-->
-<!--								   styleClass="hidden-md hidden-lg btn-primary">-->
-<!--						<p:menuitem value="Delete Selected" action="#{carListMB.delete}"-->
-<!--									process="@this" update="@form"-->
-<!--									disabled="#{empty carListMB.selectedCars or carListMB.selectedCars.size() == 0}"-->
-<!--									icon="fa fa-trash">-->
-<!--							<p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger"/>-->
-<!--						</p:menuitem>-->
-<!--						<p:menuitem value="View selected" update="@(.ui-dialog)"-->
-<!--									oncomplete="PF('selectedCars').show()"-->
-<!--									disabled="#{empty carListMB.selectedCars or carListMB.selectedCars.size() == 0}"-->
-<!--									icon="fa fa-search"-->
-<!--						/>-->
-<!--					</p:splitButton>-->
 
 					<p:separator/>
 					<p:dataTable id="dtService"

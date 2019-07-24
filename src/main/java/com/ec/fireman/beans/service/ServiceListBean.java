@@ -1,5 +1,6 @@
-package com.ec.fireman.beans;
+package com.ec.fireman.beans.service;
 
+import com.ec.fireman.beans.PageNameConstants;
 import com.ec.fireman.data.dao.ServiceDao;
 import com.ec.fireman.data.entities.Service;
 import com.ec.fireman.data.entities.State;
@@ -12,6 +13,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
@@ -33,13 +35,14 @@ public class ServiceListBean implements Serializable {
   @PostConstruct
   public void init() {
     this.refreshServices();
-    this.selectedService = new Service();
+    setSelectedService(new Service());
   }
 
   public void refreshServices() {
     services = serviceDao.findAll();
     log.info("Services length: " + services != null ? services.size() : 0);
     selectedService = new Service();
+
   }
 
   public void findByName(String nombre) {
@@ -50,39 +53,10 @@ public class ServiceListBean implements Serializable {
       services = serviceDao.findAll();
     }
     log.info("Services length: " + services != null ? services.size() : 0);
-    selectedService = new Service();
   }
 
-  @Transactional
-  public void createService() {
-    selectedService.setState(State.ACTIVE);
-    serviceDao.save(selectedService);
-    this.refreshServices();
-  }
-
-  @Transactional
-  public void editService() {
-    serviceDao.update(selectedService);
-    this.refreshServices();
-  }
-
-  public void save() {
-    if ((Long)this.selectedService.getId() == null) {
-      this.createService();
-    } else {
-      this.refreshServices();
-    }
-  }
-
-  public void clear() {
-    this.selectedService = new Service();
-  }
-
-
-  public boolean isNew() {
-    return this.selectedService == null ||
-            (((Long)this.selectedService.getId() == null || this.selectedService.getId() == 0) &&
-                    this.selectedService.getName() == null);
+  public String redirectEditTo() throws IOException {
+    return PageNameConstants.SERVICE_ADMIN_FORM_PAGE + "?id=" + this.selectedService.getId() + "&faces-redirect=true";
   }
 
 }

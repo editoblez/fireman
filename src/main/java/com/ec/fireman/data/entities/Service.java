@@ -5,7 +5,12 @@ import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 
-@NamedQueries({ @NamedQuery(name = "findServiceByName", query = "from Service e where e.name = :name") })
+@NamedQueries(
+      {
+              @NamedQuery(name = "findServiceByName", query = "from Service e where e.name = :name"),
+              @NamedQuery(name = "findServicesByName", query = "from Service e where e.name LIKE :name")
+      }
+)
 
 @Audited
 @Data

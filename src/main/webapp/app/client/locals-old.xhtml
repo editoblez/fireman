@@ -1,0 +1,91 @@
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core">
+<ui:composition template="../../template/template.xhtml">
+	<ui:define name="pageTitle">
+		Gestionar Locales
+	</ui:define>
+	<ui:define name="contenido">
+
+		<h:form id="formList">
+
+			<p:commandButton ajax="true" update=":formList:dtList growl"
+				oncomplete="PF('dlgCreate').show()" value="Nuevo"
+				style="margin: 0px 0px 5px 0px;" />
+
+			<p:dataTable id="dtList" var="item" value="#{clientLocalBean.locals}">
+				<p:column headerText="Nombre del Local">
+					<h:outputText value="#{item.local.name}"/>
+				</p:column>
+				<p:column headerText="Dirección">
+					<h:outputText value="#{item.local.address}" />
+				</p:column>
+				<p:column headerText="Servicio">
+					<h:outputText value="#{item.local.service.name}" />
+				</p:column>
+				<p:column headerText="Estado">
+					<h:outputText
+						value="#{item.permissionRequest.permissionRequestStatus.value}" />
+				</p:column>
+				<p:column style="text-align: center;" headerText="Acciones">
+					<p:commandButton update=":formEdit:opEdit growl"
+						rendered="#{item.local.state == 'ACTIVE'}" icon="ui-icon-pencil"
+						oncomplete="PF('dlgEdit').show()" title="Editar"
+						style="margin: 0px 0px 1px 10px;">
+						<f:setPropertyActionListener value="#{item.local}"
+							target="#{clientLocalBean.selectedLocal}" />
+					</p:commandButton>
+
+					<p:commandButton update=":formDelete:opDelete growl"
+						rendered="#{(item.permissionRequest.permissionRequestStatus == 'TO_REQUEST'
+						or item.permissionRequest.permissionRequestStatus == 'REJECTED' or item.permissionRequest.isToExpireOrExpired()) and item.local.state == 'ACTIVE'}"
+						icon="ui-icon-trash" oncomplete="PF('dlgEliminar').show()"
+						title="Inactivar Local" style="margin: 0px 0px 1px 10px;">
+						<f:setPropertyActionListener value="#{item.local}"
+							target="#{clientLocalBean.selectedLocal}" />
+					</p:commandButton>
+
+					<p:commandButton update=":formFiles:opFiles growl"
+						rendered="#{(item.permissionRequest.permissionRequestStatus == 'TO_REQUEST'
+						or item.permissionRequest.permissionRequestStatus == 'REJECTED' or item.permissionRequest.isToExpireOrExpired() )
+						and item.local.state == 'ACTIVE'}"
+						icon="ui-icon-folder-open" oncomplete="PF('dlgFiles').show()"
+						title="Cargar documentos" style="margin: 0px 0px 1px 10px;">
+						<f:setPropertyActionListener value="#{item.local}"
+							target="#{clientLocalBean.selectedLocal}" />
+					</p:commandButton>
+
+					<p:commandButton
+						update=":formRequest:opRequest :formList:dtList growl"
+						rendered="#{(item.permissionRequest.permissionRequestStatus == 'TO_REQUEST'
+						or item.permissionRequest.permissionRequestStatus == 'REJECTED' or item.permissionRequest.isToExpireOrExpired())
+						and item.local.state == 'ACTIVE'}"
+						icon="ui-icon-clipboard" oncomplete="PF('dlgRequest').show()"
+						title="Solicitar permiso" style="margin: 0px 0px 1px 10px;">
+						<f:setPropertyActionListener value="#{item.permissionRequest}"
+							target="#{clientLocalBean.selectedRequest}" />
+					</p:commandButton>
+
+					<p:commandButton update=":formCancel:opCancel growl"
+						rendered="#{item.permissionRequest.permissionRequestStatus != 'TO_REQUEST'
+						and item.permissionRequest.permissionRequestStatus != 'REJECTED' and !item.permissionRequest.isToExpireOrExpired()}"
+						icon="ui-icon-circle-close" oncomplete="PF('dlgCancel').show()"
+						title="Cancelar solicitud" style="margin: 0px 0px 1px 10px;">
+						<f:setPropertyActionListener value="#{item.permissionRequest}"
+							target="#{clientLocalBean.selectedRequest}" />
+					</p:commandButton>
+
+					<h:outputText value="Sin acciones / Eliminado"
+						rendered="#{item.local.state == 'INACTIVE'}" />
+
+				</p:column>
+			</p:dataTable>
+		</h:form>
+
+		<ui:include src="dialog/localDialogs.xhtml" />
+	</ui:define>
+</ui:composition>
+</html>

@@ -43,6 +43,7 @@ public class ClientLocalBean implements Serializable {
   private PermissionRequestFilesDao permissionRequestFilesDao;
 
   private List<LocalRequest> locals;
+  private LocalRequest selectedItem;
   private Local selectedLocal;
   private Service service;
   private List<RequirementFileUpload> files;
@@ -53,6 +54,7 @@ public class ClientLocalBean implements Serializable {
     this.refreshLocals();
     selectedLocal = new Local();
     selectedRequest = new PermissionRequest();
+    this.selectedItem = new LocalRequest(selectedLocal, selectedRequest);
   }
 
   public void refreshLocals() {

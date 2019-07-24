@@ -1,0 +1,99 @@
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core">
+<ui:composition template="../../template/template.xhtml">
+	<ui:define name="pageTitle">
+		Gestionar Solicitudes		
+	</ui:define>
+	<ui:define name="contenido">
+
+		<h:form id="formList">
+
+			<p:dataTable id="dtList" var="item" value="#{inspectorBean.requests}">
+				<p:column headerText="Dirección">
+					<h:outputText value="#{item.local.address}" />
+				</p:column>
+				<p:column headerText="Servicio">
+					<h:outputText value="#{item.local.service.name}" />
+				</p:column>
+				<p:column headerText="Estado">
+					<h:outputText value="#{item.permissionRequestStatus.value}" />
+				</p:column>
+				<p:column style="text-align: center; width: 450px" headerText="Acciones">
+
+					<p:commandButton update=":formFilesRev:opFilesRev growl"
+						rendered="#{!item.isToExpireOrExpired()}"
+						icon="ui-icon-folder-collapsed"
+						oncomplete="PF('dlgFilesRev').show()"
+						title="Revisar documentos del local"
+						style="margin: 0px 0px 1px 10px;">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{inspectorBean.selectedRequest}" />
+					</p:commandButton>
+
+					<p:commandButton update=":formSelect:opSelect growl"
+						rendered="#{item.permissionRequestStatus == 'REQUESTED'}"
+						icon="ui-icon-transferthick-e-w"
+						oncomplete="PF('dlgSelect').show()" title="Atender Solicitud"
+						style="margin: 0px 0px 1px 10px;">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{inspectorBean.selectedRequest}" />
+					</p:commandButton>
+
+					<p:commandButton update=":formFiles:opFiles growl"
+						rendered="#{item.permissionRequestStatus == 'IN_PROGRESS'}"
+						icon="ui-icon-folder-open" oncomplete="PF('dlgFiles').show()"
+						title="Cargar documentos" style="margin: 0px 0px 1px 10px;">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{inspectorBean.selectedRequest}" />
+					</p:commandButton>
+
+					<p:commandButton update=":formInspect:opInspect growl"
+						rendered="#{item.permissionRequestStatus == 'IN_PROGRESS'}"
+						actionListener="#{inspectorBean.fillInspectionData(item)}"
+						icon="ui-icon-document" oncomplete="PF('dlgInspect').show()"
+						title="Datos Inspección" style="margin: 0px 0px 1px 10px;">
+					</p:commandButton>
+
+					<p:button icon="ui-icon-search" target="_blank"
+						rendered="#{item.permissionRequestStatus == 'IN_PROGRESS'}"
+						onclick="window.open('#{inspectorBean.mapUrl(item)}'); return false;"
+						title="Ver en el mapa" style="margin: 0px 0px 1px 10px;">
+					</p:button>
+
+					<p:commandButton update=":formRequest:opRequest growl"
+						rendered="#{item.permissionRequestStatus == 'IN_PROGRESS'}"
+						icon="ui-icon-clipboard" oncomplete="PF('dlgRequest').show()"
+						title="Aprobar" style="margin: 0px 0px 1px 10px;">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{inspectorBean.selectedRequest}" />
+					</p:commandButton>
+
+					<p:commandButton
+						actionListener="#{reportBean.buildInspecctionReport(item)}"
+						rendered="#{item.permissionRequestStatus == 'IN_PROGRESS'}"
+						title="Reporte de inspección" icon="ui-icon-bookmark"
+						update="growl" process=":formList" ajax="false"
+						style="margin: 0px 0px 1px 10px;">
+					</p:commandButton>
+
+					<p:commandButton
+						actionListener="#{reportBean.buildPermissionReport(item)}"
+						rendered="#{item.permissionRequestStatus == 'IN_PROGRESS'}"
+						title="Reporte de permiso de funcionamiento"
+						icon="ui-icon-contact" update="growl" process=":formList"
+						ajax="false" style="margin: 0px 0px 1px 10px;">
+					</p:commandButton>
+
+				</p:column>
+			</p:dataTable>
+		</h:form>
+
+		<ui:include src="dialog/inspectorDialogs.xhtml" />
+
+	</ui:define>
+</ui:composition>
+</html>

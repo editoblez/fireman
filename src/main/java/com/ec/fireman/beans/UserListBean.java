@@ -32,6 +32,7 @@ public class UserListBean implements Serializable {
   private RoleDao roleDao;
 
   private List<UserAccount> users;
+
   private UserAccount selectedUser;
   private Role role;
   private String passReset1;
@@ -79,5 +80,4 @@ public class UserListBean implements Serializable {
   public List<Role> listRoles() {
     return roleDao.findAll();
   }
-
 }

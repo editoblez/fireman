@@ -28,15 +28,27 @@ public class ServiceListBean implements Serializable {
 
   private List<Service> services;
   private Service selectedService;
+  private String nombre;
 
   @PostConstruct
   public void init() {
     this.refreshServices();
-    setSelectedService(new Service());
+    this.selectedService = new Service();
   }
 
   public void refreshServices() {
     services = serviceDao.findAll();
+    log.info("Services length: " + services != null ? services.size() : 0);
+    selectedService = new Service();
+  }
+
+  public void findByName(String nombre) {
+    services = null;
+    if (nombre != null && !nombre.isEmpty()) {
+      services = serviceDao.findServicesByName(nombre);
+    } else {
+      services = serviceDao.findAll();
+    }
     log.info("Services length: " + services != null ? services.size() : 0);
     selectedService = new Service();
   }
@@ -52,6 +64,25 @@ public class ServiceListBean implements Serializable {
   public void editService() {
     serviceDao.update(selectedService);
     this.refreshServices();
+  }
+
+  public void save() {
+    if ((Long)this.selectedService.getId() == null) {
+      this.createService();
+    } else {
+      this.refreshServices();
+    }
+  }
+
+  public void clear() {
+    this.selectedService = new Service();
+  }
+
+
+  public boolean isNew() {
+    return this.selectedService == null ||
+            (((Long)this.selectedService.getId() == null || this.selectedService.getId() == 0) &&
+                    this.selectedService.getName() == null);
   }
 
 }

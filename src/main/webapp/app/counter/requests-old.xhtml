@@ -1,0 +1,58 @@
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core">
+<ui:composition template="../../template/template.xhtml">
+	<ui:define name="pageTitle">
+		Gestionar Solicitudes		
+	</ui:define>
+	<ui:define name="contenido">
+
+		<h:form id="formList">
+
+			<p:dataTable id="dtList" var="item" value="#{counterBean.requests}">
+				<p:column headerText="Dirección">
+					<h:outputText value="#{item.local.address}" />
+				</p:column>
+				<p:column headerText="Servicio">
+					<h:outputText value="#{item.local.service.name}" />
+				</p:column>
+				<p:column headerText="Estado">
+					<h:outputText value="#{item.permissionRequestStatus.value}" />
+				</p:column>
+				<p:column style="text-align: center; width: 200px"
+					headerText="Acciones">
+
+					<p:commandButton update=":formFiles:opFiles growl"
+						icon="ui-icon-folder-collapsed" oncomplete="PF('dlgFiles').show()"
+						title="Cargar documentos">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{counterBean.selectedRequest}" />
+					</p:commandButton>
+
+					<p:commandButton update=":formRequest:opRequest growl"
+						icon="ui-icon-clipboard" oncomplete="PF('dlgRequest').show()"
+						title="Emitir permiso de funcionamiento">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{counterBean.selectedRequest}" />
+					</p:commandButton>
+
+					<p:commandButton update=":formCancel:opCancel growl"
+						rendered="#{item.permissionRequestStatus == 'TO_PAIED'}"
+						icon="ui-icon-circle-close" oncomplete="PF('dlgCancel').show()"
+						title="Cancelar solicitud">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{counterBean.selectedRequest}" />
+					</p:commandButton>
+
+				</p:column>
+			</p:dataTable>
+		</h:form>
+
+		<ui:include src="dialog/counterDialogs.xhtml" />
+
+	</ui:define>
+</ui:composition>
+</html>

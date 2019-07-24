@@ -16,6 +16,7 @@ public class SessionUtils {
 
   private static final String USER_ID = "userid";
   private static final String ROLE = "rol";
+  private static final String USER_EMAIL = "email";
 
   public static HttpServletRequest getRequest() {
     return (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
@@ -37,6 +38,12 @@ public class SessionUtils {
   public static void saveLoggingInfo(String userId, RoleTypes role) {
     Faces.setSessionAttribute(USER_ID, userId);
     Faces.setSessionAttribute(ROLE, role.getValue());
+  }
+
+  public static void saveLoggingInfo(String userId, RoleTypes role, String email) {
+    Faces.setSessionAttribute(USER_ID, userId);
+    Faces.setSessionAttribute(ROLE, role.getValue());
+    Faces.setSessionAttribute(USER_EMAIL, email);
   }
 
   public static void closeSession() {

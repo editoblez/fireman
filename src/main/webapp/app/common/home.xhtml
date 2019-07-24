@@ -1,14 +1,16 @@
-<!DOCTYPE html >
-<html xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:ui="http://java.sun.com/jsf/facelets"
->
-    <ui:composition template="/template/template.xhtml">
-	<ui:define name="pageTitle">
-		Inicio
-	</ui:define>
-	<ui:define name="contenido">
-
-
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				template="#{layoutMB.template}">
+	<ui:param name="renderBreadCrumb" value="false"/>
+	<ui:define name="title">
+		<h2 class="align-center">
+			Bienvenidos al <span class="text-aqua"> Sistema de Bomberos</span>
+		</h2>
+		<br/>
+		<div class="align-center">
+			<img src="#{resource[ 'images:fireman-logo.png' ]}" alt="Sistema de Bomberos" title="Sistema de Bomberos"/>
+		</div>
 	</ui:define>
 </ui:composition>
-</html>

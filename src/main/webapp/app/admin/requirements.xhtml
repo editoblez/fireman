@@ -1,46 +1,106 @@
-<!DOCTYPE html >
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:pe="http://primefaces.org/ui/extensions"
-	xmlns:f="http://java.sun.com/jsf/core">
-<ui:composition template="../../template/template.xhtml">
-	<ui:define name="pageTitle">
-		Gestionar requerimientos
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:adm="http://github.com/adminfaces"
+				template="#{layoutMB.template}">
+
+	<ui:define name="metadata">
+		<ui:param name="title" value="Listado de Servicios"/>
+		<style type="text/css">
+			.ui-datatable .ui-datatable-header {
+				text-align: right !important;
+			}
+		</style>
 	</ui:define>
-	<ui:define name="contenido">
 
-		<h:form id="formList">
+	<ui:define name="description">
+		Servicios de usuarios
+	</ui:define>
 
-			<p:commandButton ajax="true" update=":formList:dtList growl"
-				oncomplete="PF('dlgServiceCreate').show()" value="Nuevo"
-				style="margin: 0px 0px 5px 0px;" />
+	<ui:define name="body">
+		<h:form>
+			<p:focus context="@form"/>
+			<div class="box box-primary">
+				<div class="box-header with-border">
+					<div id="main-buttons" class="hidden-sm hidden-xs">
+						<p:commandButton icon="fa fa-plus"
+										 value="Nuevo" styleClass="btn-primary"/>
+						<p:spacer width="5"/>
+						<p:commandButton value="Eliminar" icon="fa fa-trash" styleClass="btn-danger"
+										 disabled="#{empty requirementListBean.selectedRequirement or
+										  requirementListBean.selectedRequirement.name == null or
+										   requirementListBean.requirements.size() == 0}"
+										 process="@this" update="@form"
+						>
+							<p:confirm header="Confirmacion" message="Estas seguro?" icon="ui-icon-danger"/>
+						</p:commandButton>
+						<p:spacer width="5"/>
+						<!--						<p:commandButton value="View selected" update="@(.ui-dialog)" styleClass="btn-info"-->
+						<!--										 disabled="#{empty carListMB.selectedCars or carListMB.selectedCars.size() == 0}"-->
+						<!--										 oncomplete="PF('selectedCars').show()" icon="fa fa-search"/>-->
+					</div>
 
-			<p:dataTable id="dtList" var="req"
-				value="#{requirementListBean.requirements}">
-				<p:column headerText="Nombre" width="30%">
-					<h:outputText value="#{req.name}" />
-				</p:column>
-				<p:column headerText="Descripcion" width="40%">
-					<h:outputText value="#{req.description}" />
-				</p:column>
-				<p:column headerText="Rol" width="20%">
-					<h:outputText value="#{req.role.roleName}" />
-				</p:column>
-				<p:column style="text-align: center;" width="10%"
-					headerText="Acciones">
-					<p:commandButton update=":formServiceEdit:opEdit growl"
-						icon="ui-icon-pencil" oncomplete="PF('dlgServiceEdit').show()"
-						title="Editar" style="margin: 0px 0px 1px 10px;">
-						<f:setPropertyActionListener value="#{req}"
-							target="#{requirementListBean.selectedRequirement}" />
-					</p:commandButton>
-				</p:column>
-			</p:dataTable>
+					<!--					<p:splitButton value="New" action="/car-form?faces-redirect=true"-->
+					<!--								   icon="fa fa-plus"-->
+					<!--								   styleClass="hidden-md hidden-lg btn-primary">-->
+					<!--						<p:menuitem value="Delete Selected" action="#{carListMB.delete}"-->
+					<!--									process="@this" update="@form"-->
+					<!--									disabled="#{empty carListMB.selectedCars or carListMB.selectedCars.size() == 0}"-->
+					<!--									icon="fa fa-trash">-->
+					<!--							<p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger"/>-->
+					<!--						</p:menuitem>-->
+					<!--						<p:menuitem value="View selected" update="@(.ui-dialog)"-->
+					<!--									oncomplete="PF('selectedCars').show()"-->
+					<!--									disabled="#{empty carListMB.selectedCars or carListMB.selectedCars.size() == 0}"-->
+					<!--									icon="fa fa-search"-->
+					<!--						/>-->
+					<!--					</p:splitButton>-->
+
+					<p:separator/>
+					<p:dataTable id="dtService"
+								 selectionMode="single"
+								 selection="#{requirementListBean.selectedRequirement}"
+								 var="req"
+								 rowKey="#{req.id}"
+								 value="#{requirementListBean.requirements}"
+								 rows="5"
+								 paginatorPosition="bottom"
+								 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {JumpToPageDropdown}"
+								 currentPageReportTemplate="[ {startRecord} a {endRecord} de {totalRecords} ]"
+								 rowsPerPageTemplate="5,10,15,20,30"
+								 paginator="true">
+
+						<p:ajax event="rowSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
+						<p:ajax event="rowUnselect" update="@(.ui-button, .ui-confirm-dialog)"/>
+						<p:ajax event="rowSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
+						<p:ajax event="rowUnselect" update="@(.ui-button, .ui-confirm-dialog)"/>
+						<p:ajax event="toggleSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
+
+						<p:column headerText="Nombre" width="30%" sortBy="#{req.name}"
+								  filterMatchMode="contains"
+								  filterBy="#{req.name}">
+							<h:outputText value="#{req.name}" />
+						</p:column>
+						<p:column headerText="Descripcion" width="40%" sortBy="#{req.description}"
+								  filterMatchMode="contains"
+								  filterBy="#{req.description}">
+							<h:outputText value="#{req.description}" />
+						</p:column>
+						<p:column headerText="Rol" width="20%" sortBy="#{req.role.roleName}"
+								  filterMatchMode="contains"
+								  filterBy="#{req.role.roleName}">
+							<h:outputText value="#{req.role.roleName}" />
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-danger box-solid">
+				<p:commandButton value="Yes" type="button" styleClass="btn-material btn-primary ui-confirmdialog-yes"
+								 icon="fa fa-check"/>
+				<p:commandButton value="No" type="button" styleClass="btn-material btn-danger ui-confirmdialog-no"
+								 icon="fa fa-close"/>
+			</p:confirmDialog>
 		</h:form>
-
-		<ui:include src="dialog/requirementDialogs.xhtml"/>
 	</ui:define>
 </ui:composition>
-</html>

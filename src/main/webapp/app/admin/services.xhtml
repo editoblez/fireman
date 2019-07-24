@@ -1,45 +1,112 @@
-<!DOCTYPE html >
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:pe="http://primefaces.org/ui/extensions"
-	xmlns:f="http://java.sun.com/jsf/core">
-<ui:composition template="../../template/template.xhtml">
-	<ui:define name="pageTitle">
-		Gestionar servicios
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:adm="http://github.com/adminfaces"
+				template="#{layoutMB.template}">
+
+	<ui:define name="metadata">
+		<ui:param name="title" value="Listado de Servicios"/>
+		<style type="text/css">
+			.ui-datatable .ui-datatable-header {
+				text-align: right !important;
+			}
+		</style>
 	</ui:define>
-	<ui:define name="contenido">
 
-		<h:form id="formServiceList">
+	<ui:define name="description">
+		Servicios de usuarios
+	</ui:define>
 
-			<p:commandButton ajax="true" style="margin: 0px 0px 5px 0px;"
-				update=":formServiceList:dtService growl"
-				oncomplete="PF('dlgServiceCreate').show()" value="Nuevo" />
+	<ui:define name="body">
+		<h:form>
+			<p:focus context="@form"/>
+			<div class="box box-primary">
+				<div class="box-header with-border">
+					<div id="main-buttons" class="hidden-sm hidden-xs">
+						<p:commandButton icon="fa fa-plus"
+										 action="form/service-form.xhtml?faces-redirect=true"
+										 ajax="false"
+										 value="Nuevo" styleClass="btn-primary"/>
+						<p:commandButton value="Ver seleccionado" update="@(.ui-dialog)" styleClass="btn-info"
+										 disabled="#{empty serviceListBean.selectedService or serviceListBean.selectedService.name == null or serviceListBean.services.size() == 0}"
+										 oncomplete="PF('selectedCars').show()" icon="fa fa-search"/>
+					</div>
 
-			<p:dataTable id="dtService" var="service"
-				value="#{serviceListBean.services}">
-				<p:column headerText="Nombre">
-					<h:outputText value="#{service.name}" />
-				</p:column>
-				<p:column headerText="Estado" rendered="false">
-					<h:outputText value="#{service.state}" />
-				</p:column>
-				<p:column style="text-align: center;" width="100"
-					headerText="Acciones">
-					<p:commandButton update=":formServiceEdit:opEdit growl"
-						rendered="#{service.state == 'ACTIVE'}" icon="ui-icon-pencil"
-						oncomplete="PF('dlgServiceEdit').show()" title="Editar"
-						style="margin: 0px 0px 1px 10px;">
-						<f:setPropertyActionListener value="#{service}"
-							target="#{serviceListBean.selectedService}" />
-					</p:commandButton>
-				</p:column>
-			</p:dataTable>
+<!--					<p:splitButton value="New" action="/car-form?faces-redirect=true"-->
+<!--								   icon="fa fa-plus"-->
+<!--								   styleClass="hidden-md hidden-lg btn-primary">-->
+<!--						<p:menuitem value="Delete Selected" action="#{carListMB.delete}"-->
+<!--									process="@this" update="@form"-->
+<!--									disabled="#{empty carListMB.selectedCars or carListMB.selectedCars.size() == 0}"-->
+<!--									icon="fa fa-trash">-->
+<!--							<p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger"/>-->
+<!--						</p:menuitem>-->
+<!--						<p:menuitem value="View selected" update="@(.ui-dialog)"-->
+<!--									oncomplete="PF('selectedCars').show()"-->
+<!--									disabled="#{empty carListMB.selectedCars or carListMB.selectedCars.size() == 0}"-->
+<!--									icon="fa fa-search"-->
+<!--						/>-->
+<!--					</p:splitButton>-->
+
+					<p:separator/>
+					<p:dataTable id="dtService"
+								 selectionMode="single"
+								 selection="#{serviceListBean.selectedService}"
+								 var="service"
+								 rowKey="#{service.id}"
+								 value="#{serviceListBean.services}"
+								 rows="5"
+								 paginatorPosition="bottom"
+								 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {JumpToPageDropdown}"
+								 currentPageReportTemplate="[ {startRecord} a {endRecord} de {totalRecords} ]"
+								 rowsPerPageTemplate="5,10,15,20,30"
+								 paginator="true">
+
+						<p:ajax event="rowSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
+						<p:ajax event="rowUnselect" update="@(.ui-button, .ui-confirm-dialog)"/>
+						<p:ajax event="rowSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
+						<p:ajax event="rowUnselect" update="@(.ui-button, .ui-confirm-dialog)"/>
+						<p:ajax event="toggleSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
+
+						<f:facet name="header">
+							Buscar servicio por nombre: <p:inputText id="inptName"
+																	   value="#{serviceListBean.nombre}"/>
+							<p:spacer height="5"/>
+							<p:commandButton id="brFind"
+											 value="Buscar"
+											 action="#{serviceListBean.findByName(serviceListBean.nombre)}"
+											 process="@form"
+											 update="@form"
+											 styleClass="btn-flat bg-black btn-states"
+											 partialSubmit="true"/>
+						</f:facet>
+
+						<p:column headerText="Nombre">
+							<h:outputText value="#{service.name}" />
+						</p:column>
+						<p:column headerText="Estado" sortBy="#{service.state}"
+								  filterMatchMode="contains"
+								  filterBy="#{service.state}" rendered="false">
+							<h:outputText value="#{service.state}" />
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-danger box-solid">
+				<p:commandButton value="Yes" type="button" styleClass="btn-material btn-primary ui-confirmdialog-yes"
+								 icon="fa fa-check"/>
+				<p:commandButton value="No" type="button" styleClass="btn-material btn-danger ui-confirmdialog-no"
+								 icon="fa fa-close"/>
+			</p:confirmDialog>
 		</h:form>
 
-		<ui:include src="dialog/serviceDialogs.xhtml" />
-
+		<p:dialog header="Servicio" widgetVar="selectedService" height="250"
+				  width="400" responsive="true" styleClass="box-success">
+			<p:dataList id="selectedServices" value="#{serviceListBean.selectedService}" var="service"
+						type="definition">
+				ID: #{service.id} - Nombre: #{service.name}
+			</p:dataList>
+		</p:dialog>
 	</ui:define>
 </ui:composition>
-</html>

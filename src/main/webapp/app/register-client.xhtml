@@ -1,57 +1,160 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:p="http://primefaces.org/ui">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:adm="http://github.com/adminfaces"
+	  xmlns:p="http://primefaces.org/ui">
+
 <h:head>
-	<h:outputStylesheet library="css" name="login.css" />
 	<title>Registro de Clientes</title>
+	<meta charset="utf-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+	<link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon/favicon.ico']}"/>
+	<link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon/favicon-16x16.png']}" sizes="16x16"/>
+	<link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon/favicon-32x32.png']}" sizes="32x32"/>
+	<link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon/favicon-96x96.png']}" sizes="96x96"/>
+	<link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon/favicon-144x144.png']}" sizes="144x144"/>
+	<meta name="theme-color" content="#444"/>
+	<meta name="mobile-web-app-capable" content="yes"/>
+
+	<style type="text/css">
+		body .load-bar {
+			margin-top: -20px;
+		}
+		/* below css hides growls in small screens and makes messages visible */
+		@media (max-width: 768px) {
+
+			body div.ui-growl {
+				display: none;
+			}
+
+			body div.ui-messages {
+				display: block;
+			}
+
+		}
+
+		/* below css hides messages in medium/big devices and makes growl visible in such devices */
+		@media (min-width: 769px) {
+			body div.ui-growl {
+				display: block;
+			}
+
+			body div.ui-messages {
+				display: none;
+			}
+		}
+
+		body.login-page {
+			background-color: transparent;
+		}
+
+		html {
+			background: url(#{resource[ 'images:login-bg.jpg' ]}) no-repeat center center fixed;
+			-webkit-background-size: cover;
+			-moz-background-size: cover;
+			-o-background-size: cover;
+			background-size: cover;
+		}
+
+		@media (max-width: 768px) {
+			html {
+				background-image: url(#{resource[ 'images:login-bg-mobile.jpeg' ]});
+			}
+		}
+
+	</style>
 </h:head>
-<h:body>
-	<p:panel id="panel-register-client" header="Registrar Nuevo Cliente"
-		style="margin-bottom:10px;" styleClass="centered">
-		<h:form>
-			<p:messages id="messages" showDetail="true" closable="true" />
-			<h:panelGrid columns="3" cellpadding="5">
-				<h:outputLabel for="firstName" value="Primer Nombre" />
-				<p:inputText id="firstName" required="true"
-					value="#{registerClientBean.firstName}" />
-				<p:message for="firstName" />
 
-				<h:outputLabel for="secondName" value="Segundo Nombre" />
-				<p:inputText id="secondName"
-					value="#{registerClientBean.secondName}" />
-				<p:message for="secondName" />
+<h:body styleClass="hold-transition login-page">
+	<p:growl sticky="true">
+		<p:autoUpdate/>
+	</p:growl>
+	<div id="loader" class="load-bar" style="display: none">
+		<div class="bar"></div>
+		<div class="bar"></div>
+		<div class="bar"></div>
+	</div>
 
-				<h:outputLabel for="firstLastName" value="Primer Apellido" />
-				<p:inputText id="firstLastName" required="true"
-					value="#{registerClientBean.firstLastName}" />
-				<p:message for="firstLastName" />
+	<p:dialog id="adminStatusDialog" modal="true" widgetVar="statusDialog" draggable="false" closable="false"
+			  resizable="false" responsive="true" showHeader="false" appendTo="@(body)">
+		<p:graphicImage library="images" name="#{adminConfig.loadingImage}"/>
+	</p:dialog>
 
-				<h:outputLabel for="secondLastName" value="Segundo Apellido" />
-				<p:inputText id="secondLastName" required="true"
-					value="#{registerClientBean.secondLastName}" />
-				<p:message for="secondLastName" />
+	<div class="login-box">
+		<!-- /.login-logo -->
+		<div class="box login-box-body">
+			<h:form>
+				<p class="login-box-msg">Registro de Clientes</p>
+				<p:messages closable="true"/>
 
-				<h:outputLabel for="ci" value="Número de Cédula" />
-				<p:inputText id="ci" required="true"
-					value="#{registerClientBean.ci}" />
-				<p:message for="ci" />
-
-				<h:outputLabel for="email" value="Correo" />
-				<p:inputText id="email" value="#{registerClientBean.email}" />
-				<p:message for="email" />
-
-				<h:outputLabel for="phoneNumber" value="Teléfono" />
-				<p:inputText id="phoneNumber"
-					value="#{registerClientBean.phoneNumber}" />
-				<p:message for="phoneNumber" />
-
-			</h:panelGrid>
-			<p:commandButton value="Registrar"
-				actionListener="#{registerClientBean.register()}" ajax="false" />
-			<p:separator />
-			<p:link outcome="login" value="Volver" />
-		</h:form>
-	</p:panel>
+				<div class="form-group has-feedback">
+					<p:inputText value="#{registerClientBean.firstName}" type="text" styleClass="form-control"
+								 placeholder="Primer Nombre"
+								 required="true"
+								 requiredMessage="Nombre requerido."/>
+					<i class="fa fa-edit form-control-feedback" ></i>
+				</div>
+				<div class="form-group has-feedback">
+					<p:inputText value="#{registerClientBean.secondName}" type="text" styleClass="form-control"
+								 placeholder="Segundo Nombre"/>
+					<i class="fa fa-edit form-control-feedback" ></i>
+				</div>
+				<div class="form-group has-feedback">
+					<p:inputText value="#{registerClientBean.firstLastName}" type="text" styleClass="form-control"
+								 placeholder="Primer Apellido"
+								 required="true"
+								 requiredMessage="Primer apellido requerido."/>
+					<i class="fa fa-edit form-control-feedback" ></i>
+				</div>
+				<div class="form-group has-feedback">
+					<p:inputText value="#{registerClientBean.secondLastName}" type="text" styleClass="form-control"
+								 placeholder="Segundo Apellido"
+								 required="true"
+								 requiredMessage="Segundo apellido requerido."/>
+					<i class="fa fa-edit form-control-feedback" ></i>
+				</div>
+				<div class="form-group has-feedback">
+					<p:inputText value="#{registerClientBean.ci}" type="text" styleClass="form-control"
+								 placeholder="Número de cédula"
+								 required="true"
+								 requiredMessage="Número de cédula requerido."/>
+					<i class="fa fa-id-card form-control-feedback" ></i>
+				</div>
+				<div class="form-group has-feedback">
+					<p:inputText value="#{registerClientBean.email}" type="email" styleClass="form-control"
+								 placeholder="Correo"
+								 required="true"
+								 requiredMessage="E-mail requerido."/>
+					<i class="fa fa-envelope form-control-feedback" ></i>
+				</div>
+				<div class="form-group has-feedback">
+					<p:inputText value="#{registerClientBean.phoneNumber}" type="text" styleClass="form-control"
+								 placeholder="Teléfono"
+								 required="true"
+								 requiredMessage="Teléfono requerido."/>
+					<i class="fa fa-mobile-phone form-control-feedback" ></i>
+				</div>
+				<div class="row">
+					<p:spacer height="10"/>
+					<div class="col-xs-12">
+						<p:commandButton styleClass="btn btn-success btn-block"
+										 id="registroBtn"
+										 ajax="false"
+										 onclick="showBar()"
+										 actionListener="#{registerClientBean.register()}"
+										 oncomplete="if(args.validationFailed){hideBar()}"
+										 value="Registrar"/>
+					</div>
+				</div>
+			</h:form>
+			<br/>
+			<p:link href="login.xhtml">Volver</p:link>
+		</div>
+		<!-- /.login-box-body -->
+	</div>
+	<adm:ripple />
+	<h:outputScript library="js" name="admintemplate.js" target="head"/>
 </h:body>
 </html>

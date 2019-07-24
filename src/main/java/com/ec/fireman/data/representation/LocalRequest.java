@@ -17,4 +17,19 @@ public class LocalRequest {
     this.permissionRequest = permissionRequest;
   }
 
+  public Local getLocal() {
+    return local;
+  }
+
+  public void setLocal(Local local) {
+    this.local = local;
+  }
+
+  public PermissionRequest getPermissionRequest() {
+    return permissionRequest;
+  }
+
+  public void setPermissionRequest(PermissionRequest permissionRequest) {
+    this.permissionRequest = permissionRequest;
+  }
 }

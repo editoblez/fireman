@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+     <ul class="nav navbar-nav">
+        <li>
+            <a href="#" onclick="clearBreadCrumbs()">
+                <i class="fa fa-home"></i>
+                <span>Home</span>
+            </a>
+        </li>
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cars <span
+                    class="caret"></span>
+                <i class="fa fa-car"></i>
+            </a>
+
+            <ul class="dropdown-menu" role="menu">
+                <li>
+                    <a href="#">
+                        <span>List cars</span>
+                        <i class="fa fa-th-list"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span>New car</span>
+                        <i class="fa fa-plus-circle"></i>
+                    </a>
+                </li>
+
+
+            </ul>
+
+        </li>
+    </ul>
+
+</ui:composition>

@@ -79,4 +79,8 @@ public class UserAccount implements BaseEntity {
     return sb.toString();
   }
 
+  public String getEmail() {
+    return this.email;
+  }
+
 }

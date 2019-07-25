@@ -1,5 +1,6 @@
-package com.ec.fireman.beans;
+package com.ec.fireman.beans.requeriment;
 
+import com.ec.fireman.beans.PageNameConstants;
 import com.ec.fireman.data.dao.RequirementDao;
 import com.ec.fireman.data.dao.RoleDao;
 import com.ec.fireman.data.entities.Requirement;
@@ -14,6 +15,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
@@ -37,7 +39,7 @@ public class RequirementListBean implements Serializable {
   @PostConstruct
   public void init() {
     this.refreshRequirement();
-    selectedRequirement = new Requirement();
+    setSelectedRequirement(new Requirement());
   }
 
   public void refreshRequirement() {
@@ -64,6 +66,10 @@ public class RequirementListBean implements Serializable {
 
   public List<Role> listRoles() {
     return roleDao.findAll();
+  }
+
+  public String redirectEditTo() throws IOException {
+    return PageNameConstants.REQUIREMENT_ADMIN_FORM_PAGE + "?id=" + this.selectedRequirement.getId() + "&faces-redirect=true";
   }
 
 }

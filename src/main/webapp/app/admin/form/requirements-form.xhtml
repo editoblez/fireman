@@ -5,56 +5,43 @@
                 template="#{layoutMB.template}">
     <ui:define name="metadata">
         <f:metadata>
-            <f:viewParam name="id" value="#{requirementListBean.selectedRequirement.id}" converter="javax.faces.Long"/>
+            <f:viewParam name="id" value="#{requirementFormBean.id}" converter="javax.faces.Long"/>
             <!-- use view action if you are in a Java EE 7 server: <f:viewAction action="#{carFormMB.init()}"/>-->
-            <f:event type="preRenderView" listener="#{requirementListBean.init}"/>
+            <f:event type="preRenderView" listener="#{requirementFormBean.init}"/>
         </f:metadata>
         <ui:param name="renderFormAsterisks" value="true"/>
     </ui:define>
     <ui:define name="title">
-        Car form
+        Requerimiento
     </ui:define>
     <ui:define name="body">
-        <adm:breadcrumb title="#{empty requirementListBean.selectedRequirement.id ? 'Nuevo' : 'Car '.concat(carFormMB.id)}" link="/car-form.jsf?id=#{carFormMB.id}"/>
+        <adm:breadcrumb title="#{requirementFormBean.isNew() ? 'Nuevo requerimiento' : 'Requerimiento '.concat(requirementFormBean.requirement.name)}"/>
         <h:form id="form" prependId="false">
             <p:focus context="@form"/>
             <p:panel styleClass="box-primary card">
                 <div id="main-buttons" class="hidden-sm hidden-xs">
-                    <p:commandButton value="Guardar" action="#{carFormMB.save}" update="@form"
+                    <p:commandButton value="Guardar" action="#{requirementFormBean.save}" update="@form"
                                      icon="fa fa-check" styleClass="btn-primary"/>
-                    <p:spacer width="5" rendered="#{carFormMB.isNew()}"/>
-                    <p:commandButton value="Limpiar" action="#{carFormMB.clear}" process="@this"
+                    <p:spacer width="5" rendered="#{requirementFormBean.isNew()}"/>
+                    <p:commandButton value="Limpiar" action="#{requirementFormBean.clear}" process="@this"
                                      icon="fa fa-refresh" styleClass="btn-success"
-                                     update="@form" rendered="#{carFormMB.isNew()}" resetValues="true"/>
-                    <p:spacer width="5" rendered="#{not carFormMB.isNew()}"/>
-
-                    <p:commandButton value="Delete" action="#{carFormMB.remove}" process="@this"
-                                     rendered="#{not carFormMB.isNew()}" icon="fa fa-trash"
-                                     styleClass="btn-danger">
-                        <f:setPropertyActionListener value="true"
-                                                     target="#{facesContext.externalContext.flash.keepMessages}"/>
-                        <p:confirm header="Confirmacion" message="Estas seguro?" icon="ui-icon-danger"/>
-                    </p:commandButton>
+                                     update="@form" rendered="#{requirementFormBean.isNew()}" resetValues="true"/>
+                    <p:spacer width="5" rendered="#{not requirementFormBean.isNew()}"/>
                     <p:spacer width="5"/>
                     <p:commandButton value="Atras" immediate="true"
-                                     action="car-list?faces-redirect=true"
+                                     action="#{requirementFormBean.redirectTo}"
                                      process="@this"
                                      icon="fa fa-reply"/>
                 </div>
-                <p:splitButton value="Save" action="#{carFormMB.save}" update="@form"
+                <p:splitButton value="Guardar" action="#{requirementFormBean.save}" update="@form"
                                icon="fa fa-check"
                                styleClass="hidden-md hidden-lg btn-primary">
-                    <p:menuitem value="Reset" action="#{carFormMB.clear}"
-                                process="@this" update="@form" rendered="#{carFormMB.isNew()}"
+                    <p:menuitem value="Limpiar" action="#{requirementFormBean.clear}"
+                                process="@this" update="@form" rendered="#{requirementFormBean.isNew()}"
                                 resetValues="true" icon="fa fa-refresh"/>
-                    <p:menuitem value="Delete" action="#{carFormMB.remove}" process="@this"
-                                rendered="#{not carFormMB.isNew()}" icon="fa fa-trash">
-                        <f:setPropertyActionListener value="true"
-                                                     target="#{facesContext.externalContext.flash.keepMessages}"/>
-                        <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger"/>
-                    </p:menuitem>
                     <p:separator/>
-                    <p:menuitem value="Back" action="car-list?faces-redirect=true"
+                    <p:menuitem value="Atras"
+                                action="#{requirementFormBean.redirectTo}"
                                 process="@this" immediate="true"
                                 icon="fa fa-reply"/>
                 </p:splitButton>
@@ -67,7 +54,8 @@
                             <p:outputLabel for="id" value="ID"/>
                         </div>
                         <div class="ui-sm-12 ui-g-11" >
-                            <p:inputText id="id" value="#{carFormMB.car.id}" readonly="true" styleClass="form-control ui-state-disabled" style="width: 100%"/>
+                            <p:inputText id="id" value="#{requirementFormBean.requirement.id}"
+                                         readonly="true" styleClass="form-control ui-state-disabled" style="width: 100%"/>
                             <span class="help-block">
                                 <p:message for="id" />
                             </span>
@@ -75,21 +63,10 @@
                     </div>
                     <div class="ui-sm-12 ui-g-6 ui-g-nopad">
                         <div class="ui-sm-12 ui-g-11">
-                            <p:outputLabel value="Model" for="inptModel"/>
+                            <p:outputLabel value="Nombre" for="inptName"/>
                         </div>
                         <div class="ui-sm-12 ui-g-11" >
-                            <p:inputText id="inptModel" value="#{carFormMB.car.model}" required="true"/>
-                            <span class="help-block">
-                                <p:message for="inptModel" />
-                            </span>
-                        </div>
-                    </div>
-                    <div class="ui-sm-12 ui-g-6 ui-g-nopad">
-                        <div class="ui-sm-12 ui-g-11">
-                            <p:outputLabel value="Name" for="inptName"/>
-                        </div>
-                        <div class="ui-sm-12 ui-g-11" >
-                            <p:inputText id="inptName" value="#{carFormMB.car.name}" required="true"/>
+                            <p:inputText id="inptName" value="#{requirementFormBean.requirement.name}" required="true"/>
                             <span class="help-block">
                                 <p:message for="inptName" />
                             </span>
@@ -97,32 +74,49 @@
                     </div>
                     <div class="ui-sm-12 ui-g-6 ui-g-nopad">
                         <div class="ui-sm-12 ui-g-11">
-                            <p:outputLabel value="Price" for="inptPrice"/>
+                            <p:outputLabel value="Descripción" for="inptDescription"/>
                         </div>
                         <div class="ui-sm-12 ui-g-11" >
-                            <p:inputNumber id="inptPrice" value="#{carFormMB.car.price}" required="true"/>
+                            <p:inputTextarea id="inptDescription" value="#{requirementFormBean.requirement.description}" required="true"/>
                             <span class="help-block">
-                                <p:message for="inptPrice" />
+                                <p:message for="inptDescription" />
+                            </span>
+                        </div>
+                    </div>
+                    <div class="ui-sm-12 ui-g-6 ui-g-nopad">
+                        <div class="ui-sm-12 ui-g-11">
+                            <p:outputLabel value="Rol" for="cmbRol"/>
+                        </div>
+                        <div class="ui-sm-12 ui-g-11" >
+                            <p:selectOneMenu id="cmbRol"
+                                             panelStyle="width:180px" converter="selectOneMenuConverter"
+                                             value="#{requirementFormBean.role}"
+                                             effect="fade" var="t" style="width:160px"
+                                             filter="true" filterMatchMode="startsWith">
+                                <f:selectItem itemLabel="Selecione" itemValue="#{null}" noSelectionOption="true"/>
+                                <f:selectItems value="#{requirementFormBean.listRoles()}" var="r"
+                                               itemLabel="#{r.roleName}" itemValue="#{r}" />
+                                <p:column>
+                                    <h:outputText value="#{t.roleName}" />
+                                </p:column>
+                            </p:selectOneMenu>
+                            <span class="help-block">
+                                <p:message for="cmbRol" />
                             </span>
                         </div>
                     </div>
                 </div>
                 <h:panelGroup id="footer" layout="block" styleClass="hidden-sm hidden-md hidden-lg">
                     <hr/>
-                    <p:splitButton value="Save" action="#{carFormMB.save}" update="@form"
+                    <p:splitButton value="Guardar" action="#{requirementFormBean.save}" update="@form"
                                    icon="fa fa-check"
                                    styleClass="hidden-md hidden-lg btn-primary">
-                        <p:menuitem value="Reset" action="#{carFormMB.clear}"
-                                    process="@this" update="@form" rendered="#{carFormMB.isNew()}"
+                        <p:menuitem value="Limpiar" action="#{requirementFormBean.clear}"
+                                    process="@this" update="@form" rendered="#{requirementFormBean.isNew()}"
                                     resetValues="true" icon="fa fa-refresh"/>
-                        <p:menuitem value="Delete" action="#{carFormMB.remove}" process="@this"
-                                    rendered="#{not carFormMB.isNew()}" icon="fa fa-trash">
-                            <f:setPropertyActionListener value="true"
-                                                         target="#{facesContext.externalContext.flash.keepMessages}"/>
-                            <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger"/>
-                        </p:menuitem>
                         <p:separator/>
-                        <p:menuitem value="Back" action="car-list?faces-redirect=true"
+                        <p:menuitem value="Atrás"
+                                    action="#{requirementFormBean.redirectTo}"
                                     process="@this" immediate="true"
                                     icon="fa fa-reply"/>
                     </p:splitButton>

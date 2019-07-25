@@ -7,7 +7,8 @@ public class PageNameConstants {
   public static final String REGISTER_CLIENT_PAGE = "/app/register-client.xhtml";
 
   public static final String SERVICE_ADMIN_FORM_PAGE = "/app/admin/form/service-form.xhtml";
-  static final String REQUIREMENT_ADMIN_PAGE = "/app/admin/requirements.xhtml";
+  public static final String REQUIREMENT_ADMIN_PAGE = "/app/admin/requirements.xhtml";
+  public static final String REQUIREMENT_ADMIN_FORM_PAGE = "/app/admin/form/requirements-form.xhtml";
   static final String USER_ADMIN_PAGE = "/app/admin/users.xhtml";
   static final String LOCAL_CLIENT_PAGE = "/app/client/locals.xhtml";
   static final String INSPECTOR_PAGE = "/app/inspector/inspections.xhtml";

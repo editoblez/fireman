@@ -28,7 +28,7 @@
 										 action="form/requirements-form.xhtml?faces-redirect=true"
 										 value="Nuevo" styleClass="btn-primary"/>
 						<p:spacer width="5"/>
-						<p:commandButton value="Ver requerimiento" update="@(.ui-dialog)" styleClass="btn-info"
+						<p:commandButton value="Editar requerimiento" update="@(.ui-dialog)" styleClass="btn-info"
 										 disabled="#{empty requirementListBean.selectedRequirement or
 										  requirementListBean.selectedRequirement.name == null or
 										   requirementListBean.requirements.size() == 0}"
@@ -37,7 +37,7 @@
 					<p:splitButton value="Nuevo" action="form/requirements-form.xhtml?faces-redirect=true"
 								   icon="fa fa-plus"
 								   styleClass="hidden-md hidden-lg btn-primary">
-						<p:menuitem value="Ver requerimiento" update="@(.ui-dialog)"
+						<p:menuitem value="Editar requerimiento" update="@(.ui-dialog)"
 									action="#{serviceListBean.redirectEditTo}"
 									disabled="#{empty requirementListBean.selectedRequirement or
 										  requirementListBean.selectedRequirement.name == null or

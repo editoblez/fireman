@@ -19,17 +19,17 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <pe:gravatar id="userImage"
                              value="nonexisting"/>
-                <span class="hidden-xs">#{loginBean.loggedUser()}</span>
+                <span class="hidden-xs">#{empty loginBean.emailUser() ? loginBean.loggedUser() : loginBean.emailUser()}</span>
             </a>
             <ul class="dropdown-menu">
                 <li class="user-header">
                     <div class="hidden-xs">
                         <pe:gravatar style="border-radius: 50%"
-                                     value="#{loginBean.loggedUser()}"/>
+                                     value="#{empty loginBean.emailUser() ? loginBean.loggedUser() : loginBean.emailUser()}"/>
                     </div>
                     <p>
-                        #{loginBean.loggedUser()}
-                        <small>#{loginBean.loggedUser()}</small>
+                        #{empty loginBean.emailUser() ? loginBean.loggedUser() : loginBean.emailUser()}
+                        <small>#{empty loginBean.emailUser() ? null : loginBean.loggedUser()}</small>
                     </p>
                 </li>
                 <li class="user-footer">

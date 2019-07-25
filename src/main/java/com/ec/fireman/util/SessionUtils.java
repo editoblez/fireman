@@ -16,7 +16,7 @@ public class SessionUtils {
 
   private static final String USER_ID = "userid";
   private static final String ROLE = "rol";
-  private static final String USER_EMAIL = "email";
+  public static final String USER_EMAIL = "email";
 
   public static HttpServletRequest getRequest() {
     return (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();

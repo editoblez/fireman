@@ -78,6 +78,7 @@ public class RequirementFormBean implements Serializable {
 
     public void clear() {
         requirement = new Requirement();
+        role = new Role();
         id = null;
     }
 

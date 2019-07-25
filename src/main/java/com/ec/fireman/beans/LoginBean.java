@@ -63,7 +63,7 @@ public class LoginBean implements Serializable {
   }
 
   public String emailUser() {
-    return Faces.getSessionAttribute("email");
+    return Faces.getSessionAttribute(SessionUtils.USER_EMAIL).toString();
   }
 
 }

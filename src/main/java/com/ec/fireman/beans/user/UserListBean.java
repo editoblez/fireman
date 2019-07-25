@@ -1,5 +1,6 @@
-package com.ec.fireman.beans;
+package com.ec.fireman.beans.user;
 
+import com.ec.fireman.beans.PageNameConstants;
 import com.ec.fireman.data.dao.RoleDao;
 import com.ec.fireman.data.dao.UserAccountDao;
 import com.ec.fireman.data.entities.Role;
@@ -13,6 +14,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
@@ -79,5 +81,13 @@ public class UserListBean implements Serializable {
 
   public List<Role> listRoles() {
     return roleDao.findAll();
+  }
+
+  public String redirectEditTo() throws IOException {
+    return PageNameConstants.USER_ADMIN_FORM_PAGE + "?id=" + this.selectedUser.getId() + "&faces-redirect=true";
+  }
+
+  public String redirectToPwdChange() throws IOException {
+    return PageNameConstants.USER_PWD_CHANGE_PAGE + "?id=" + this.selectedUser.getId() + "&faces-redirect=true";
   }
 }

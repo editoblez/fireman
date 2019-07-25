@@ -6,7 +6,7 @@
 				template="#{layoutMB.template}">
 
 	<ui:define name="metadata">
-		<ui:param name="title" value="Listado de Usuarios"/>
+		<ui:param name="title" value="Gestión de Usuarios"/>
 		<style type="text/css">
 			.ui-datatable .ui-datatable-header {
 				text-align: right !important;
@@ -15,7 +15,7 @@
 	</ui:define>
 
 	<ui:define name="description">
-		Busqueda de usuarios
+		Listado
 	</ui:define>
 
 	<ui:define name="body">
@@ -25,38 +25,23 @@
 				<div class="box-header with-border">
 					<div id="main-buttons" class="hidden-sm hidden-xs">
 						<p:commandButton icon="fa fa-plus"
+										 action="form/user-form.xhtml?faces-redirect=true"
 										 value="Nuevo" styleClass="btn-primary"/>
 						<p:spacer width="5"/>
-						<p:commandButton value="Eliminar" icon="fa fa-trash" styleClass="btn-danger"
-										 disabled="#{empty userListBean.selectedUser or userListBean.selectedUser.ci == null or userListBean.users.size() == 0}"
-										 process="@this" update="@form"
-						>
-							<p:confirm header="Confirmacion" message="Estas seguro?" icon="ui-icon-danger"/>
-						</p:commandButton>
-<!--						<p:spacer width="5"/>-->
-<!--						<p:commandButton value="View selected" update="@(.ui-dialog)" styleClass="btn-info"-->
-<!--										 disabled="#{empty carListMB.selectedCars or carListMB.selectedCars.size() == 0}"-->
-<!--										 oncomplete="PF('selectedCars').show()" icon="fa fa-search"/>-->
+						<p:commandButton value="Editar usuario" update="@(.ui-dialog)" styleClass="btn-info"
+										 disabled="#{empty userListBean.selectedUser or
+										  empty userListBean.selectedUser.ci or
+										   userListBean.users.size() == 0}"
+										 action="#{userListBean.redirectEditTo}" icon="fa fa-search"/>
+						<p:spacer width="5"/>
+						<p:commandButton value="Cambiar contraseña" update="@(.ui-dialog)" styleClass="btn-danger"
+										 disabled="#{empty userListBean.selectedUser or
+										 empty userListBean.selectedUser.ci or
+										   userListBean.users.size() == 0}"
+										 action="#{userListBean.redirectToPwdChange}" icon="fa fa-lock"/>
 					</div>
-
-<!--					<p:splitButton value="New" action="/car-form?faces-redirect=true"-->
-<!--								   icon="fa fa-plus"-->
-<!--								   styleClass="hidden-md hidden-lg btn-primary">-->
-<!--						<p:menuitem value="Delete Selected" action="#{carListMB.delete}"-->
-<!--									process="@this" update="@form"-->
-<!--									disabled="#{empty carListMB.selectedCars or carListMB.selectedCars.size() == 0}"-->
-<!--									icon="fa fa-trash">-->
-<!--							<p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger"/>-->
-<!--						</p:menuitem>-->
-<!--						<p:menuitem value="View selected" update="@(.ui-dialog)"-->
-<!--									oncomplete="PF('selectedCars').show()"-->
-<!--									disabled="#{empty carListMB.selectedCars or carListMB.selectedCars.size() == 0}"-->
-<!--									icon="fa fa-search"-->
-<!--						/>-->
-<!--					</p:splitButton>-->
-
 					<p:separator/>
-					<p:dataTable id="dtUser"
+					<p:dataTable id="dtUsuario"
 								 selectionMode="single"
 								 selection="#{userListBean.selectedUser}"
 								 var="user"
@@ -75,24 +60,24 @@
 						<p:ajax event="rowUnselect" update="@(.ui-button, .ui-confirm-dialog)"/>
 						<p:ajax event="toggleSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
 
-						<p:column headerText="CI" filterBy="#{user.ci}" sortBy="#{user.ci}"
-								  filterMatchMode="contains">
+						<p:column headerText="CI" sortBy="#{user.ci}"
+								  filterMatchMode="contains"
+								  filterBy="#{user.ci}">
 							<h:outputText value="#{user.ci}" />
 						</p:column>
-						<p:column headerText="Primer Nombre" filterBy="#{user.firstName}" sortBy="#{user.firstName}"
-								  filterMatchMode="contains">
-							<h:outputText value="#{user.firstName}" />
+						<p:column headerText="Nombre(s) y Apellidos" sortBy="#{user.getFullName()}"
+								  filterMatchMode="contains"
+								  filterBy="#{user.getFullName()}">
+							<h:outputText value="#{user.getFullName()}" />
 						</p:column>
-						<p:column headerText="Primer Apellido" filterBy="#{user.firstLastName}" sortBy="#{user.firstLastName}"
-								  filterMatchMode="contains">
-							<h:outputText value="#{user.firstLastName}" />
-						</p:column>
-						<p:column headerText="Correo" filterBy="#{user.email}" sortBy="#{user.email}"
-								  filterMatchMode="contains">
+						<p:column headerText="Correo" sortBy="#{user.email}"
+								  filterMatchMode="contains"
+								  filterBy="#{user.email}">
 							<h:outputText value="#{user.email}" />
 						</p:column>
-						<p:column headerText="Rol" filterBy="#{user.role.roleName}" sortBy="#{user.role.roleName}"
-								  filterMatchMode="contains">
+						<p:column headerText="Rol" sortBy="#{user.role.roleName}"
+								  filterMatchMode="contains"
+								  filterBy="#{user.role.roleName}">
 							<h:outputText value="#{user.role.roleName}" />
 						</p:column>
 					</p:dataTable>
@@ -105,17 +90,5 @@
 								 icon="fa fa-close"/>
 			</p:confirmDialog>
 		</h:form>
-
-
-
-<!--		<p:dialog header="Selected cars" widgetVar="selectedCars" height="250"-->
-<!--				  width="400" responsive="true" styleClass="box-success">-->
-<!--			<p:dataList id="selectedCarsList" value="#{carListMB.selectedCars}" var="car"-->
-<!--						type="definition">-->
-<!--				ID: #{car.id} - Name: #{car.name} - Model: #{car.model}-->
-<!--			</p:dataList>-->
-<!--		</p:dialog>-->
-
 	</ui:define>
-
 </ui:composition>

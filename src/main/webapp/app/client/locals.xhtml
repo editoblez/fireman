@@ -6,7 +6,7 @@
 				template="#{layoutMB.template}">
 
 	<ui:define name="metadata">
-		<ui:param name="title" value="Listado de Locales"/>
+		<ui:param name="title" value="Gestión de Locales"/>
 		<style type="text/css">
 			.ui-datatable .ui-datatable-header {
 				text-align: right !important;
@@ -15,7 +15,7 @@
 	</ui:define>
 
 	<ui:define name="description">
-		Locales
+		Listado
 	</ui:define>
 
 	<ui:define name="body">
@@ -25,40 +25,43 @@
 				<div class="box-header with-border">
 					<div id="main-buttons" class="hidden-sm hidden-xs">
 						<p:commandButton icon="fa fa-plus"
+										 action="form/local-form.xhtml?faces-redirect=true"
 										 value="Nuevo" styleClass="btn-primary"/>
 						<p:spacer width="5"/>
-						<p:commandButton value="Eliminar" icon="fa fa-trash" styleClass="btn-danger"
-										 disabled="#{empty clientLocalBean.selectedItem or
-										  clientLocalBean.selectedItem.local.name == null or
+						<p:commandButton value="Editar local" update="@(.ui-dialog)" styleClass="btn-info"
+										 disabled="#{clientLocalBean.selectedItem == null or
+										 clientLocalBean.selectedItem.local.state != 'ACTIVE' or
 										   clientLocalBean.locals.size() == 0}"
-										 process="@this" update="@form"
-						>
-							<p:confirm header="Confirmacion" message="Estas seguro?" icon="ui-icon-danger"/>
-						</p:commandButton>
+										 action="#{clientLocalBean.redirecToLocalForm}" icon="fa fa-pencil"/>
 						<p:spacer width="5"/>
-						<!--						<p:commandButton value="View selected" update="@(.ui-dialog)" styleClass="btn-info"-->
-						<!--										 disabled="#{empty carListMB.selectedCars or carListMB.selectedCars.size() == 0}"-->
-						<!--										 oncomplete="PF('selectedCars').show()" icon="fa fa-search"/>-->
+						<p:commandButton value="Eliminar local" styleClass="btn-danger"
+										 process="@this" update="@form"
+										 disabled="#{clientLocalBean.selectedItem == null or
+										 clientLocalBean.locals.size() == 0 or
+										 not (clientLocalBean.selectedItem.permissionRequest.permissionRequestStatus == 'TO_REQUEST'
+											or clientLocalBean.selectedItem.permissionRequest.permissionRequestStatus == 'REJECTED' or
+											 clientLocalBean.selectedItem.permissionRequest.isToExpireOrExpired()) or
+											clientLocalBean.selectedItem.local.state != 'ACTIVE'}"
+										 action="#{clientLocalBean.deleteLocal(clientLocalBean.selectedItem.local.id)}"
+										 icon="fa fa-trash">
+							<p:confirm header="Confirmation" message="Esta seguro que desea eliminarlo?" icon="ui-icon-danger"/>
+						</p:commandButton>
 					</div>
-
-					<!--					<p:splitButton value="New" action="/car-form?faces-redirect=true"-->
-					<!--								   icon="fa fa-plus"-->
-					<!--								   styleClass="hidden-md hidden-lg btn-primary">-->
-					<!--						<p:menuitem value="Delete Selected" action="#{carListMB.delete}"-->
-					<!--									process="@this" update="@form"-->
-					<!--									disabled="#{empty carListMB.selectedCars or carListMB.selectedCars.size() == 0}"-->
-					<!--									icon="fa fa-trash">-->
-					<!--							<p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger"/>-->
-					<!--						</p:menuitem>-->
-					<!--						<p:menuitem value="View selected" update="@(.ui-dialog)"-->
-					<!--									oncomplete="PF('selectedCars').show()"-->
-					<!--									disabled="#{empty carListMB.selectedCars or carListMB.selectedCars.size() == 0}"-->
-					<!--									icon="fa fa-search"-->
-					<!--						/>-->
-					<!--					</p:splitButton>-->
+					<p:splitButton value="Nuevo" action="form/local-form.xhtml?faces-redirect=true"
+								   icon="fa fa-plus"
+								   styleClass="hidden-md hidden-lg btn-primary">
+						<p:menuitem value="Editar local" update="@(.ui-dialog)"
+									action="#{serviceListBean.redirectEditTo}"
+									rendered="#{not empty clientLocalBean.selectedItem and
+										 not empty clientLocalBean.selectedItem.getLocal() and
+										 not empty clientLocalBean.selectedItem.local.name and
+										   clientLocalBean.locals.size() != 0}"
+									icon="fa fa-pencil"
+						/>
+					</p:splitButton>
 
 					<p:separator/>
-					<p:dataTable id="dtLocalReq"
+					<p:dataTable id="dtService"
 								 selectionMode="single"
 								 selection="#{clientLocalBean.selectedItem}"
 								 var="item"
@@ -77,10 +80,10 @@
 						<p:ajax event="rowUnselect" update="@(.ui-button, .ui-confirm-dialog)"/>
 						<p:ajax event="toggleSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
 
-						<p:column headerText="Nombre del Local" sortBy="#{item.local.name}"
+						<p:column headerText="Nombre del Local" sortBy="#{item.getLocal().name}"
 								  filterMatchMode="contains"
-								  filterBy="#{item.local.name}">
-							<h:outputText value="#{item.local.name}"/>
+								  filterBy="#{item.getLocal().name}">
+							<h:outputText value="#{item.getLocal().name}"/>
 						</p:column>
 						<p:column headerText="Dirección" sortBy="#{item.local.address}"
 								  filterMatchMode="contains"
@@ -95,13 +98,15 @@
 						<p:column headerText="Estado" sortBy="#{item.permissionRequest.permissionRequestStatus.value}"
 								  filterMatchMode="contains"
 								  filterBy="#{item.permissionRequest.permissionRequestStatus.value}">
-							<h:outputText
+							<h:outputText value="Eliminado"
+										  rendered="#{item.local.state == 'INACTIVE'}" />
+							<h:outputText rendered="#{not (item.local.state == 'INACTIVE')}"
 									value="#{item.permissionRequest.permissionRequestStatus.value}" />
 						</p:column>
-						<p:column style="text-align: center;" headerText="Acciones">
-							<h:outputText value="Sin acciones / Eliminado"
-										  rendered="#{item.local.state == 'INACTIVE'}" />
-						</p:column>
+<!--						<p:column style="text-align: center;" headerText="Acciones">-->
+<!--							<h:outputText value="Sin acciones / Eliminado"-->
+<!--										  rendered="#{item.local.state == 'INACTIVE'}" />-->
+<!--						</p:column>-->
 					</p:dataTable>
 				</div>
 			</div>

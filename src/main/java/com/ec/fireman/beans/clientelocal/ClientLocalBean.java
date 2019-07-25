@@ -1,5 +1,6 @@
-package com.ec.fireman.beans;
+package com.ec.fireman.beans.clientelocal;
 
+import com.ec.fireman.beans.PageNameConstants;
 import com.ec.fireman.data.dao.*;
 import com.ec.fireman.data.entities.*;
 import com.ec.fireman.data.representation.LocalRequest;
@@ -54,7 +55,7 @@ public class ClientLocalBean implements Serializable {
     this.refreshLocals();
     selectedLocal = new Local();
     selectedRequest = new PermissionRequest();
-    this.selectedItem = new LocalRequest(selectedLocal, selectedRequest);
+    this.selectedItem = null;
   }
 
   public void refreshLocals() {
@@ -73,28 +74,8 @@ public class ClientLocalBean implements Serializable {
   }
 
   @Transactional
-  public void createLocal() {
-    selectedLocal.setUserAccount(userAccountDao.findUserByCi(SessionUtils.retrieveLoggedUser().getUserId()));
-    selectedLocal.setState(State.ACTIVE);
-    selectedLocal.setService(service);
-    log.info(selectedLocal.toString());
-    PermissionRequest permissionRequest = new PermissionRequest(PermissionRequestStatus.TO_REQUEST, selectedLocal);
-    permissionRequestDao.save(permissionRequest);
-    this.refreshLocals();
-    this.clearData();
-  }
-
-  @Transactional
-  public void editLocal() {
-    selectedLocal.setService(selectedLocal.getService());
-    log.info(selectedLocal.toString());
-    localDao.update(selectedLocal);
-    this.refreshLocals();
-    this.clearData();
-  }
-
-  @Transactional
-  public void deleteLocal() {
+  public void deleteLocal(Long id) {
+    selectedLocal = localDao.findById(id);
     log.info(selectedLocal.toString());
     selectedLocal.setState(State.INACTIVE);
     localDao.update(selectedLocal);
@@ -173,6 +154,10 @@ public class ClientLocalBean implements Serializable {
       }
     }
     return files;
+  }
+
+  public String redirecToLocalForm() {
+    return PageNameConstants.LOCAL_CLIENT_FORM_PAGE + "?id=" + this.selectedItem.getLocal().getId() + "&faces-redirect=true";
   }
 
 }

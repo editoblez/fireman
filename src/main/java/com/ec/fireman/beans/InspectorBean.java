@@ -86,11 +86,7 @@ public class InspectorBean implements Serializable {
     this.clearData();
   }
 
-  public StreamedContent download(PermissionRequestFiles prf) {
-    InputStream stream = new ByteArrayInputStream(prf.getData());
-    String suffix = prf.getFileName().substring(prf.getFileName().lastIndexOf("."));
-    return new DefaultStreamedContent(stream, MimeTypes.findBySuffix(suffix).getMimeType(), prf.getFileName());
-  }
+
 
   public List<PermissionRequestFiles> listFiles() {
     List<PermissionRequestFiles> list = permissionRequestFilesDao
@@ -137,57 +133,6 @@ public class InspectorBean implements Serializable {
       item.setInspectionHeader(inspectionHeader);
       inspectionFireExtinguisherDao.update(item);
     }
-    this.clearData();
-  }
-
-  public List<RequirementFileUpload> listRequirements() {
-    // TODO: LIST ACTIVE REQUIREMENTS BY ROLE (DAO)
-    List<Requirement> requirements = requirementDao.findAll().stream()
-        .filter(it -> it.getRole().getRoleName() == RoleTypes.INSPECTOR).collect(Collectors.toList());
-    files = new ArrayList<RequirementFileUpload>();
-    if (requirements != null && !requirements.isEmpty()) {
-      for (Requirement req : requirements) {
-        files.add(new RequirementFileUpload(req.getId(), req.getName()));
-      }
-    }
-    return files;
-  }
-
-  public void upload() {
-    // TODO: verificar que el archivo del requerimiento que se va a subir
-    // no esté cargado, en caso de que ya lo esté, se debe eliminar y subirlo
-    // nuevamente
-    for (RequirementFileUpload requirementFileUpload : files) {
-      log.info(requirementFileUpload.toString());
-      if (requirementFileUpload.getFile() != null) {
-        String suffix = requirementFileUpload.getFile().getFileName()
-            .substring(requirementFileUpload.getFile().getFileName().lastIndexOf("."));
-        if (MimeTypes.findBySuffix(suffix) == null) {
-          MessageUtil.errorFacesMessage("Carga Archivo",
-              "La extensión del archivo " + requirementFileUpload.getFile().getFileName() + " no es permitida.");
-          continue;
-        }
-        byte[] bytes = null;
-        try {
-          bytes = IOUtils.toByteArray(requirementFileUpload.getFile().getInputstream());
-        } catch (IOException e) {
-          log.error(e.getMessage());
-        }
-        PermissionRequest permissionRequest = permissionRequestDao
-            .findPermissionRequestByLocal(selectedRequest.getLocal().getId());
-        PermissionRequestFiles prf = new PermissionRequestFiles();
-        prf.setPermissionRequest(permissionRequest);
-        prf.setRequirement(requirementDao.findById(requirementFileUpload.getRequirementId()));
-        prf.setState(State.ACTIVE);
-        prf.setData(bytes);
-        prf.setFileName(requirementFileUpload.getFile().getFileName());
-        permissionRequestFilesDao.save(prf);
-
-        MessageUtil.infoFacesMessage("Carga Archivo",
-            requirementFileUpload.getFile().getFileName() + " subido correctamente.");
-      }
-    }
-    this.refreshRequests();
     this.clearData();
   }
 

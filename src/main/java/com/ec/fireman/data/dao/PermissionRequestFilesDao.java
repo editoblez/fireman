@@ -29,4 +29,16 @@ public class PermissionRequestFilesDao extends GenericDaoImpl<PermissionRequestF
     return null;
   }
 
+  public List<PermissionRequestFiles> findFilesByRequestAndRequirement(long requestId, long reqId) {
+    try {
+      return entityManager.createNamedQuery("findFilesByRequestAndRequirement")
+              .setParameter("requestId", requestId)
+              .setParameter("reqId", reqId)
+              .getResultList();
+    } catch (Exception ex) {
+      log.error("Error to execute findFilesByRequestAndRequirement", ex);
+    }
+    return null;
+  }
+
 }

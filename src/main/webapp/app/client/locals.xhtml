@@ -32,7 +32,7 @@
 										 disabled="#{clientLocalBean.selectedItem == null or
 										 clientLocalBean.selectedItem.local.state != 'ACTIVE' or
 										   clientLocalBean.locals.size() == 0}"
-										 action="#{clientLocalBean.redirecToLocalForm}" icon="fa fa-pencil"/>
+										 action="#{clientLocalBean.redirectToLocalForm}" icon="fa fa-pencil"/>
 						<p:spacer width="5"/>
 						<p:commandButton value="Eliminar local" styleClass="btn-danger"
 										 process="@this" update="@form"
@@ -98,15 +98,22 @@
 						<p:column headerText="Estado" sortBy="#{item.permissionRequest.permissionRequestStatus.value}"
 								  filterMatchMode="contains"
 								  filterBy="#{item.permissionRequest.permissionRequestStatus.value}">
-							<h:outputText value="Eliminado"
-										  rendered="#{item.local.state == 'INACTIVE'}" />
-							<h:outputText rendered="#{not (item.local.state == 'INACTIVE')}"
+							<h:outputText
 									value="#{item.permissionRequest.permissionRequestStatus.value}" />
 						</p:column>
-<!--						<p:column style="text-align: center;" headerText="Acciones">-->
-<!--							<h:outputText value="Sin acciones / Eliminado"-->
-<!--										  rendered="#{item.local.state == 'INACTIVE'}" />-->
-<!--						</p:column>-->
+						<p:column style="text-align: center;" headerText="Acciones">
+							<p:commandButton rendered="#{(item.permissionRequest.permissionRequestStatus == 'TO_REQUEST'
+						or item.permissionRequest.permissionRequestStatus == 'REJECTED' or item.permissionRequest.isToExpireOrExpired() )
+						and item.local.state == 'ACTIVE'}" styleClass="btn-info"
+											 action="#{clientLocalBean.redirectToUploadDocs}"
+											 icon="fa fa-folder-open"
+											 title="Cargar documentos" style="margin: 0px 0px 1px 10px;">
+								<f:setPropertyActionListener value="#{item.local}"
+															 target="#{clientLocalBean.selectedLocal}" />
+							</p:commandButton>
+							<h:outputText value="Sin acciones / Eliminado"
+										  rendered="#{item.local.state == 'INACTIVE'}" />
+						</p:column>
 					</p:dataTable>
 				</div>
 			</div>

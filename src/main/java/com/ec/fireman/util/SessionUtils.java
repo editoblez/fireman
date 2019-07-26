@@ -15,7 +15,7 @@ import java.util.Optional;
 public class SessionUtils {
 
   private static final String USER_ID = "userid";
-  private static final String ROLE = "rol";
+  public static final String ROLE = "rol";
   public static final String USER_EMAIL = "email";
 
   public static HttpServletRequest getRequest() {

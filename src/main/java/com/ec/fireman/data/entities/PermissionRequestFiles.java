@@ -5,7 +5,9 @@ import lombok.Data;
 import javax.persistence.*;
 
 @NamedQueries({
-    @NamedQuery(name = "findPermissionRequestFilesByRequest", query = "from PermissionRequestFiles pr where pr.permissionRequest.id = :requestId") })
+    @NamedQuery(name = "findPermissionRequestFilesByRequest", query = "from PermissionRequestFiles pr where pr.permissionRequest.id = :requestId"),
+        @NamedQuery(name = "findFilesByRequestAndRequirement", query = "from PermissionRequestFiles pr where pr.permissionRequest.id = :requestId and pr.requirement.id = :reqId")
+})
 
 @Data
 @Entity

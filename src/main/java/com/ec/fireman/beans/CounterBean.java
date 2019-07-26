@@ -97,27 +97,6 @@ public class CounterBean implements Serializable {
     permissionIssueDao.save(new PermissionIssue(price, inspectionHeaderDao.findByPermissionRequest(selectedRequest), time, closeToExpire, expire));
   }
 
-  public void upload() {
-    for (RequirementFileUpload requirementFileUpload : files) {
-      log.info(requirementFileUpload.toString());
-      if (requirementFileUpload.getFile() != null) {
-        byte[] bytes = null;
-        try {
-          bytes = IOUtils.toByteArray(requirementFileUpload.getFile().getInputstream());
-        } catch (IOException e) {
-          log.error(e.getMessage());
-        }
-        PermissionRequestFiles prf = new PermissionRequestFiles();
-        prf.setRequirement(requirementDao.findById(requirementFileUpload.getRequirementId()));
-        prf.setState(State.ACTIVE);
-        prf.setData(bytes);
-        prf.setFileName(requirementFileUpload.getFile().getFileName());
-        permissionRequestFilesDao.save(prf);
-
-        MessageUtil.infoFacesMessage("Succesful", requirementFileUpload.getFile().getFileName() + " is uploaded.");
-      }
-    }
-  }
 
   @Transactional
   public void cancelRequest() {
@@ -145,12 +124,4 @@ public class CounterBean implements Serializable {
     String suffix = prf.getFileName().substring(prf.getFileName().lastIndexOf("."));
     return new DefaultStreamedContent(stream, MimeTypes.findBySuffix(suffix).getMimeType(), prf.getFileName());
   }
-
-  public List<PermissionRequestFiles> listFiles() {
-    List<PermissionRequestFiles> list = permissionRequestFilesDao
-        .findPermissionRequestFilesByRequest(selectedRequest.getId());
-    log.info("Files length: " + (list != null ? list.size() : 0));
-    return list;
-  }
-
 }

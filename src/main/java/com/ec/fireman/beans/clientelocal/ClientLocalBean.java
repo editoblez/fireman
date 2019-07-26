@@ -1,6 +1,7 @@
 package com.ec.fireman.beans.clientelocal;
 
 import com.ec.fireman.beans.PageNameConstants;
+import com.ec.fireman.beans.PageRedirectConstants;
 import com.ec.fireman.data.dao.*;
 import com.ec.fireman.data.entities.*;
 import com.ec.fireman.data.representation.LocalRequest;
@@ -10,6 +11,7 @@ import com.ec.fireman.util.SessionUtils;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.IOUtils;
+import org.omnifaces.util.Faces;
 
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
@@ -56,6 +58,7 @@ public class ClientLocalBean implements Serializable {
     selectedLocal = new Local();
     selectedRequest = new PermissionRequest();
     this.selectedItem = null;
+    Faces.setSessionAttribute(PageRedirectConstants.REFERER, null);
   }
 
   public void refreshLocals() {
@@ -103,61 +106,16 @@ public class ClientLocalBean implements Serializable {
     this.clearData();
   }
 
-  public void upload() {
-    // TODO: verificar que el archivo del requerimiento que se va a subir
-    // no esté cargado, en caso de que ya lo esté, se debe eliminar y subirlo
-    // nuevamente
-    for (RequirementFileUpload requirementFileUpload : files) {
-      log.info(requirementFileUpload.toString());
-      if (requirementFileUpload.getFile() != null) {
-        String suffix = requirementFileUpload.getFile().getFileName()
-            .substring(requirementFileUpload.getFile().getFileName().lastIndexOf("."));
-        if (MimeTypes.findBySuffix(suffix) == null) {
-          MessageUtil.errorFacesMessage("Carga Archivo",
-              "La extensión del archivo " + requirementFileUpload.getFile().getFileName() + " no es permitida.");
-          continue;
-        }
-        byte[] bytes = null;
-        try {
-          bytes = IOUtils.toByteArray(requirementFileUpload.getFile().getInputstream());
-        } catch (IOException e) {
-          log.error(e.getMessage());
-        }
-        PermissionRequest permissionRequest = permissionRequestDao.findPermissionRequestByLocal(selectedLocal.getId());
-        PermissionRequestFiles prf = new PermissionRequestFiles();
-        prf.setPermissionRequest(permissionRequest);
-        prf.setRequirement(requirementDao.findById(requirementFileUpload.getRequirementId()));
-        prf.setState(State.ACTIVE);
-        prf.setData(bytes);
-        prf.setFileName(requirementFileUpload.getFile().getFileName());
-        permissionRequestFilesDao.save(prf);
-
-        MessageUtil.infoFacesMessage("Carga Archivo",
-            requirementFileUpload.getFile().getFileName() + " subido correctamente.");
-      }
-    }
-    this.refreshLocals();
-    this.clearData();
-  }
-
   public List<Service> listServices() {
     return serviceDao.findAll();
   }
 
-  public List<RequirementFileUpload> listRequirements() {
-    // TODO: LIST ACTIVE REQUIREMENTS BY ROLE (DAO)
-    List<Requirement> requirements = requirementDao.findAll().stream().filter(it -> it.getRole().getRoleName() == RoleTypes.CLIENT).collect(Collectors.toList());
-    files = new ArrayList<RequirementFileUpload>();
-    if (requirements != null && !requirements.isEmpty()) {
-      for (Requirement req : requirements) {
-        files.add(new RequirementFileUpload(req.getId(), req.getName()));
-      }
-    }
-    return files;
+  public String redirectToLocalForm() {
+    return PageNameConstants.LOCAL_CLIENT_FORM_PAGE + "?id=" + this.selectedItem.getLocal().getId() + "&faces-redirect=true";
   }
 
-  public String redirecToLocalForm() {
-    return PageNameConstants.LOCAL_CLIENT_FORM_PAGE + "?id=" + this.selectedItem.getLocal().getId() + "&faces-redirect=true";
+  public String redirectToUploadDocs() {
+    return PageNameConstants.LOCAL_DOCUMENTS_UPLOAD + "?id=" + this.selectedLocal.getId() + "&faces-redirect=true";
   }
 
 }

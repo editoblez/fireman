@@ -18,6 +18,8 @@ public class PageNameConstants {
   public static final String LOCAL_CLIENT_PAGE = "/app/client/locals.xhtml";
   public static final String LOCAL_CLIENT_FORM_PAGE = "/app/client/form/local-form.xhtml";
 
+  public static final String LOCAL_DOCUMENTS_UPLOAD = "/app/document/local-docs.xhtml";
+
   public static final String INSPECTOR_PAGE = "/app/inspector/inspections.xhtml";
 
   public static final String COUNTER_PAGE = "/app/counter/requests.xhtml";

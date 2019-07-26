@@ -15,6 +15,7 @@ import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -52,14 +53,19 @@ public class LocalDocs implements Serializable {
     private Local local;
     private Long id;
 
+    @PostConstruct
     public void init() {
         if (Assert.has(id) && id != null) {
             local = localDao.findById(id);
         }
         if (Faces.getSessionAttribute(PageRedirectConstants.REFERER) == null ||
-                Faces.getSessionAttribute(PageRedirectConstants.REFERER).toString().isEmpty())
+                Faces.getSessionAttribute(PageRedirectConstants.REFERER).toString().isEmpty() ||
+                (getCurrentInstance().
+                        getExternalContext().getRequestHeaderMap()
+                        .get(PageRedirectConstants.REFERER).lastIndexOf("local-docs.xhtml") < 0)) {
             Faces.setSessionAttribute(PageRedirectConstants.REFERER, getCurrentInstance().
                     getExternalContext().getRequestHeaderMap().get(PageRedirectConstants.REFERER));
+        }
     }
 
     public String redirectTo() {
@@ -80,50 +86,56 @@ public class LocalDocs implements Serializable {
                 break;
             }
         }
-        return redirectUrl;
+        return redirectUrl + "?faces-redirect=true";
     }
 
     public void uploadAll() {
         // TODO: verificar que el archivo del requerimiento que se va a subir
         // no esté cargado, en caso de que ya lo esté, se debe eliminar y subirlo
         // nuevamente
-        FacesMessage msg = null;
-        for (RequirementFileUpload requirementFileUpload : files) {
-            log.info(requirementFileUpload.toString());
-            if (requirementFileUpload.getFile() != null) {
-                String suffix = requirementFileUpload.getFile().getFileName()
-                        .substring(requirementFileUpload.getFile().getFileName().lastIndexOf("."));
-                if (MimeTypes.findBySuffix(suffix) == null) {
-                    msg = new FacesMessage("Carga Archivo",
-                            "La extensión del archivo " + requirementFileUpload.getFile().getFileName() + " no es permitida.");
-                    continue;
-                }
-                byte[] bytes = null;
-                try {
-                    bytes = IOUtils.toByteArray(requirementFileUpload.getFile().getInputstream());
-                } catch (IOException e) {
-                    log.error(e.getMessage());
-                }
-                PermissionRequest permissionRequest = permissionRequestDao.findPermissionRequestByLocal(local.getId());
-                PermissionRequestFiles prf = new PermissionRequestFiles();
-                prf.setPermissionRequest(permissionRequest);
-                prf.setRequirement(requirementDao.findById(requirementFileUpload.getRequirementId()));
-                prf.setState(State.ACTIVE);
-                prf.setData(bytes);
-                prf.setFileName(requirementFileUpload.getFile().getFileName());
-                permissionRequestFilesDao.save(prf);
+        String msg = null;
+        try {
+            for (RequirementFileUpload requirementFileUpload : files) {
+                log.info(requirementFileUpload.toString());
+                if (requirementFileUpload.getFile() != null) {
+                    String suffix = requirementFileUpload.getFile().getFileName()
+                            .substring(requirementFileUpload.getFile().getFileName().lastIndexOf("."));
+                    if (MimeTypes.findBySuffix(suffix) == null) {
+                        msg = "La extensión del archivo " + requirementFileUpload.getFile().getFileName() + " no es permitida.";
+                        MessageUtil.addDetailMessage(msg, FacesMessage.SEVERITY_WARN);
+                        continue;
+                    }
+                    byte[] bytes = null;
+                    try {
+                        bytes = IOUtils.toByteArray(requirementFileUpload.getFile().getInputstream());
+                    } catch (IOException e) {
+                        log.error(e.getMessage());
+                    }
+                    PermissionRequest permissionRequest = permissionRequestDao.findPermissionRequestByLocal(local.getId());
+                    PermissionRequestFiles prf = new PermissionRequestFiles();
+                    prf.setPermissionRequest(permissionRequest);
+                    prf.setRequirement(requirementDao.findById(requirementFileUpload.getRequirementId()));
+                    prf.setState(State.ACTIVE);
+                    prf.setData(bytes);
+                    prf.setFileName(requirementFileUpload.getFile().getFileName());
+                    permissionRequestFilesDao.save(prf);
 
-                msg = new FacesMessage("Carga Archivo",
-                        requirementFileUpload.getFile().getFileName() + " subido correctamente.");
+                    msg = requirementFileUpload.getFile().getFileName() + " subido correctamente.";
+                    MessageUtil.addDetailMessage(msg);
+                } else {
+                    MessageUtil.addDetailMessage("La extensión del fichero no es permitida o no existe.", FacesMessage.SEVERITY_ERROR);
+                }
             }
+        } catch (Exception ex) {
+            MessageUtil.addDetailMessage(ex.getMessage(), FacesMessage.SEVERITY_WARN);
         }
-        getCurrentInstance().addMessage(null, msg);
     }
 
     public List<RequirementFileUpload> listRequirements() {
         // TODO: LIST ACTIVE REQUIREMENTS BY ROLE (DAO)
         List<Requirement> requirements = requirementDao.findAll().stream()
-                .filter(it -> it.getRole().getRoleName().getValue() == Faces.getSessionAttribute(SessionUtils.ROLE).toString()).collect(Collectors.toList());
+                .filter(it -> it.getRole().getRoleName().getValue() ==
+                        Faces.getSessionAttribute(SessionUtils.ROLE).toString()).collect(Collectors.toList());
         files = new ArrayList<RequirementFileUpload>();
         if (!requirements.isEmpty()) {
             for (Requirement req : requirements) {
@@ -154,13 +166,11 @@ public class LocalDocs implements Serializable {
         log.info("File delete: " + (item.getFileName()) +
                 " for Requirement: " + item.getRequirement().getId() + " and Permission Requirement: " +
                 item.getPermissionRequest().getId());
-        FacesMessage msg = new FacesMessage("File ", item.getFileName() + " is delete.");
         permissionRequestFilesDao.remove(item);
-        getCurrentInstance().addMessage(null, msg);
+        MessageUtil.addDetailMessage("File "+ item.getFileName() + " is delete.");
     }
 
     public void handleFileUpload(FileUploadEvent event) {
-        FacesMessage msg = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
-        getCurrentInstance().addMessage(null, msg);
+        MessageUtil.addDetailMessage(event.getFile().getFileName() + " is uploaded.");
     }
 }

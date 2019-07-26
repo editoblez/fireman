@@ -44,7 +44,7 @@
 											clientLocalBean.selectedItem.local.state != 'ACTIVE'}"
 										 action="#{clientLocalBean.deleteLocal(clientLocalBean.selectedItem.local.id)}"
 										 icon="fa fa-trash">
-							<p:confirm header="Confirmation" message="Esta seguro que desea eliminarlo?" icon="ui-icon-danger"/>
+							<p:confirm header="Confirmation" message="Esta seguro que desea eliminarlo?" icon="fa fa-danger"/>
 						</p:commandButton>
 					</div>
 					<p:splitButton value="Nuevo" action="form/local-form.xhtml?faces-redirect=true"
@@ -102,14 +102,39 @@
 									value="#{item.permissionRequest.permissionRequestStatus.value}" />
 						</p:column>
 						<p:column style="text-align: center;" headerText="Acciones">
-							<p:commandButton rendered="#{(item.permissionRequest.permissionRequestStatus == 'TO_REQUEST'
-						or item.permissionRequest.permissionRequestStatus == 'REJECTED' or item.permissionRequest.isToExpireOrExpired() )
-						and item.local.state == 'ACTIVE'}" styleClass="btn-info"
+							<p:commandButton rendered="#{(item.permissionRequest.permissionRequestStatus == 'TO_REQUEST' or
+							 item.permissionRequest.permissionRequestStatus == 'REJECTED' or
+							  item.permissionRequest.isToExpireOrExpired()) and
+							   item.local.state == 'ACTIVE'}" styleClass="btn-info"
 											 action="#{clientLocalBean.redirectToUploadDocs}"
 											 icon="fa fa-folder-open"
 											 title="Cargar documentos" style="margin: 0px 0px 1px 10px;">
 								<f:setPropertyActionListener value="#{item.local}"
 															 target="#{clientLocalBean.selectedLocal}" />
+							</p:commandButton>
+							<p:commandButton
+									rendered="#{(item.permissionRequest.permissionRequestStatus == 'TO_REQUEST' or
+									item.permissionRequest.permissionRequestStatus == 'REJECTED' or
+									item.permissionRequest.isToExpireOrExpired()) and
+									 item.local.state == 'ACTIVE'}"
+									update="@form" styleClass="btn-warning"
+									icon="fa fa-clipboard"  action="#{clientLocalBean.localRequest()}"
+									title="Solicitar permiso" style="margin: 0 0 1px 10px;">
+								<f:setPropertyActionListener value="#{item.permissionRequest}"
+															 target="#{clientLocalBean.selectedRequest}" />
+								<p:confirm header="Confirmation" message="Está seguro que desea solicitar el permiso de funcionamiento?" icon="fa fa-danger"/>
+							</p:commandButton>
+							<p:commandButton update="@form"
+											 rendered="#{item.permissionRequest.permissionRequestStatus != 'TO_REQUEST' and
+											  item.permissionRequest.permissionRequestStatus != 'REJECTED' and
+											   !item.permissionRequest.isToExpireOrExpired()}"
+											 styleClass="btn-danger"
+											 icon="fa fa-trash"
+											 action="#{clientLocalBean.cancelRequest()}"
+											 title="Cancelar solicitud" style="margin: 0 0 1px 10px;">
+								<f:setPropertyActionListener value="#{item.permissionRequest}"
+															 target="#{clientLocalBean.selectedRequest}" />
+								<p:confirm header="Confirmation" message="Está seguro que desea cancelar la solicitud del permiso de funcionamiento?." icon="fa fa-danger"/>
 							</p:commandButton>
 							<h:outputText value="Sin acciones / Eliminado"
 										  rendered="#{item.local.state == 'INACTIVE'}" />

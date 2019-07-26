@@ -14,6 +14,8 @@ import org.apache.commons.io.IOUtils;
 import org.omnifaces.util.Faces;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -23,6 +25,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static javax.faces.context.FacesContext.getCurrentInstance;
 
 @Data
 @Log4j2
@@ -92,7 +96,7 @@ public class ClientLocalBean implements Serializable {
     selectedRequest.setState(State.ACTIVE);
     permissionRequestDao.update(selectedRequest);
     log.info(selectedRequest.toString());
-    MessageUtil.infoFacesMessage("Solicitud", "Permiso de funcionamiento solicitado correctaente");
+    MessageUtil.addDetailMessage("Permiso de funcionamiento solicitado correctamente");
     this.refreshLocals();
     this.clearData();
   }
@@ -101,7 +105,7 @@ public class ClientLocalBean implements Serializable {
   public void cancelRequest() {
     selectedRequest.setPermissionRequestStatus(PermissionRequestStatus.TO_REQUEST);
     permissionRequestDao.update(selectedRequest);
-    MessageUtil.infoFacesMessage("Cancelaci�n", "Permiso de funcionamiento cancelado correctaente");
+    MessageUtil.addDetailMessage("Permiso de funcionamiento cancelado correctamente");
     this.refreshLocals();
     this.clearData();
   }
@@ -117,5 +121,4 @@ public class ClientLocalBean implements Serializable {
   public String redirectToUploadDocs() {
     return PageNameConstants.LOCAL_DOCUMENTS_UPLOAD + "?id=" + this.selectedLocal.getId() + "&faces-redirect=true";
   }
-
 }

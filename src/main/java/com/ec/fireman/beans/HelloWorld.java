@@ -1,8 +1,8 @@
 package com.ec.fireman.beans;
 
-import javax.faces.bean.ManagedBean;
+import javax.annotation.ManagedBean;
 
-@ManagedBean(name = "helloWorld", eager = true)
+@ManagedBean("helloWorld")
 public class HelloWorld {
 
   public HelloWorld() {

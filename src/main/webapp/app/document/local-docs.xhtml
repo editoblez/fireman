@@ -79,6 +79,7 @@
                         <p:fileUpload value="#{item.file}"
                                       label="Buscar"
                                       fileUploadListener="#{localDocs.handleFileUpload}"
+                                      invalidFileMessage="LA extensión del fichero no es permitida."
                                       mode="simple" dragDropSupport="true" skinSimple="true"
                                       allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|doc?x|odt)$/" />
                     </p:column>

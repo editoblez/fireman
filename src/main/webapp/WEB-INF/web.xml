@@ -90,9 +90,5 @@
     <exception-type>java.lang.Throwable</exception-type>
     <location>/500.xhtml</location>
   </error-page>
-  <error-page>
-    <exception-type>javax.faces.FacesException</exception-type>
-    <location>/500.xhtml</location>
-  </error-page>
 
 </web-app>

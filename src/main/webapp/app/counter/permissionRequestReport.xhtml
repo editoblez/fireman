@@ -1,0 +1,63 @@
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core">
+<ui:composition template="../../template/template.xhtml">
+	<ui:define name="pageTitle">
+		Reporte de solicitudes por inspector		
+	</ui:define>
+	<ui:define name="contenido">
+
+		<h:form id="formList">
+
+			<p:panel id="panelFiltter" header="Filtros"
+				style="margin-bottom:20px" toggleable="true">
+				<h:panelGrid columns="2" cellpadding="10">
+					<h:panelGroup>
+						<p:outputLabel value="Inspector"
+							title="Ingrese alguno de los datos: Cédula, Primer Nombre ó Primer Apellido del Inspector" />
+						<br />
+						<p:inputText id="txtInspector"
+							value="#{permissionRequestReportBean.inspector}" />
+					</h:panelGroup>
+					<div align="left" style="padding-top: 15px;">
+						<p:commandButton ajax="true" action="faces-redirect=false"
+							update=":formList:dtList growl :formList:exportBtn"
+							id="refreshBtn"
+							actionListener="#{permissionRequestReportBean.refreshReport()}"
+							value="Buscar" styleClass="btn btn-default" />
+					</div>
+				</h:panelGrid>
+				<p:blockUI block="formList" trigger="refreshBtn" />
+			</p:panel>
+
+			<div align="right" style="padding-bottom: 10px;">
+				<p:commandButton id="exportBtn" ajax="false"
+					disabled="#{empty permissionRequestReportBean.requests}"
+					update=":formList:dtList growl" value="Exportar PDF">
+					<p:dataExporter type="pdf" target="dtList" fileName="permisos" />
+				</p:commandButton>
+			</div>
+			<p:dataTable id="dtList" var="item"
+				value="#{permissionRequestReportBean.requests}">
+				<p:column headerText="Dirección">
+					<h:outputText value="#{item.local.address}" />
+				</p:column>
+				<p:column headerText="Servicio">
+					<h:outputText value="#{item.local.service.name}" />
+				</p:column>
+				<p:column headerText="Inspector">
+					<h:outputText rendered="#{item.inspector != null}"
+						value="#{item.inspector.firstName} #{item.inspector.firstLastName}" />
+				</p:column>
+				<p:column headerText="Estado">
+					<h:outputText value="#{item.permissionRequestStatus.value}" />
+				</p:column>
+			</p:dataTable>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

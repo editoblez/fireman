@@ -27,6 +27,7 @@ public class MenuView implements Serializable {
   private MenuItem local;
   private MenuItem inspector;
   private MenuItem counter;
+  private MenuItem permissionRequestReport;
 
   @PostConstruct
   public void init() {
@@ -40,5 +41,6 @@ public class MenuView implements Serializable {
     local = new MenuItem("Local", PageNameConstants.LOCAL_CLIENT_PAGE, roleType == RoleTypes.CLIENT);
     inspector = new MenuItem("Inspector", PageNameConstants.INSPECTOR_PAGE, roleType == RoleTypes.INSPECTOR);
     counter = new MenuItem("Counter", PageNameConstants.COUNTER_PAGE, roleType == RoleTypes.ECONOMIC);
+    permissionRequestReport = new MenuItem("Reporte Solicitudes Permiso", PageNameConstants.PERMISSION_REQUEST_REPORT_PAGE, roleType == RoleTypes.ECONOMIC);
   }
 }

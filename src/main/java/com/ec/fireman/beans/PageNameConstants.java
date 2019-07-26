@@ -11,5 +11,5 @@ public class PageNameConstants {
   static final String LOCAL_CLIENT_PAGE = "/app/client/locals.xhtml";
   static final String INSPECTOR_PAGE = "/app/inspector/inspections.xhtml";
   static final String COUNTER_PAGE = "/app/counter/requests.xhtml";
-
+  static final String PERMISSION_REQUEST_REPORT_PAGE = "/app/counter/permissionRequestReport.xhtml";
 }

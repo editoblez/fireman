@@ -1,13 +1,16 @@
 package com.ec.fireman.data.dao;
 
-import com.ec.fireman.data.entities.PermissionRequest;
-import com.ec.fireman.data.entities.PermissionRequestStatus;
-import com.ec.fireman.util.SessionUtils;
-import lombok.extern.log4j.Log4j2;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
-import java.util.List;
+import javax.persistence.Query;
+
+import com.ec.fireman.data.entities.PermissionRequest;
+import com.ec.fireman.data.entities.PermissionRequestStatus;
+import com.ec.fireman.util.SessionUtils;
+
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @Stateless
@@ -42,14 +45,20 @@ public class PermissionRequestDao extends GenericDaoImpl<PermissionRequest> {
 
   public List findAllByStatusAndUser(PermissionRequestStatus status, String inspectorId) {
     try {
-      return entityManager.createNamedQuery("findPermissionRequestByStatusAndInspector")
-          .setParameter("status", status)
-          .setParameter("inspector", inspectorId)
-          .getResultList();
+      return entityManager.createNamedQuery("findPermissionRequestByStatusAndInspector").setParameter("status", status)
+          .setParameter("inspector", inspectorId).getResultList();
     } catch (Exception ex) {
       log.error("Error to execute PermissionRequestStatus", ex);
     }
     return null;
+  }
+
+  public List<PermissionRequest> findAllByInspector(String inspector) {
+    Query query = entityManager.createQuery("select pr from PermissionRequest pr "
+        + "where pr.inspector.ci like :inspector or pr.inspector.firstName like :inspector "
+        + "or pr.inspector.firstLastName like :inspector ", PermissionRequest.class);
+    query.setParameter("inspector", "%" + inspector + "%");
+    return query.getResultList();
   }
 
   public List findAllInProgressByLoggedUser() {

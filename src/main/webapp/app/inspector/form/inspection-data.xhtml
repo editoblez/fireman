@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:adm="http://github.com/adminfaces"
+                template="#{layoutMB.template}">
+    <ui:define name="metadata">
+        <f:metadata>
+            <f:viewParam name="id" value="#{inspectionDataBean.id}" converter="javax.faces.Long"/>
+            <!-- use view action if you are in a Java EE 7 server: <f:viewAction action="#{carFormMB.init()}"/>-->
+            <f:event type="preRenderView" listener="#{inspectionDataBean.init}"/>
+        </f:metadata>
+        <ui:param name="renderFormAsterisks" value="true"/>
+    </ui:define>
+    <ui:define name="title">
+        Local
+    </ui:define>
+    <ui:define name="body">
+        <adm:breadcrumb title="Datos Inspección"/>
+        <h:form id="form" prependId="false">
+            <p:focus context="@form"/>
+            <p:panel styleClass="box-primary card">
+                <div id="main-buttons" class="hidden-sm hidden-xs">
+                    <p:commandButton value="Guardar" action="#{inspectionDataBean.saveInspection()}" update="@form"
+                                     icon="fa fa-check" styleClass="btn-primary"/>
+                    <p:spacer width="5"/>
+                    <p:commandButton value="Atras" immediate="true"
+                                     action="#{inspectionDataBean.redirectTo}"
+                                     process="@this"
+                                     icon="fa fa-reply"/>
+                </div>
+                <p:splitButton value="Guardar" action="#{inspectionDataBean.saveInspection()}" update="@form"
+                               icon="fa fa-check"
+                               styleClass="hidden-md hidden-lg btn-primary">
+                    <p:menuitem value="Atras"
+                                action="#{inspectionDataBean.redirectTo}"
+                                process="@this" immediate="true"
+                                icon="fa fa-reply"/>
+                </p:splitButton>
+
+                <hr/>
+
+                <div class="ui-g ui-fluid">
+                    <p:outputPanel id="opInspect" style="width: 100%">
+                        <p:accordionPanel>
+                            <p:tab title="Tipo Construcción">
+                                <h:panelGrid columns="6" cellpadding="5">
+                                    <p:selectBooleanCheckbox
+                                            value="#{inspectionDataBean.inspectionHeader.concrete}"
+                                            itemLabel="Hormigón" />
+                                    <p:selectBooleanCheckbox
+                                            value="#{inspectionDataBean.inspectionHeader.metallicStructure}"
+                                            itemLabel="Estructura metálica" />
+                                    <p:selectBooleanCheckbox
+                                            value="#{inspectionDataBean.inspectionHeader.mixed}" itemLabel="Mixto" />
+                                    <p:selectBooleanCheckbox
+                                            value="#{inspectionDataBean.inspectionHeader.block}"
+                                            itemLabel="Bloque" />
+                                    <p:selectBooleanCheckbox
+                                            value="#{inspectionDataBean.inspectionHeader.brick}"
+                                            itemLabel="Ladrillo" />
+                                    <p:selectBooleanCheckbox
+                                            value="#{inspectionDataBean.inspectionHeader.adobe}" itemLabel="Adobe" />
+                                </h:panelGrid>
+                            </p:tab>
+
+                            <p:tab title="Instalaciones Eléctricas">
+                                <h:panelGrid columns="6" cellpadding="5">
+                                    <p:selectBooleanCheckbox
+                                            value="#{inspectionDataBean.inspectionHeader.installationsGood}"
+                                            itemLabel="Buenas" />
+                                    <p:selectBooleanCheckbox
+                                            value="#{inspectionDataBean.inspectionHeader.installationsBad}"
+                                            itemLabel="Malas" />
+                                    <p:selectBooleanCheckbox
+                                            value="#{inspectionDataBean.inspectionHeader.installationsInternal}"
+                                            itemLabel="Internas" />
+                                    <p:selectBooleanCheckbox
+                                            value="#{inspectionDataBean.inspectionHeader.installationsExternal}"
+                                            itemLabel="Externas" />
+                                </h:panelGrid>
+                            </p:tab>
+
+                            <p:tab title="Ventilación">
+                                <h:panelGrid columns="4" cellpadding="5">
+                                    <p:selectBooleanCheckbox
+                                            value="#{inspectionDataBean.inspectionHeader.ventilationNatural}"
+                                            itemLabel="Natural" />
+                                    <p:selectBooleanCheckbox
+                                            value="#{inspectionDataBean.inspectionHeader.ventilationMechanic}"
+                                            itemLabel="Mecánica" />
+                                    <p:selectBooleanCheckbox
+                                            value="#{inspectionDataBean.inspectionHeader.ventilationAdequate}"
+                                            itemLabel="Adecuada" />
+                                    <p:selectBooleanCheckbox
+                                            value="#{inspectionDataBean.inspectionHeader.ventilationScarce}"
+                                            itemLabel="Escasa" />
+                                </h:panelGrid>
+                            </p:tab>
+
+                            <p:tab title="Extintores">
+                                <p:commandButton id="btnAddExt" ajax="true"
+                                                 action="faces-redirect=false" update="dtListFireExt btnAddExt"
+                                                 disabled="#{inspectionDataBean.extinguishers.size() >= 3}"
+                                                 actionListener="#{inspectionDataBean.addExtinguisher()}"
+                                                 value="Agregar Extintor" style="margin: 0px 0px 10px 0px;"/>
+
+                                <p:dataTable id="dtListFireExt" var="item"
+                                             value="#{inspectionDataBean.extinguishers}">
+                                    <p:column headerText="Cantidad">
+                                        <p:inputText value="#{item.quantity}" style="width: 100px">
+                                            <p:keyFilter mask="pint" />
+                                        </p:inputText>
+                                    </p:column>
+                                    <p:column headerText="Tipo">
+                                        <p:inputText value="#{item.type}" style="width: 100px"/>
+                                    </p:column>
+                                    <p:column headerText="Capacidad">
+                                        <p:inputText value="#{item.capacity}" style="width: 100px"/>
+                                    </p:column>
+                                    <p:column headerText="Estado">
+                                        <p:inputText value="#{item.status}" style="width: 100px"/>
+                                    </p:column>
+                                    <p:column headerText="Ubicación">
+                                        <p:inputText value="#{item.location}" style="width: 100px"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:tab>
+
+                            <p:tab title="Otros">
+                                <h:panelGrid columns="5" cellpadding="5">
+                                    <p:selectBooleanCheckbox
+                                            value="#{inspectionDataBean.inspectionHeader.knowledgeExtinction}"
+                                            itemLabel="Conocimientos sobre extinción" />
+                                    <p:selectBooleanCheckbox
+                                            value="#{inspectionDataBean.inspectionHeader.alarms}"
+                                            itemLabel="Alarmas" />
+                                    <p:selectBooleanCheckbox
+                                            value="#{inspectionDataBean.inspectionHeader.fireDetectors}"
+                                            itemLabel="Detectores de incendio" />
+                                    <p:selectBooleanCheckbox
+                                            value="#{inspectionDataBean.inspectionHeader.smokeDetectors}"
+                                            itemLabel="Detectores de humo" />
+                                    <p:selectBooleanCheckbox
+                                            value="#{inspectionDataBean.inspectionHeader.emergencyLights}"
+                                            itemLabel="Luces de emergencia" />
+                                </h:panelGrid>
+                            </p:tab>
+
+                            <p:tab title="Resumen">
+                                <h:panelGrid columns="3" cellpadding="5">
+                                    <h:panelGroup>
+                                        <p:outputLabel for="area1" value="Riesgos de incendio" />
+                                        <div>
+                                            <p:inputTextarea rows="3" cols="18" id="area1"
+                                                             autoResize="false"
+                                                             value="#{inspectionDataBean.inspectionHeader.riskFire}"
+                                                             required="false" requiredMessage="Riesgos requerido" />
+                                            <p:message for="area1" />
+                                        </div>
+                                    </h:panelGroup>
+                                    <h:panelGroup>
+                                        <p:outputLabel for="area2" value="Recomendaciones" />
+                                        <div>
+                                            <p:inputTextarea rows="3" cols="18" id="area2"
+                                                             autoResize="false"
+                                                             value="#{inspectionDataBean.inspectionHeader.recommendations}"
+                                                             required="false" requiredMessage="Recomendaciones requerida" />
+                                            <p:message for="area2" />
+                                        </div>
+                                    </h:panelGroup>
+                                    <h:panelGroup>
+                                        <p:outputLabel for="area3" value="Observaciones" />
+                                        <div>
+                                            <p:inputTextarea rows="3" cols="18" id="area3"
+                                                             autoResize="false"
+                                                             value="#{inspectionDataBean.inspectionHeader.observations}"
+                                                             required="false" requiredMessage="Observaciones requerido" />
+                                            <p:message for="area3" />
+                                        </div>
+                                    </h:panelGroup>
+                                </h:panelGrid>
+                            </p:tab>
+                        </p:accordionPanel>
+                    </p:outputPanel>
+                    <div class="ui-sm-12 ui-g-nopad">
+                    </div>
+                </div>
+                <h:panelGroup id="footer" layout="block" styleClass="hidden-sm hidden-md hidden-lg">
+                    <hr/>
+                    <p:splitButton value="Guardar" action="#{inspectionDataBean.saveInspection()}" update="@form"
+                                   icon="fa fa-check"
+                                   styleClass="hidden-md hidden-lg btn-primary">
+                        <p:menuitem value="Atrás"
+                                    action="#{inspectionDataBean.redirectTo}"
+                                    process="@this" immediate="true"
+                                    icon="fa fa-reply"/>
+                    </p:splitButton>
+                </h:panelGroup>
+            </p:panel>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-danger box-solid">
+                <p:commandButton value="Si" type="button" styleClass="btn-material btn-primary ui-confirmdialog-yes"
+                                 icon="fa fa-check"/>
+                <p:commandButton value="No" type="button" styleClass="btn-material btn-danger ui-confirmdialog-no"
+                                 icon="fa fa-close"/>
+            </p:confirmDialog>
+        </h:form>
+
+
+    </ui:define>
+
+</ui:composition>

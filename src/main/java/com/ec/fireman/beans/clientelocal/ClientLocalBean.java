@@ -10,23 +10,16 @@ import com.ec.fireman.util.MessageUtil;
 import com.ec.fireman.util.SessionUtils;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.io.IOUtils;
 import org.omnifaces.util.Faces;
 
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static javax.faces.context.FacesContext.getCurrentInstance;
 
 @Data
 @Log4j2
@@ -119,6 +112,6 @@ public class ClientLocalBean implements Serializable {
   }
 
   public String redirectToUploadDocs() {
-    return PageNameConstants.LOCAL_DOCUMENTS_UPLOAD + "?id=" + this.selectedLocal.getId() + "&faces-redirect=true";
+    return PageNameConstants.DOCUMENTS_UPLOAD + "?id=" + this.selectedItem.getLocal().getId() + "&faces-redirect=true";
   }
 }

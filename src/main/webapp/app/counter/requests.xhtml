@@ -1,108 +1,104 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
-				xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
-				xmlns:p="http://primefaces.org/ui"
-				xmlns:adm="http://github.com/adminfaces"
-				template="#{layoutMB.template}">
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="#{layoutMB.template}">
 
-	<ui:define name="metadata">
-		<ui:param name="title" value="Listado de Requerimientos"/>
-		<style type="text/css">
-			.ui-datatable .ui-datatable-header {
-				text-align: right !important;
-			}
-		</style>
-	</ui:define>
+    <ui:define name="metadata">
+        <ui:param name="title" value="Gestión de Requerimientos"/>
+        <style type="text/css">
+            .ui-datatable .ui-datatable-header {
+                text-align: right !important;
+            }
+        </style>
+    </ui:define>
 
-	<ui:define name="description">
-		Requerimientos
-	</ui:define>
+    <ui:define name="description">
+        Listado
+    </ui:define>
 
-	<ui:define name="body">
-		<h:form>
-			<p:focus context="@form"/>
-			<div class="box box-primary">
-				<div class="box-header with-border">
-					<div id="main-buttons" class="hidden-sm hidden-xs">
-						<p:commandButton icon="fa fa-plus"
-										 value="Nuevo" styleClass="btn-primary"/>
-						<p:spacer width="5"/>
-						<p:commandButton value="Eliminar" icon="fa fa-trash" styleClass="btn-danger"
-										 disabled="#{empty counterBean.selectedRequest or
-										  counterBean.selectedRequest.local.name == null or
-										   counterBean.requests.size() == 0}"
-										 process="@this" update="@form"
-						>
-							<p:confirm header="Confirmacion" message="Estas seguro?" icon="ui-icon-danger"/>
-						</p:commandButton>
-						<p:spacer width="5"/>
-						<!--						<p:commandButton value="View selected" update="@(.ui-dialog)" styleClass="btn-info"-->
-						<!--										 disabled="#{empty carListMB.selectedCars or carListMB.selectedCars.size() == 0}"-->
-						<!--										 oncomplete="PF('selectedCars').show()" icon="fa fa-search"/>-->
-					</div>
+    <ui:define name="body">
+        <h:form>
+            <p:focus context="@form"/>
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <p:dataTable id="dtService"
+                                 selectionMode="single"
+                                 selection="#{counterBean.selectedRequest}"
+                                 var="item"
+                                 rowKey="#{item.id}"
+                                 value="#{counterBean.requests}"
+                                 rows="5"
+                                 paginatorPosition="bottom"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {JumpToPageDropdown}"
+                                 currentPageReportTemplate="[ {startRecord} a {endRecord} de {totalRecords} ]"
+                                 rowsPerPageTemplate="5,10,15,20,30"
+                                 paginator="true">
 
-					<!--					<p:splitButton value="New" action="/car-form?faces-redirect=true"-->
-					<!--								   icon="fa fa-plus"-->
-					<!--								   styleClass="hidden-md hidden-lg btn-primary">-->
-					<!--						<p:menuitem value="Delete Selected" action="#{carListMB.delete}"-->
-					<!--									process="@this" update="@form"-->
-					<!--									disabled="#{empty carListMB.selectedCars or carListMB.selectedCars.size() == 0}"-->
-					<!--									icon="fa fa-trash">-->
-					<!--							<p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger"/>-->
-					<!--						</p:menuitem>-->
-					<!--						<p:menuitem value="View selected" update="@(.ui-dialog)"-->
-					<!--									oncomplete="PF('selectedCars').show()"-->
-					<!--									disabled="#{empty carListMB.selectedCars or carListMB.selectedCars.size() == 0}"-->
-					<!--									icon="fa fa-search"-->
-					<!--						/>-->
-					<!--					</p:splitButton>-->
+                        <p:ajax event="rowSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
+                        <p:ajax event="rowUnselect" update="@(.ui-button, .ui-confirm-dialog)"/>
+                        <p:ajax event="rowSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
+                        <p:ajax event="rowUnselect" update="@(.ui-button, .ui-confirm-dialog)"/>
+                        <p:ajax event="toggleSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
 
-					<p:separator/>
-					<p:dataTable id="dtRequest"
-								 selectionMode="single"
-								 selection="#{counterBean.selectedRequest}"
-								 var="item"
-								 rowKey="#{item}"
-								 value="#{counterBean.requests}"
-								 rows="5"
-								 paginatorPosition="bottom"
-								 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {JumpToPageDropdown}"
-								 currentPageReportTemplate="[ {startRecord} a {endRecord} de {totalRecords} ]"
-								 rowsPerPageTemplate="5,10,15,20,30"
-								 paginator="true">
-
-						<p:ajax event="rowSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
-						<p:ajax event="rowUnselect" update="@(.ui-button, .ui-confirm-dialog)"/>
-						<p:ajax event="rowSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
-						<p:ajax event="rowUnselect" update="@(.ui-button, .ui-confirm-dialog)"/>
-						<p:ajax event="toggleSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
-
-						<p:column headerText="Dirección" sortBy="#{item.local.address}"
-								  filterMatchMode="contains"
-								  filterBy="#{item.local.address}">
-							<h:outputText value="#{item.local.address}" />
-						</p:column>
-						<p:column headerText="Servicio" sortBy="#{item.local.service.name}"
-								  filterMatchMode="contains"
-								  filterBy="#{item.local.service.name}">
-							<h:outputText value="#{item.local.service.name}" />
-						</p:column>
-						<p:column headerText="Estado"
-								  sortBy="#{item.permissionRequest.permissionRequestStatus.value}"
-								  filterMatchMode="contains"
-								  filterBy="#{item.permissionRequest.permissionRequestStatus.value}">
-							<h:outputText
-									value="#{item.permissionRequest.permissionRequestStatus.value}" />
-						</p:column>
-					</p:dataTable>
-				</div>
-			</div>
-			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-danger box-solid">
-				<p:commandButton value="Yes" type="button" styleClass="btn-material btn-primary ui-confirmdialog-yes"
-								 icon="fa fa-check"/>
-				<p:commandButton value="No" type="button" styleClass="btn-material btn-danger ui-confirmdialog-no"
-								 icon="fa fa-close"/>
-			</p:confirmDialog>
-		</h:form>
-	</ui:define>
+                        <p:column headerText="Dirección del Local" sortBy="#{item.local.address}"
+                                  filterMatchMode="contains"
+                                  filterBy="#{item.local.address}">
+                            <h:outputText value="#{item.local.address}"/>
+                        </p:column>
+                        <p:column headerText="Servicio" sortBy="#{item.local.service.name}"
+                                  filterMatchMode="contains"
+                                  filterBy="#{item.local.service.name}">
+                            <h:outputText value="#{item.local.service.name}"/>
+                        </p:column>
+                        <p:column headerText="Estado" sortBy="#{item.permissionRequestStatus.value}"
+                                  filterMatchMode="contains"
+                                  filterBy="#{item.permissionRequestStatus.value}">
+                            <h:outputText
+                                    value="#{item.permissionRequestStatus.value}"/>
+                        </p:column>
+                        <p:column style="text-align: center;" headerText="Acciones">
+                            <p:commandButton rendered="#{item.local.state == 'ACTIVE'}" styleClass="btn-info"
+                                             action="#{counterBean.redirectToUploadDocs}"
+                                             icon="fa fa-folder-open"
+                                             title="Cargar documentos" style="margin: 0 0 1px 10px;">
+                                <f:setPropertyActionListener value="#{item}"
+                                                             target="#{counterBean.selectedRequest}"/>
+                            </p:commandButton>
+                            <p:commandButton rendered="#{item.local.state == 'ACTIVE'}"
+                                             update="@form"
+                                             icon="fa fa-clipboard"
+                                             action="#{counterBean.redirectToPermissionEmit}"
+                                             title="Emitir permiso de funcionamiento"
+                                             style="margin: 0 0 1px 10px;">
+                                <f:setPropertyActionListener value="#{item}"
+                                                             target="#{counterBean.selectedRequest}"/>
+                                <p:confirm header="Confirmation"
+                                           message="Está seguro que desea emitir permiso de funcionamiento?."
+                                           icon="fa fa-danger"/>
+                            </p:commandButton>
+                            <p:commandButton update="@form"
+                                             rendered="#{item.permissionRequestStatus == 'TO_PAIED' and
+							item.local.state == 'ACTIVE'}"
+                                             icon="fa fa-ban" styleClass="btn-danger"
+                                             action="#{counterBean.cancelRequest()}"
+                                             title="Cancelar solicitud" style="margin: 0 0 1px 10px;">
+                                <f:setPropertyActionListener value="#{item}"
+                                                             target="#{counterBean.selectedRequest}"/>
+                                <p:confirm header="Confirmation"
+                                           message="Está seguro que desea cancelar la solicitud del permiso de funcionamiento?."
+                                           icon="fa fa-danger"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </div>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-danger box-solid">
+                <p:commandButton value="Si" type="button" styleClass="btn-material btn-primary ui-confirmdialog-yes"
+                                 icon="fa fa-check"/>
+                <p:commandButton value="No" type="button" styleClass="btn-material btn-danger ui-confirmdialog-no"
+                                 icon="fa fa-close"/>
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
 </ui:composition>

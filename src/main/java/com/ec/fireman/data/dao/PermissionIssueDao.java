@@ -32,7 +32,7 @@ public class PermissionIssueDao extends GenericDaoImpl<PermissionIssue> {
     }
     PermissionIssue permissionIssue = (PermissionIssue) permissionIssues.get(0);
     permissionIssue.setState(State.INACTIVE);
-    entityManager.merge(permissionIssues);
+    entityManager.merge(permissionIssue);
   }
 
   public List<PermissionIssue> findAllCloseToExpire() {

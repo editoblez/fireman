@@ -108,7 +108,7 @@
 							   item.local.state == 'ACTIVE'}" styleClass="btn-info"
 											 action="#{clientLocalBean.redirectToUploadDocs}"
 											 icon="fa fa-folder-open"
-											 title="Cargar documentos" style="margin: 0px 0px 1px 10px;">
+											 title="Cargar documentos" style="margin: 0 0 1px 10px;">
 								<f:setPropertyActionListener value="#{item.local}"
 															 target="#{clientLocalBean.selectedLocal}" />
 							</p:commandButton>
@@ -126,10 +126,9 @@
 							</p:commandButton>
 							<p:commandButton update="@form"
 											 rendered="#{item.permissionRequest.permissionRequestStatus != 'TO_REQUEST' and
-											  item.permissionRequest.permissionRequestStatus != 'REJECTED' and
-											   !item.permissionRequest.isToExpireOrExpired()}"
-											 styleClass="btn-danger"
-											 icon="fa fa-trash"
+											 item.permissionRequest.permissionRequestStatus != 'REJECTED' and
+											  !item.permissionRequest.isToExpireOrExpired()}"
+											 icon="fa fa-ban" styleClass="btn-danger"
 											 action="#{clientLocalBean.cancelRequest()}"
 											 title="Cancelar solicitud" style="margin: 0 0 1px 10px;">
 								<f:setPropertyActionListener value="#{item.permissionRequest}"
@@ -143,7 +142,7 @@
 				</div>
 			</div>
 			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-danger box-solid">
-				<p:commandButton value="Yes" type="button" styleClass="btn-material btn-primary ui-confirmdialog-yes"
+				<p:commandButton value="Si" type="button" styleClass="btn-material btn-primary ui-confirmdialog-yes"
 								 icon="fa fa-check"/>
 				<p:commandButton value="No" type="button" styleClass="btn-material btn-danger ui-confirmdialog-no"
 								 icon="fa fa-close"/>

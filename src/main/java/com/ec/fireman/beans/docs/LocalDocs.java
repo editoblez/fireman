@@ -62,7 +62,7 @@ public class LocalDocs implements Serializable {
                 Faces.getSessionAttribute(PageRedirectConstants.REFERER).toString().isEmpty() ||
                 (getCurrentInstance().
                         getExternalContext().getRequestHeaderMap()
-                        .get(PageRedirectConstants.REFERER).lastIndexOf("local-docs.xhtml") < 0)) {
+                        .get(PageRedirectConstants.REFERER).lastIndexOf("documents.xhtml") < 0)) {
             Faces.setSessionAttribute(PageRedirectConstants.REFERER, getCurrentInstance().
                     getExternalContext().getRequestHeaderMap().get(PageRedirectConstants.REFERER));
         }
@@ -90,10 +90,6 @@ public class LocalDocs implements Serializable {
     }
 
     public void uploadAll() {
-        // TODO: verificar que el archivo del requerimiento que se va a subir
-        // no esté cargado, en caso de que ya lo esté, se debe eliminar y subirlo
-        // nuevamente
-        String msg = null;
         try {
             for (RequirementFileUpload requirementFileUpload : files) {
                 log.info(requirementFileUpload.toString());
@@ -101,8 +97,9 @@ public class LocalDocs implements Serializable {
                     String suffix = requirementFileUpload.getFile().getFileName()
                             .substring(requirementFileUpload.getFile().getFileName().lastIndexOf("."));
                     if (MimeTypes.findBySuffix(suffix) == null) {
-                        msg = "La extensión del archivo " + requirementFileUpload.getFile().getFileName() + " no es permitida.";
-                        MessageUtil.addDetailMessage(msg, FacesMessage.SEVERITY_WARN);
+                        MessageUtil.addDetailMessage("La extensión del archivo " +
+                                        requirementFileUpload.getFile().getFileName() + " no es permitida.",
+                                FacesMessage.SEVERITY_WARN);
                         continue;
                     }
                     byte[] bytes = null;
@@ -119,9 +116,8 @@ public class LocalDocs implements Serializable {
                     prf.setData(bytes);
                     prf.setFileName(requirementFileUpload.getFile().getFileName());
                     permissionRequestFilesDao.save(prf);
-
-                    msg = requirementFileUpload.getFile().getFileName() + " subido correctamente.";
-                    MessageUtil.addDetailMessage(msg);
+                    MessageUtil.addDetailMessage(requirementFileUpload.getFile().getFileName() +
+                            " subido correctamente.");
                 } else {
                     MessageUtil.addDetailMessage("La extensión del fichero no es permitida o no existe.", FacesMessage.SEVERITY_ERROR);
                 }

@@ -1,5 +1,6 @@
-package com.ec.fireman.beans;
+package com.ec.fireman.beans.counter;
 
+import com.ec.fireman.beans.PageNameConstants;
 import com.ec.fireman.data.dao.*;
 import com.ec.fireman.data.entities.*;
 import com.ec.fireman.data.representation.RequirementFileUpload;
@@ -53,7 +54,6 @@ public class CounterBean implements Serializable {
   private List requests;
   private List<RequirementFileUpload> files;
   private PermissionRequest selectedRequest;
-  private BigDecimal price;
 
   @PostConstruct
   public void init() {
@@ -71,34 +71,6 @@ public class CounterBean implements Serializable {
   }
 
   @Transactional
-  public void editRequest() {
-    selectedRequest.setPermissionRequestStatus(PermissionRequestStatus.PERMISSION_ISSUED);
-    selectedRequest.setEconomic(userAccountDao.findUserByCi(SessionUtils.retrieveLoggedUser().getUserId()));
-    permissionRequestDao.update(selectedRequest);
-
-    createNewPermissionIssue();
-
-    log.info(selectedRequest.toString());
-    MessageUtil.infoFacesMessage("Solicitud", "Permiso de funcionamiento emitido");
-    this.refreshRequests();
-    this.clearData();
-  }
-
-  private void createNewPermissionIssue() {
-    Calendar timeCalendar = Calendar.getInstance();
-    Calendar closeToExpireCalendar = Calendar.getInstance();
-    Calendar expiredCalendar = Calendar.getInstance();
-    permissionIssueDao.inactivePreviousPermissionIssued(selectedRequest);
-    long time = timeCalendar.getTimeInMillis();
-    closeToExpireCalendar.add(Calendar.MONTH, parameterDao.findMonthQuantityCloseToAddToExpire());
-    long closeToExpire = closeToExpireCalendar.getTimeInMillis();
-    expiredCalendar.add(Calendar.MONTH, parameterDao.findMonthQuantityToAddToExpire());
-    long expire = expiredCalendar.getTimeInMillis();
-    permissionIssueDao.save(new PermissionIssue(price, inspectionHeaderDao.findByPermissionRequest(selectedRequest), time, closeToExpire, expire));
-  }
-
-
-  @Transactional
   public void cancelRequest() {
     selectedRequest.setPermissionRequestStatus(PermissionRequestStatus.REJECTED);
     permissionRequestDao.update(selectedRequest);
@@ -107,21 +79,11 @@ public class CounterBean implements Serializable {
     this.clearData();
   }
 
-  public List<RequirementFileUpload> listRequirements() {
-    // TODO: LIST ACTIVE REQUIREMENTS BY ROLE (DAO)
-    List<Requirement> requirements = requirementDao.findAll();
-    files = new ArrayList<>();
-    if (requirements != null && !requirements.isEmpty()) {
-      for (Requirement req : requirements) {
-        files.add(new RequirementFileUpload(req.getId(), req.getName()));
-      }
-    }
-    return files;
+  public String redirectToUploadDocs() {
+    return PageNameConstants.DOCUMENTS_UPLOAD + "?id=" + this.selectedRequest.getLocal().getId() + "&faces-redirect=true";
   }
 
-  public StreamedContent download(PermissionRequestFiles prf) {
-    InputStream stream = new ByteArrayInputStream(prf.getData());
-    String suffix = prf.getFileName().substring(prf.getFileName().lastIndexOf("."));
-    return new DefaultStreamedContent(stream, MimeTypes.findBySuffix(suffix).getMimeType(), prf.getFileName());
+  public String redirectToPermissionEmit() {
+    return PageNameConstants.COUNTER_PERMISSION_PAGE + "?id=" + this.selectedRequest.getId() + "&faces-redirect=true";
   }
 }

@@ -60,6 +60,14 @@
 						</p:column>
 						<p:column style="text-align: center;" headerText="Acciones">
 							<p:commandButton rendered="#{item.permissionRequestStatus == 'IN_PROGRESS' and
+							item.local.state == 'ACTIVE'}" styleClass="btn-file"
+											 action="#{inspectorBean.redirectToSeeDocs}"
+											 icon="fa fa-eye"
+											 title="Revisar documentos" style="margin: 0 0 1px 10px;">
+								<f:setPropertyActionListener value="#{item}"
+															 target="#{inspectorBean.selectedRequest}" />
+							</p:commandButton>
+							<p:commandButton rendered="#{item.permissionRequestStatus == 'IN_PROGRESS' and
 							item.local.state == 'ACTIVE'}" styleClass="btn-info"
 											 action="#{inspectorBean.redirectToUploadDocs}"
 											 icon="fa fa-folder-open"

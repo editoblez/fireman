@@ -70,12 +70,12 @@ public class LocalDocs implements Serializable {
 
     public String redirectTo() {
         String completeUrl = Faces.getSessionAttribute(PageRedirectConstants.REFERER).toString();
-        StringBuffer path = new StringBuffer(
+        StringBuilder path = new StringBuilder(
                 getCurrentInstance().getExternalContext().isSecure() ? "https://" : "http://"
         );
         path.append(getCurrentInstance().getExternalContext().getRequestServerName());
-        Integer port = getCurrentInstance().getExternalContext().getRequestServerPort();
-        path.append(port != 80 && port != 443 ? ":" + port.toString() : "");
+        int port = getCurrentInstance().getExternalContext().getRequestServerPort();
+        path.append(port != 80 && port != 443 ? ":" + port : "");
         path.append(getCurrentInstance().getExternalContext().getRequestContextPath());
 
         String[] urls = completeUrl.split(path.toString());

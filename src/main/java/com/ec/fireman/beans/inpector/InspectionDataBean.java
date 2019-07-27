@@ -12,6 +12,7 @@ import com.github.adminfaces.template.util.Assert;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 
+import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -42,12 +43,15 @@ public class InspectionDataBean implements Serializable {
     private PermissionRequest selectedRequest;
 
     public void init() {
-        extinguishers = new ArrayList<>();
-        inspectionHeader = null;
         if (Assert.has(id) && id != null) {
             selectedRequest = permissionRequestDao.findById(id);
             this.fillInspectionData(selectedRequest);
             inspectionHeader = inspectionHeaderDao.findByPermissionRequest(selectedRequest);
+            extinguishers = inspectionFireExtinguisherDao.findInspectionFireExtinguisherByHeader(inspectionHeader.getId());
+            if (extinguishers == null || extinguishers.isEmpty()) {
+                extinguishers = new ArrayList<>();
+                extinguishers.add(new InspectionFireExtinguisher());
+            }
         }
     }
 

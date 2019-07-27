@@ -80,14 +80,6 @@ public class InspectorBean implements Serializable {
         this.clearData();
     }
 
-
-    public List<PermissionRequestFiles> listFiles() {
-        List<PermissionRequestFiles> list = permissionRequestFilesDao
-                .findPermissionRequestFilesByRequest(selectedRequest.getId());
-        log.info("Files length: " + (list != null ? list.size() : 0));
-        return list;
-    }
-
     public String mapUrl(PermissionRequest pr) {
         String url = pr != null && pr.getLocal() != null ? pr.getLocal().getMapUrl() : "";
         log.info("Map URL: " + url);
@@ -100,6 +92,10 @@ public class InspectorBean implements Serializable {
 
     public String redirectToUploadDocs() {
         return PageNameConstants.DOCUMENTS_UPLOAD + "?id=" + this.selectedRequest.getLocal().getId() + "&faces-redirect=true";
+    }
+
+    public String redirectToSeeDocs() {
+        return PageNameConstants.DOCUMENTS_SEE + "?id=" + this.selectedRequest.getId() + "&faces-redirect=true";
     }
 
     public String redirectToInspectionPage() {

@@ -99,9 +99,9 @@
 
                             <p:tab title="Extintores">
                                 <p:commandButton id="btnAddExt" ajax="true"
-                                                 action="faces-redirect=false" update="dtListFireExt btnAddExt"
+                                                 update="@form"
                                                  disabled="#{inspectionDataBean.extinguishers.size() >= 3}"
-                                                 actionListener="#{inspectionDataBean.addExtinguisher()}"
+                                                 acttion="#{inspectionDataBean.addExtinguisher()}"
                                                  value="Agregar Extintor" style="margin: 0px 0px 10px 0px;"/>
 
                                 <p:dataTable id="dtListFireExt" var="item"

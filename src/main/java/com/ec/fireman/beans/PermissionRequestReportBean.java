@@ -25,7 +25,7 @@ public class PermissionRequestReportBean implements Serializable {
   @Inject
   private PermissionRequestDao permissionRequestDao;
 
-  private List requests;
+  private List<PermissionRequest> requests;
   private String inspector;
   private PermissionRequest selectedRequest;
 

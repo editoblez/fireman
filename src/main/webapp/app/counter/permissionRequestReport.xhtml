@@ -12,28 +12,29 @@
 
 		<h:form id="formList">
 
-			<p:panel id="panelFiltter" header="Filtros"
-				style="margin-bottom:20px" toggleable="true">
-				<h:panelGrid columns="2" cellpadding="10">
-					<h:panelGroup>
-						<p:outputLabel value="Inspector"
-							title="Ingrese alguno de los datos: Cédula, Primer Nombre ó Primer Apellido del Inspector" />
-						<br />
-						<p:inputText id="txtInspector"
-							value="#{permissionRequestReportBean.inspector}" />
-					</h:panelGroup>
-					<div align="left" style="padding-top: 15px;">
-						<p:commandButton ajax="true" action="faces-redirect=false"
-							update=":formList:dtList growl :formList:exportBtn"
-							id="refreshBtn"
-							actionListener="#{permissionRequestReportBean.refreshReport()}"
-							value="Buscar" styleClass="btn btn-default" />
-					</div>
-				</h:panelGrid>
-				<p:blockUI block="formList" trigger="refreshBtn" />
-			</p:panel>
+			<p:accordionPanel id="panelFiltter">
+				<p:tab title="Filtros" style="margin-bottom:10px">
+					<h:panelGrid columns="2" cellpadding="10">
+						<h:panelGroup>
+							<p:outputLabel value="Inspector" />
+							<br />
+							<p:inputText id="txtInspector"
+								title="Ingrese alguno de los datos: Cédula, Primer Nombre ó Primer Apellido del Inspector"
+								value="#{permissionRequestReportBean.inspector}" />
+						</h:panelGroup>
+						<div align="left" style="padding-top: 15px;">
+							<p:commandButton ajax="true" action="faces-redirect=false"
+								update=":formList:dtList growl :formList:exportBtn"
+								id="refreshBtn"
+								actionListener="#{permissionRequestReportBean.refreshReport()}"
+								value="Buscar" styleClass="btn btn-default" />
+						</div>
+					</h:panelGrid>
+					<p:blockUI block="formList" trigger="refreshBtn" />
+				</p:tab>
+			</p:accordionPanel>
 
-			<div align="right" style="padding-bottom: 10px;">
+			<div align="right" style="padding-bottom: 10px; padding-top: 10px;">
 				<p:commandButton id="exportBtn" ajax="false"
 					disabled="#{empty permissionRequestReportBean.requests}"
 					update=":formList:dtList growl" value="Exportar PDF">

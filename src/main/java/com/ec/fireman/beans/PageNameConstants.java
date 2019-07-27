@@ -12,4 +12,5 @@ public class PageNameConstants {
   static final String INSPECTOR_PAGE = "/app/inspector/inspections.xhtml";
   static final String COUNTER_PAGE = "/app/counter/requests.xhtml";
   static final String PERMISSION_REQUEST_REPORT_PAGE = "/app/counter/permissionRequestReport.xhtml";
+  static final String PERMISSION_ISSUE_REPORT_PAGE = "/app/counter/permissionIssueReport.xhtml";
 }

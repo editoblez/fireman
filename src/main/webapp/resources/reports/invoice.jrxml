@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="inspection" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="891eeccb-6430-4edd-9ffd-a5294f35454f">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<parameter name="logo" class="java.lang.String"/>
+	<parameter name="permissionDate" class="java.lang.String"/>
+	<parameter name="permissionPrice" class="java.lang.Float"/>
+	<parameter name="nextExpirationDate" class="java.lang.String"/>
+	<parameter name="expirationDate" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<title>
+		<band height="260" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="260" uuid="06df74a8-282b-4554-b0c0-c6403a437a37"/>
+				<graphicElement>
+					<pen lineWidth="2.0" lineStyle="Double" lineColor="#3107A6"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="20" uuid="191ffcaf-6bfe-498d-917f-49b23161aa9f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CUERPO DE BOMBEROS DE TISALEO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="20" width="555" height="12" uuid="a7dbd026-da52-4d0f-bbb3-993085c9cba4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PREVENCION DE INCENDIOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="35" width="555" height="40" uuid="bc12de6c-31d5-4cb7-87e4-8e3c51994fd5"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Real Audiencia y 20 de Octubre
+Teléfonos: 2751792 Administrativo
+                 2751793 Emergencias]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="98" width="555" height="13" uuid="9c73d6ad-0f99-4ecd-8cfa-a4e7d1185b06"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DETALLE DE FACTURA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="97" y="148" width="120" height="13" uuid="7f30de6f-032b-48b4-87d4-218a25cd4cb9"/>
+				<text><![CDATA[FECHA PERMISO:]]></text>
+			</staticText>
+			<image>
+				<reportElement x="10" y="10" width="100" height="100" uuid="5690109e-07c6-4c4c-814f-bb8451570bdf"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="97" y="170" width="120" height="13" uuid="6a50fca8-f201-48e6-8c78-8370c5f65fb4"/>
+				<text><![CDATA[VALOR PERMISO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="97" y="195" width="120" height="13" uuid="afa68429-a16f-45b4-8746-f8f5147df44d"/>
+				<text><![CDATA[FECHA POR CADUCAR:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="97" y="217" width="120" height="13" uuid="318b492d-e124-495a-a187-cb924a0d6780"/>
+				<text><![CDATA[FECHA CADUCACION:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="237" y="148" width="300" height="13" uuid="bfa97c99-9e7e-41f2-aa88-7294de3af2f0"/>
+				<textFieldExpression><![CDATA[$P{permissionDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="237" y="170" width="300" height="13" uuid="a143daba-1c18-4ed1-9227-ecbfa1a63c5b"/>
+				<textFieldExpression><![CDATA[$P{permissionPrice}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="237" y="195" width="300" height="13" uuid="92982d6f-7e45-4b34-9cfa-469e8638a413"/>
+				<textFieldExpression><![CDATA[$P{nextExpirationDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="237" y="217" width="300" height="13" uuid="2c166390-0b78-4255-ac65-9811e33099dc"/>
+				<textFieldExpression><![CDATA[$P{expirationDate}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="122" width="555" height="1" uuid="efc56d5e-0227-4951-bf9d-603b7ae4bfb6"/>
+				<graphicElement>
+					<pen lineWidth="2.0" lineStyle="Double" lineColor="#522FB4"/>
+				</graphicElement>
+			</line>
+		</band>
+	</title>
+</jasperReport>

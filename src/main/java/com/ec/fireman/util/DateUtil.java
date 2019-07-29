@@ -1,6 +1,7 @@
 package com.ec.fireman.util;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class DateUtil {
   private static String pattern = "yyyy-MM-dd HH:mm:ss";
@@ -16,4 +17,9 @@ public class DateUtil {
     return simpleDateFormatYear.format(date);
   }
 
+  public static int extractYear(long expire) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTimeInMillis(expire);
+    return calendar.get(Calendar.YEAR);
+  }
 }

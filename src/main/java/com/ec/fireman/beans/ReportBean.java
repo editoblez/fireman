@@ -2,13 +2,14 @@ package com.ec.fireman.beans;
 
 import com.ec.fireman.data.dao.InspectionFireExtinguisherDao;
 import com.ec.fireman.data.dao.InspectionHeaderDao;
+import com.ec.fireman.data.dao.PermissionIssueDao;
 import com.ec.fireman.data.entities.InspectionFireExtinguisher;
 import com.ec.fireman.data.entities.InspectionHeader;
+import com.ec.fireman.data.entities.PermissionIssue;
 import com.ec.fireman.data.entities.PermissionRequest;
 import com.ec.fireman.util.DateUtil;
 import com.ec.fireman.util.MessageUtil;
 import com.ec.fireman.util.TextNumberUtil;
-
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import net.sf.jasperreports.engine.*;
@@ -40,6 +41,8 @@ public class ReportBean implements Serializable {
   private InspectionHeaderDao inspectionHeaderDao;
   @Inject
   private InspectionFireExtinguisherDao inspectionFireExtinguisherDao;
+  @Inject
+  private PermissionIssueDao permissionIssueDao;
 
   private List<InspectionHeader> inspectionList;
 
@@ -113,6 +116,7 @@ public class ReportBean implements Serializable {
 
   public void buildPermissionReport(PermissionRequest pr) {
     InspectionHeader inspection = null;
+    PermissionIssue permissionIssue = permissionIssueDao.findByPermissionRequest(pr);
     try {
       log.info(pr.toString());
       inspection = inspectionHeaderDao.findInspectionHeaderByRequest(pr.getId());
@@ -128,13 +132,12 @@ public class ReportBean implements Serializable {
     String nombreArchivo = "PERMISO";
     FacesContext context = FacesContext.getCurrentInstance();
     Map<String, Object> params = new HashMap<>();
-    params.put("PERMISSION_NUMBER", "0012"); // TODO BUSCAR ESTE DATO (número de permiso)
-    params.put("VALIDITY", "2020"); // TODO BUSCAR ESTE DATO (AÑO DE VALIDEZ)
+    params.put("PERMISSION_NUMBER", String.valueOf(permissionIssue.getId()));
+    params.put("VALIDITY", String.valueOf(DateUtil.extractYear(permissionIssue.getExpire())));
     params.put("WATTERMARK", context.getExternalContext().getRealPath(File.separator) + File.separator + "resources"
         + File.separator + "images" + File.separator + "wattermark.png");
-    Float price = Float.valueOf("23.4"); // TODO BUSCAR ESTE DATO (precio)
-    params.put("price", price);
-    params.put("textPrice", TextNumberUtil.convert(String.valueOf(price), true));
+    params.put("price", permissionIssue.getPrice().floatValue());
+    params.put("textPrice", TextNumberUtil.convert(permissionIssue.getPrice().toString(), true));
     params.put("years", DateUtil.getYearFromDate(inspection.getLastUpdate()));
     params.put("socialReason",
         inspection.getPermissionRequest().getLocal().getUserAccount().getFullName().toUpperCase());
@@ -153,9 +156,42 @@ public class ReportBean implements Serializable {
     }
 
   }
+  
+  public void buildInvoiceReport(PermissionRequest pr) {
+    InspectionHeader inspection = null;
+    try {
+      log.info(pr.toString());
+      inspection = inspectionHeaderDao.findInspectionHeaderByRequest(pr.getId());
+    } catch (Exception e1) {
+      log.info(e1.getMessage());
+    }
+
+    if (inspection == null) {
+      MessageUtil.warningFacesMessage("Reporte", "No existe información");
+      return;
+    }
+
+    String nombreArchivo = "FACTURA";
+    FacesContext context = FacesContext.getCurrentInstance();
+    Map<String, Object> params = new HashMap<>();
+    params.put("logo", context.getExternalContext().getRealPath(File.separator) + File.separator + "resources"
+        + File.separator + "images" + File.separator + "fireman-logo.png");
+    params.put("permissionDate", DateUtil.formatDateToString(inspection.getLastUpdate())); //TODO LLENAR ESTE CAMPO CON EL DATO REAL
+    params.put("permissionPrice", Float.valueOf("23.4")); //TODO LLENAR ESTE CAMPO CON EL DATO REAL
+    params.put("nextExpirationDate", DateUtil.formatDateToString(inspection.getLastUpdate())); //TODO LLENAR ESTE CAMPO CON EL DATO REAL
+    params.put("expirationDate", DateUtil.formatDateToString(inspection.getLastUpdate())); //TODO LLENAR ESTE CAMPO CON EL DATO REAL
+
+    try {
+      this.generatePDF(nombreArchivo, "invoice.jrxml", null, params, context);
+    } catch (Exception e) {
+      log.error(e.getMessage());
+      MessageUtil.errorFacesMessage("Reporte", "Error al generar el reporte.");
+    }
+
+  }
 
   public void generatePDF(String fileName, String templateName, JRBeanCollectionDataSource data,
-      Map<String, Object> params, FacesContext context) {
+                          Map<String, Object> params, FacesContext context) {
     try {
       String path = context.getExternalContext().getRealPath(File.separator) + File.separator + "resources"
           + File.separator + "reports" + File.separator + templateName;

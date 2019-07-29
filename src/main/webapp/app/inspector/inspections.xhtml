@@ -1,138 +1,145 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
-				xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
-				xmlns:p="http://primefaces.org/ui"
-				xmlns:adm="http://github.com/adminfaces"
-				template="#{layoutMB.template}">
+        xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        template="#{layoutMB.template}">
 
-	<ui:define name="metadata">
-		<ui:param name="title" value="Gestión de Requerimientos"/>
-		<style type="text/css">
-			.ui-datatable .ui-datatable-header {
-				text-align: right !important;
-			}
-		</style>
-	</ui:define>
+    <ui:define name="metadata">
+        <ui:param name="title" value="Gestión de Requerimientos"/>
+        <style type="text/css">
+            .ui-datatable .ui-datatable-header {
+                text-align: right !important;
+            }
+        </style>
+    </ui:define>
 
-	<ui:define name="description">
-		Listado
-	</ui:define>
+    <ui:define name="description">
+        Listado
+    </ui:define>
 
-	<ui:define name="body">
-		<h:form>
-			<p:focus context="@form"/>
-			<div class="box box-primary">
-				<div class="box-header with-border">
-					<p:dataTable id="dtService"
-								 selectionMode="single"
-								 selection="#{inspectorBean.selectedRequest}"
-								 var="item"
-								 rowKey="#{item.id}"
-								 value="#{inspectorBean.requests}"
-								 rows="5"
-								 paginatorPosition="bottom"
-								 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {JumpToPageDropdown}"
-								 currentPageReportTemplate="[ {startRecord} a {endRecord} de {totalRecords} ]"
-								 rowsPerPageTemplate="5,10,15,20,30"
-								 paginator="true">
+    <ui:define name="body">
+        <h:form>
+            <p:focus context="@form"/>
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <p:dataTable id="dtService"
+                            selectionMode="single"
+                            selection="#{inspectorBean.selectedRequest}"
+                            var="item"
+                            rowKey="#{item.id}"
+                            value="#{inspectorBean.requests}"
+                            rows="5"
+                            paginatorPosition="bottom"
+                            paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {JumpToPageDropdown}"
+                            currentPageReportTemplate="[ {startRecord} a {endRecord} de {totalRecords} ]"
+                            rowsPerPageTemplate="5,10,15,20,30"
+                            paginator="true">
 
-						<p:ajax event="rowSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
-						<p:ajax event="rowUnselect" update="@(.ui-button, .ui-confirm-dialog)"/>
-						<p:ajax event="rowSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
-						<p:ajax event="rowUnselect" update="@(.ui-button, .ui-confirm-dialog)"/>
-						<p:ajax event="toggleSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
+                        <p:ajax event="rowSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
+                        <p:ajax event="rowUnselect" update="@(.ui-button, .ui-confirm-dialog)"/>
+                        <p:ajax event="rowSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
+                        <p:ajax event="rowUnselect" update="@(.ui-button, .ui-confirm-dialog)"/>
+                        <p:ajax event="toggleSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
 
-						<p:column headerText="Dirección del Local" sortBy="#{item.local.address}"
-								  filterMatchMode="contains"
-								  filterBy="#{item.local.address}">
-							<h:outputText value="#{item.local.address}"/>
-						</p:column>
-						<p:column headerText="Servicio" sortBy="#{item.local.service.name}"
-								  filterMatchMode="contains"
-								  filterBy="#{item.local.service.name}">
-							<h:outputText value="#{item.local.service.name}" />
-						</p:column>
-						<p:column headerText="Estado" sortBy="#{item.permissionRequestStatus.value}"
-								  filterMatchMode="contains"
-								  filterBy="#{item.permissionRequestStatus.value}">
-							<h:outputText
-									value="#{item.permissionRequestStatus.value}" />
-						</p:column>
-						<p:column style="text-align: center;" headerText="Acciones">
-							<p:commandButton rendered="#{item.permissionRequestStatus == 'IN_PROGRESS' and
+                        <p:column headerText="Dirección del Local" sortBy="#{item.local.address}"
+                                filterMatchMode="contains"
+                                filterBy="#{item.local.address}">
+                            <h:outputText value="#{item.local.address}"/>
+                        </p:column>
+                        <p:column headerText="Servicio" sortBy="#{item.local.service.name}"
+                                filterMatchMode="contains"
+                                filterBy="#{item.local.service.name}">
+                            <h:outputText value="#{item.local.service.name}"/>
+                        </p:column>
+                        <p:column headerText="Estado" sortBy="#{item.permissionRequestStatus.value}"
+                                filterMatchMode="contains"
+                                filterBy="#{item.permissionRequestStatus.value}">
+                            <h:outputText
+                                    value="#{item.permissionRequestStatus.value}"/>
+                        </p:column>
+                        <p:column style="text-align: center;" headerText="Acciones">
+                            <p:commandButton rendered="#{item.permissionRequestStatus == 'IN_PROGRESS' and
 							item.local.state == 'ACTIVE'}" styleClass="btn-file"
-											 action="#{inspectorBean.redirectToSeeDocs}"
-											 icon="fa fa-eye"
-											 title="Revisar documentos" style="margin: 0 0 1px 10px;">
-								<f:setPropertyActionListener value="#{item}"
-															 target="#{inspectorBean.selectedRequest}" />
-							</p:commandButton>
-							<p:commandButton rendered="#{item.permissionRequestStatus == 'IN_PROGRESS' and
+                                    action="#{inspectorBean.redirectToSeeDocs}"
+                                    icon="fa fa-eye"
+                                    title="Revisar documentos" style="margin: 0 0 1px 10px;">
+                                <f:setPropertyActionListener value="#{item}"
+                                        target="#{inspectorBean.selectedRequest}"/>
+                            </p:commandButton>
+                            <p:commandButton rendered="#{item.permissionRequestStatus == 'IN_PROGRESS' and
 							item.local.state == 'ACTIVE'}" styleClass="btn-info"
-											 action="#{inspectorBean.redirectToUploadDocs}"
-											 icon="fa fa-folder-open"
-											 title="Cargar documentos" style="margin: 0 0 1px 10px;">
-								<f:setPropertyActionListener value="#{item}"
-															 target="#{inspectorBean.selectedRequest}" />
-							</p:commandButton>
-							<p:commandButton rendered="#{item.permissionRequestStatus == 'REQUESTED'}"
-											 update="@form" styleClass="btn-warning"
-											 icon="fa fa-clipboard"
-											 title="Atender Solicitud"
-											 action="#{inspectorBean.redirectToMeetRequest}"
-											 style="margin: 0 0 1px 10px;">
-								<f:setPropertyActionListener value="#{item}"
-															 target="#{inspectorBean.selectedRequest}" />
-								<p:confirm header="Confirmation" message="Está seguro que desea atender la solicitud del permiso de funcionamiento?." icon="fa fa-danger"/>
-							</p:commandButton>
-							<p:button icon="fa fa-map-marker" target="_blank"
-									  rendered="#{item.permissionRequestStatus == 'IN_PROGRESS'}"
-									  onclick="window.open('#{inspectorBean.mapUrl(item)}'); return false;"
-									  styleClass="btn-info"
-									  title="Ver en el mapa" style="margin: 0 0 1px 10px;">
-							</p:button>
-							<p:commandButton rendered="#{item.permissionRequestStatus == 'IN_PROGRESS' and
+                                    action="#{inspectorBean.redirectToUploadDocs}"
+                                    icon="fa fa-folder-open"
+                                    title="Cargar documentos" style="margin: 0 0 1px 10px;">
+                                <f:setPropertyActionListener value="#{item}"
+                                        target="#{inspectorBean.selectedRequest}"/>
+                            </p:commandButton>
+                            <p:commandButton rendered="#{item.permissionRequestStatus == 'REQUESTED'}"
+                                    update="@form" styleClass="btn-warning"
+                                    icon="fa fa-clipboard"
+                                    title="Atender Solicitud"
+                                    action="#{inspectorBean.redirectToMeetRequest}"
+                                    style="margin: 0 0 1px 10px;">
+                                <f:setPropertyActionListener value="#{item}"
+                                        target="#{inspectorBean.selectedRequest}"/>
+                                <p:confirm header="Confirmation" message="Está seguro que desea atender la solicitud del permiso de funcionamiento?." icon="fa fa-danger"/>
+                            </p:commandButton>
+                            <p:button icon="fa fa-map-marker" target="_blank"
+                                    rendered="#{item.permissionRequestStatus == 'IN_PROGRESS'}"
+                                    onclick="window.open('#{inspectorBean.mapUrl(item)}'); return false;"
+                                    styleClass="btn-info"
+                                    title="Ver en el mapa" style="margin: 0 0 1px 10px;">
+                            </p:button>
+                            <p:commandButton rendered="#{item.permissionRequestStatus == 'IN_PROGRESS' and
 												item.local.state == 'ACTIVE'}"
-											 action="#{inspectorBean.redirectToInspectionPage}"
-											 icon="fa fa-edit" styleClass="btn-warning"
-											 title="Datos Inspección" style="margin: 0 0 1px 10px;">
-								<f:setPropertyActionListener value="#{item}"
-															 target="#{inspectorBean.selectedRequest}" />
-							</p:commandButton>
-							<p:commandButton update="@form"
-											 rendered="#{item.permissionRequestStatus == 'IN_PROGRESS'}"
-											 icon="fa fa-check-square-o" styleClass="btn-warning"
-											 action="#{inspectorBean.editRequest()}"
-											 title="Aprobar" style="margin: 0 0 1px 10px;">
-								<f:setPropertyActionListener value="#{item}"
-															 target="#{inspectorBean.selectedRequest}" />
-								<p:confirm header="Confirmation" message="Está seguro que desea aprobar el permiso de funcionamiento?." icon="fa fa-danger"/>
-							</p:commandButton>
-							<p:commandButton
-									actionListener="#{reportBean.buildInspecctionReport(item)}"
-									rendered="#{item.permissionRequestStatus == 'IN_PROGRESS'}"
-									title="Reporte de inspección" icon="fa fa-address-card-o"
-									ajax="false" styleClass="btn-fatal"
-									style="margin: 0 0 1px 10px;">
-							</p:commandButton>
+                                    action="#{inspectorBean.redirectToInspectionPage}"
+                                    icon="fa fa-edit" styleClass="btn-warning"
+                                    title="Datos Inspección" style="margin: 0 0 1px 10px;">
+                                <f:setPropertyActionListener value="#{item}"
+                                        target="#{inspectorBean.selectedRequest}"/>
+                            </p:commandButton>
+                            <p:commandButton update="@form"
+                                    rendered="#{item.permissionRequestStatus == 'IN_PROGRESS'}"
+                                    icon="fa fa-check-square-o" styleClass="btn-warning"
+                                    action="#{inspectorBean.editRequest()}"
+                                    title="Aprobar" style="margin: 0 0 1px 10px;">
+                                <f:setPropertyActionListener value="#{item}"
+                                        target="#{inspectorBean.selectedRequest}"/>
+                                <p:confirm header="Confirmation" message="Está seguro que desea aprobar el permiso de funcionamiento?." icon="fa fa-danger"/>
+                            </p:commandButton>
+                            <p:commandButton
+                                    actionListener="#{reportBean.buildInspecctionReport(item)}"
+                                    rendered="#{item.permissionRequestStatus == 'IN_PROGRESS'}"
+                                    title="Reporte de inspección" icon="fa fa-address-card-o"
+                                    ajax="false" styleClass="btn-fatal"
+                                    style="margin: 0 0 1px 10px;">
+                            </p:commandButton>
 
-							<p:commandButton
-									actionListener="#{reportBean.buildPermissionReport(item)}"
-									rendered="#{item.permissionRequestStatus == 'IN_PROGRESS'}"
-									title="Reporte de permiso de funcionamiento"
-									icon="fa fa-address-card" styleClass="btn-fatal"
-									ajax="false" style="margin: 0 0 1px 10px;">
-							</p:commandButton>
-						</p:column>
-					</p:dataTable>
-				</div>
-			</div>
-			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-danger box-solid">
-				<p:commandButton value="Si" type="button" styleClass="btn-material btn-primary ui-confirmdialog-yes"
-								 icon="fa fa-check"/>
-				<p:commandButton value="No" type="button" styleClass="btn-material btn-danger ui-confirmdialog-no"
-								 icon="fa fa-close"/>
-			</p:confirmDialog>
-		</h:form>
-	</ui:define>
+                            <p:commandButton
+                                    actionListener="#{reportBean.buildPermissionReport(item)}"
+                                    rendered="#{item.permissionRequestStatus == 'PERMISSION_ISSUED'}"
+                                    title="Reporte de permiso de funcionamiento"
+                                    icon="fa fa-address-card" styleClass="btn-fatal"
+                                    ajax="false" style="margin: 0 0 1px 10px;">
+                            </p:commandButton>
+
+                            <p:commandButton
+                                    actionListener="#{reportBean.buildInvoiceReport(item)}"
+                                    rendered="#{item.permissionRequestStatus == 'PERMISSION_ISSUED'}"
+                                    title="Reporte de detalle de factura"
+                                    icon="fa fa-address-card" styleClass="btn-fatal"
+                                    ajax="false" style="margin: 0 0 1px 10px;">
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </div>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-danger box-solid">
+                <p:commandButton value="Si" type="button" styleClass="btn-material btn-primary ui-confirmdialog-yes"
+                        icon="fa fa-check"/>
+                <p:commandButton value="No" type="button" styleClass="btn-material btn-danger ui-confirmdialog-no"
+                        icon="fa fa-close"/>
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
 </ui:composition>

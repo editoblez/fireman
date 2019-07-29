@@ -20,7 +20,7 @@ public class ScheduledTasks {
   @Inject
   PermissionIssueDao permissionIssueDao;
 
-  @Schedule(hour = "02", minute = "21", second = "30", info = "Daily")
+  @Schedule(hour = "23", minute = "01", second = "15", info = "Daily")
   public void automaticallyScheduled(Timer timer) {
     log.info("Running batch process ...");
     updateAllCloseToExpireStatus();

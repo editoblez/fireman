@@ -1,0 +1,84 @@
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core">
+<ui:composition template="../../template/template.xhtml">
+	<ui:define name="pageTitle">
+		Reporte de permisos por fecha	
+	</ui:define>
+	<ui:define name="contenido">
+
+		<h:form id="formList">
+
+			<p:accordionPanel id="panelFiltter">
+				<p:tab title="Filtros" style="margin-bottom:10px">
+					<h:panelGrid columns="2" cellpadding="10">
+						<h:panelGroup>
+							<p:outputLabel value="Fecha desde" />
+							<br />
+							<p:calendar id="from" value="#{permissionIssueReportBean.from}"
+								pattern="dd-MM-yyyy HH:mm:ss" mask="true" />
+						</h:panelGroup>
+						<h:panelGroup>
+							<p:outputLabel value="Fecha hasta" />
+							<br />
+							<p:calendar id="to" value="#{permissionIssueReportBean.to}"
+								pattern="dd-MM-yyyy HH:mm:ss" mask="true" />
+						</h:panelGroup>
+					</h:panelGrid>
+					<div align="left" style="padding-top: 15px; padding-left: 10px;">
+						<p:commandButton ajax="true" action="faces-redirect=false"
+							update=":formList:dtList growl :formList:exportBtn"
+							id="refreshBtn"
+							actionListener="#{permissionIssueReportBean.refreshReport()}"
+							value="Buscar" styleClass="btn btn-default" />
+					</div>
+					<p:blockUI block="formList" trigger="refreshBtn" />
+				</p:tab>
+			</p:accordionPanel>
+
+			<div align="right" style="padding-bottom: 10px; padding-top: 10px;">
+				<p:commandButton id="exportBtn" ajax="false"
+					disabled="#{empty permissionIssueReportBean.requests}"
+					update=":formList:dtList growl" value="Exportar PDF">
+					<p:dataExporter type="pdf" target="dtList" fileName="permisos" />
+				</p:commandButton>
+			</div>
+			<p:dataTable id="dtList" var="item"
+				value="#{permissionIssueReportBean.requests}">
+				<p:column headerText="Dirección Local">
+					<h:outputText
+						value="#{item.inspectionHeader.permissionRequest.local.address}" />
+				</p:column>
+				<p:column headerText="Fecha creación">
+					<h:outputText value="#{item.time}">
+						<f:convertDateTime pattern="dd-MM-yyyy HH:mm" />
+					</h:outputText>
+				</p:column>
+				<p:column headerText="Fecha próxima a expiración">
+					<h:outputText value="#{item.closeToExpire}">
+						<f:convertDateTime pattern="dd-MM-yyyy HH:mm" />
+					</h:outputText>
+				</p:column>
+				<p:column headerText="Fecha expiración">
+				<h:outputText value="#{item.expire}">
+						<f:convertDateTime pattern="dd-MM-yyyy HH:mm" />
+					</h:outputText>
+				</p:column>
+				<p:column headerText="Inspector">
+					<h:outputText
+						rendered="#{item.inspectionHeader.permissionRequest.inspector != null}"
+						value="#{item.inspectionHeader.permissionRequest.inspector.firstName} #{item.inspectionHeader.permissionRequest.inspector.firstLastName}" />
+				</p:column>
+				<p:column headerText="Estado">
+					<h:outputText
+						value="#{item.inspectionHeader.permissionRequest.permissionRequestStatus.value}" />
+				</p:column>
+			</p:dataTable>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

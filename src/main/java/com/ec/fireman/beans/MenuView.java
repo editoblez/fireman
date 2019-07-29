@@ -1,17 +1,18 @@
 package com.ec.fireman.beans;
 
-import com.ec.fireman.beans.representation.MenuItem;
-import com.ec.fireman.data.entities.RoleTypes;
-import com.ec.fireman.data.representation.User;
-import com.ec.fireman.util.SessionUtils;
-import lombok.Data;
-import lombok.extern.log4j.Log4j2;
+import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
-import java.awt.*;
-import java.io.Serializable;
+
+import com.ec.fireman.beans.representation.MenuItem;
+import com.ec.fireman.data.entities.RoleTypes;
+import com.ec.fireman.data.representation.User;
+import com.ec.fireman.util.SessionUtils;
+
+import lombok.Data;
+import lombok.extern.log4j.Log4j2;
 
 @Data
 
@@ -27,6 +28,8 @@ public class MenuView implements Serializable {
   private MenuItem local;
   private MenuItem inspector;
   private MenuItem counter;
+  private MenuItem permissionRequestReport;
+  private MenuItem permissionIssueReport;
 
   @PostConstruct
   public void init() {
@@ -40,5 +43,7 @@ public class MenuView implements Serializable {
     local = new MenuItem("Local", PageNameConstants.LOCAL_CLIENT_PAGE, roleType == RoleTypes.CLIENT);
     inspector = new MenuItem("Inspector", PageNameConstants.INSPECTOR_PAGE, roleType == RoleTypes.INSPECTOR);
     counter = new MenuItem("Counter", PageNameConstants.COUNTER_PAGE, roleType == RoleTypes.ECONOMIC);
+    permissionRequestReport = new MenuItem("Reporte Solicitudes", PageNameConstants.PERMISSION_REQUEST_REPORT_PAGE, roleType == RoleTypes.ECONOMIC);
+    permissionIssueReport = new MenuItem("Reporte Permisos", PageNameConstants.PERMISSION_ISSUE_REPORT_PAGE, roleType == RoleTypes.ECONOMIC);
   }
 }

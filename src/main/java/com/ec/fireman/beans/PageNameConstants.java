@@ -5,9 +5,11 @@ public class PageNameConstants {
   public static final String HOME_PAGE = "/app/common/home.xhtml";
   public static final String REGISTER_CLIENT_PAGE = "/app/register-client.xhtml";
 
-  public static final String SERVICE_ADMIN_PAGE = "/app/admin/services.xhtml";
   public static final String SERVICE_ADMIN_FORM_PAGE = "/app/admin/form/service-form.xhtml";
 
+  static final String SERVICE_ADMIN_PAGE = "/app/admin/services.xhtml";
+  static final String PERMISSION_REQUEST_REPORT_PAGE = "/app/counter/permissionRequestReport.xhtml";
+  static final String PERMISSION_ISSUE_REPORT_PAGE = "/app/counter/permissionIssueReport.xhtml";
   public static final String REQUIREMENT_ADMIN_PAGE = "/app/admin/requirements.xhtml";
   public static final String REQUIREMENT_ADMIN_FORM_PAGE = "/app/admin/form/requirements-form.xhtml";
 

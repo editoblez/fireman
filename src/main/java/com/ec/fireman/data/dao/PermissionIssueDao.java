@@ -1,16 +1,20 @@
 package com.ec.fireman.data.dao;
 
-import com.ec.fireman.data.entities.PermissionIssue;
-import com.ec.fireman.data.entities.PermissionRequest;
-import com.ec.fireman.data.entities.State;
-import lombok.extern.log4j.Log4j2;
-import org.apache.commons.collections4.CollectionUtils;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
-import java.util.Calendar;
-import java.util.List;
+
+import org.apache.commons.collections4.CollectionUtils;
+
+import com.ec.fireman.data.entities.PermissionIssue;
+import com.ec.fireman.data.entities.PermissionRequest;
+import com.ec.fireman.data.entities.State;
+
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @Stateless
@@ -55,5 +59,12 @@ public class PermissionIssueDao extends GenericDaoImpl<PermissionIssue> {
     query.setParameter("active", State.ACTIVE);
     query.setParameter("id", pr.getId());
     return (PermissionIssue) query.getSingleResult();
+  }
+
+  public List<PermissionIssue> findByTime(Date from, Date to) {
+    Query query = entityManager.createQuery("select pi from PermissionIssue pi where pi.time between :dateFrom and :dateTo", PermissionIssue.class);
+    query.setParameter("dateFrom", from.getTime());
+    query.setParameter("dateTo", to.getTime());
+    return query.getResultList();
   }
 }

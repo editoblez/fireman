@@ -1,94 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
-				xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
-				xmlns:p="http://primefaces.org/ui"
-				xmlns:adm="http://github.com/adminfaces"
-				template="#{layoutMB.template}">
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        template="#{layoutMB.template}">
 
-	<ui:define name="metadata">
-		<ui:param name="title" value="Gestión de Usuarios"/>
-		<style type="text/css">
-			.ui-datatable .ui-datatable-header {
-				text-align: right !important;
-			}
-		</style>
-	</ui:define>
+    <ui:define name="metadata">
+        <ui:param name="title" value="Gestión de Usuarios"/>
+        <style type="text/css">
+            .ui-datatable .ui-datatable-header {
+                text-align: right !important;
+            }
+        </style>
+    </ui:define>
 
-	<ui:define name="description">
-		Listado
-	</ui:define>
+    <ui:define name="description">
+        Listado
+    </ui:define>
 
-	<ui:define name="body">
-		<h:form>
-			<p:focus context="@form"/>
-			<div class="box box-primary">
-				<div class="box-header with-border">
-					<div id="main-buttons" class="hidden-sm hidden-xs">
-						<p:commandButton icon="fa fa-plus"
-										 action="form/user-form.xhtml?faces-redirect=true"
-										 value="Nuevo" styleClass="btn-primary"/>
-						<p:spacer width="5"/>
-						<p:commandButton value="Editar usuario" update="@(.ui-dialog)" styleClass="btn-info"
-										 disabled="#{empty userListBean.selectedUser or
+    <ui:define name="body">
+        <h:form>
+            <p:focus context="@form"/>
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton icon="fa fa-plus"
+                                action="form/user-form.xhtml?faces-redirect=true"
+                                value="Nuevo" styleClass="btn-primary"/>
+                        <p:spacer width="5"/>
+                        <p:commandButton value="Editar usuario" update="@(.ui-dialog)" styleClass="btn-info"
+                                disabled="#{empty userListBean.selectedUser or
 										  empty userListBean.selectedUser.ci or
 										   userListBean.users.size() == 0}"
-										 action="#{userListBean.redirectEditTo}" icon="fa fa-search"/>
-						<p:spacer width="5"/>
-						<p:commandButton value="Cambiar contraseña" update="@(.ui-dialog)" styleClass="btn-danger"
-										 disabled="#{empty userListBean.selectedUser or
+                                action="#{userListBean.redirectEditTo}" icon="fa fa-search"/>
+                        <p:spacer width="5"/>
+                        <p:commandButton value="Cambiar contraseña" update="@(.ui-dialog)" styleClass="btn-danger"
+                                disabled="#{empty userListBean.selectedUser or
 										 empty userListBean.selectedUser.ci or
 										   userListBean.users.size() == 0}"
-										 action="#{userListBean.redirectToPwdChange}" icon="fa fa-lock"/>
-					</div>
-					<p:separator/>
-					<p:dataTable id="dtUsuario"
-								 selectionMode="single"
-								 selection="#{userListBean.selectedUser}"
-								 var="user"
-								 rowKey="#{user.id}"
-								 value="#{userListBean.users}"
-								 rows="5"
-								 paginatorPosition="bottom"
-								 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {JumpToPageDropdown}"
-								 currentPageReportTemplate="[ {startRecord} a {endRecord} de {totalRecords} ]"
-								 rowsPerPageTemplate="5,10,15,20,30"
-								 paginator="true">
+                                action="#{userListBean.redirectToPwdChange}" icon="fa fa-lock"/>
+                    </div>
+                    <p:separator/>
+                    <p:dataTable id="dtUsuario"
+                            selectionMode="single"
+                            selection="#{userListBean.selectedUser}"
+                            var="user"
+                            rowKey="#{user.id}"
+                            value="#{userListBean.users}"
+                            rows="5"
+                            paginatorPosition="bottom"
+                            paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {JumpToPageDropdown}"
+                            currentPageReportTemplate="[ {startRecord} a {endRecord} de {totalRecords} ]"
+                            rowsPerPageTemplate="5,10,15,20,30"
+                            paginator="true">
 
-						<p:ajax event="rowSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
-						<p:ajax event="rowUnselect" update="@(.ui-button, .ui-confirm-dialog)"/>
-						<p:ajax event="rowSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
-						<p:ajax event="rowUnselect" update="@(.ui-button, .ui-confirm-dialog)"/>
-						<p:ajax event="toggleSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
+                        <p:ajax event="rowSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
+                        <p:ajax event="rowUnselect" update="@(.ui-button, .ui-confirm-dialog)"/>
+                        <p:ajax event="rowSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
+                        <p:ajax event="rowUnselect" update="@(.ui-button, .ui-confirm-dialog)"/>
+                        <p:ajax event="toggleSelect" update="@(.ui-button, .ui-confirm-dialog)"/>
 
-						<p:column headerText="CI" sortBy="#{user.ci}"
-								  filterMatchMode="contains"
-								  filterBy="#{user.ci}">
-							<h:outputText value="#{user.ci}" />
-						</p:column>
-						<p:column headerText="Nombre(s) y Apellidos" sortBy="#{user.getFullName()}"
-								  filterMatchMode="contains"
-								  filterBy="#{user.getFullName()}">
-							<h:outputText value="#{user.getFullName()}" />
-						</p:column>
-						<p:column headerText="Correo" sortBy="#{user.email}"
-								  filterMatchMode="contains"
-								  filterBy="#{user.email}">
-							<h:outputText value="#{user.email}" />
-						</p:column>
-						<p:column headerText="Rol" sortBy="#{user.role.roleName}"
-								  filterMatchMode="contains"
-								  filterBy="#{user.role.roleName}">
-							<h:outputText value="#{user.role.roleName}" />
-						</p:column>
-					</p:dataTable>
-				</div>
-			</div>
-			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-danger box-solid">
-				<p:commandButton value="Si" type="button" styleClass="btn-material btn-primary ui-confirmdialog-yes"
-								 icon="fa fa-check"/>
-				<p:commandButton value="No" type="button" styleClass="btn-material btn-danger ui-confirmdialog-no"
-								 icon="fa fa-close"/>
-			</p:confirmDialog>
-		</h:form>
-	</ui:define>
+                        <p:column headerText="CI" sortBy="#{user.ci}"
+                                filterMatchMode="contains"
+                                filterBy="#{user.ci}">
+                            <h:outputText value="#{user.ci}"/>
+                        </p:column>
+                        <p:column headerText="Nombre(s) y Apellidos" sortBy="#{user.getFullName()}"
+                                filterMatchMode="contains"
+                                filterBy="#{user.getFullName()}">
+                            <h:outputText value="#{user.getFullName()}"/>
+                        </p:column>
+                        <p:column headerText="Correo" sortBy="#{user.email}"
+                                filterMatchMode="contains"
+                                filterBy="#{user.email}">
+                            <h:outputText value="#{user.email}"/>
+                        </p:column>
+                        <p:column headerText="Rol" sortBy="#{user.role.roleName}"
+                                filterMatchMode="contains"
+                                filterBy="#{user.role.roleName}">
+                            <h:outputText value="#{user.role.roleName}"/>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </div>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-danger box-solid">
+                <p:commandButton value="Si" type="button" styleClass="btn-material btn-primary ui-confirmdialog-yes"
+                        icon="fa fa-check"/>
+                <p:commandButton value="No" type="button" styleClass="btn-material btn-danger ui-confirmdialog-no"
+                        icon="fa fa-close"/>
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
 </ui:composition>
